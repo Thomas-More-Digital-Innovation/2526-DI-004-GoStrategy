@@ -58,6 +58,7 @@ func (aiObj *AI) MakeMove(board *game.Board) game.Move {
 		return game.Move{}
 	}
 
+	//nolint:gosec
 	rand.Shuffle(len(allMoves), func(i, j int) {
 		allMoves[i], allMoves[j] = allMoves[j], allMoves[i]
 	})

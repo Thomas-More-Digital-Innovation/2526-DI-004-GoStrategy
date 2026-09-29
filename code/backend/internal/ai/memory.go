@@ -14,13 +14,22 @@ type MemoryEntry struct {
 
 // Memory represents the AI's internal knowledge of the board
 type Memory struct {
-	field [10][10]*MemoryEntry
-	mutex sync.RWMutex
+	field    [10][10]*MemoryEntry
+	hasMoved [10][10]bool
+	mutex    sync.RWMutex
 }
 
 // NewMemory creates a new Memory instance
 func NewMemory() *Memory {
 	return &Memory{}
+}
+
+// HasMoved returns whether a piece at pos is known to have moved
+func (m *Memory) HasMoved(pos game.Position) bool {
+	m.mutex.RLock()
+	defer m.mutex.RUnlock()
+
+	return m.hasMoved[pos.Y][pos.X]
 }
 
 // Remember updates memory with new information about a piece
@@ -49,6 +58,7 @@ func (m *Memory) Forget(pos game.Position) {
 	defer m.mutex.Unlock()
 
 	m.field[pos.Y][pos.X] = nil
+	m.hasMoved[pos.Y][pos.X] = false
 }
 
 // MovePiece updates memory when a piece moves (critical for correctness)
@@ -60,6 +70,8 @@ func (m *Memory) MovePiece(from, to game.Position) {
 		m.field[to.Y][to.X] = m.field[from.Y][from.X]
 		m.field[from.Y][from.X] = nil
 	}
+	m.hasMoved[to.Y][to.X] = true
+	m.hasMoved[from.Y][from.X] = false
 }
 
 // UpdateFromCombat processes combat results to update memory
@@ -76,9 +88,12 @@ func (m *Memory) UpdateFromCombat(attackerPos, defenderPos game.Position, attack
 			LastSeen:   round,
 		}
 		m.field[attackerPos.Y][attackerPos.X] = nil
+		m.hasMoved[attackerPos.Y][attackerPos.X] = false
+		m.hasMoved[defenderPos.Y][defenderPos.X] = true
 	} else {
 		// Attacker died, clear both positions
 		m.field[attackerPos.Y][attackerPos.X] = nil
+		m.hasMoved[attackerPos.Y][attackerPos.X] = false
 
 		// defender survived, remember it
 		if defenderPiece != nil && defenderPiece.IsAlive() {
@@ -90,6 +105,7 @@ func (m *Memory) UpdateFromCombat(attackerPos, defenderPos game.Position, attack
 		} else {
 			// both died
 			m.field[defenderPos.Y][defenderPos.X] = nil
+			m.hasMoved[defenderPos.Y][defenderPos.X] = false
 		}
 	}
 }
@@ -100,6 +116,7 @@ func (m *Memory) Clear() {
 	defer m.mutex.Unlock()
 
 	m.field = [10][10]*MemoryEntry{}
+	m.hasMoved = [10][10]bool{}
 }
 
 // GetKnownEnemyPositions returns all positions where we remember enemy pieces
@@ -110,7 +127,7 @@ func (m *Memory) GetKnownEnemyPositions() []game.Position {
 
 	positions := make([]game.Position, 0, 10)
 	for y := range 10 {
-		for x := 0; x < 10; x++ {
+		for x := range 10 {
 			if m.field[y][x] != nil {
 				positions = append(positions, game.NewPosition(x, y))
 			}

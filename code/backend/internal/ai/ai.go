@@ -3,6 +3,7 @@ package ai
 
 import (
 	"digital-innovation/gostrategy/internal/game"
+	"digital-innovation/gostrategy/internal/game/models"
 )
 
 // AI is the interface that all AI implementations must satisfy.
@@ -45,8 +46,8 @@ func (ai *BaseAI) GetMemory() *Memory {
 }
 
 // AnalyzeMove is called after opponent moves - override in subclasses for learning
-// Default implementation updates memory automatically
-func (ai *BaseAI) AnalyzeMove(move game.Move, _ *game.Player, _ int) {
+// Default implementation updates memory automatically and detects scouts
+func (ai *BaseAI) AnalyzeMove(move game.Move, opponent *game.Player, round int) {
 	if ai.memory == nil {
 		return
 	}
@@ -54,8 +55,20 @@ func (ai *BaseAI) AnalyzeMove(move game.Move, _ *game.Player, _ int) {
 	from := move.GetFrom()
 	to := move.GetTo()
 
-	if ai.memory.Recall(from) != nil {
-		ai.memory.MovePiece(from, to)
+	ai.memory.MovePiece(from, to)
+
+	deltaX := from.X - to.X
+	if deltaX < 0 {
+		deltaX = -deltaX
+	}
+	deltaY := from.Y - to.Y
+	if deltaY < 0 {
+		deltaY = -deltaY
+	}
+
+	if (deltaX > 1 || deltaY > 1) && opponent != nil {
+		scoutPiece := game.NewPiece(models.Scout, opponent)
+		ai.memory.Remember(to, scoutPiece, 1.0, round)
 	}
 }
 

@@ -3,6 +3,7 @@ package minimax
 
 import (
 	"digital-innovation/gostrategy/internal/ai"
+	ai_const "digital-innovation/gostrategy/internal/ai/const"
 	"digital-innovation/gostrategy/internal/game"
 	"digital-innovation/gostrategy/internal/game/models"
 	"slices"
@@ -79,7 +80,15 @@ func (aiObj *AI) MakeMove(board *game.Board) game.Move {
 }
 
 func (aiObj *AI) minimax(board *game.Board, depth int, alpha, beta float64, maximizingPlayer bool, opponent *game.Player) float64 {
+	if isFlagCaptured(board, aiObj.GetPlayer()) {
+		return -1e6 * float64(depth+1)
+	}
+	if opponent != nil && isFlagCaptured(board, opponent) {
+		return 1e6 * float64(depth+1)
+	}
+
 	originalAlpha := alpha
+	originalBeta := beta
 
 	key := getBoardStateKey(board, maximizingPlayer)
 	if entry, ok := aiObj.tt[key]; ok && entry.depth >= depth {
@@ -173,9 +182,9 @@ func (aiObj *AI) minimax(board *game.Board, depth int, alpha, beta float64, maxi
 	}
 
 	flag := ttExact
-	if minEval <= originalAlpha {
+	if minEval <= alpha {
 		flag = ttAlpha
-	} else if minEval >= beta {
+	} else if minEval >= originalBeta {
 		flag = ttBeta
 	}
 	aiObj.tt[key] = ttEntry{
@@ -184,6 +193,23 @@ func (aiObj *AI) minimax(board *game.Board, depth int, alpha, beta float64, maxi
 		flag:  flag,
 	}
 	return minEval
+}
+
+func isFlagCaptured(board *game.Board, player *game.Player) bool {
+	if player == nil {
+		return true
+	}
+	playerID := player.GetID()
+	field := board.GetField()
+	for y := range 10 {
+		for x := range 10 {
+			piece := field[y][x]
+			if piece != nil && piece.GetOwner().GetID() == playerID && piece.GetType().GetName() == ai_const.Flag {
+				return false
+			}
+		}
+	}
+	return true
 }
 
 func getBoardStateKey(board *game.Board, maximizingPlayer bool) string {
