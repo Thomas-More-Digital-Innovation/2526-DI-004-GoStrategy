@@ -106,6 +106,7 @@
 
     async function abandonAndQuit() {
         try {
+            socket.disconnect();
             await gamesApi.abandon(gameId);
         } catch (e) {
             console.error("Failed to abandon session:", e);
@@ -465,6 +466,7 @@
         onRandomize={handleRandomize}
         onStart={handleStartGame}
         onLoadSetup={handleLoadSetup}
+        onBackToMenu={abandonAndQuit}
         {viewerId}
         gameMode={gameStore.gameMode}
         selectedPlayer={setupSelectedPlayer}
