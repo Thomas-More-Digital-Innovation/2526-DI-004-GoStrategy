@@ -1,6 +1,7 @@
 <script lang="ts">
     import Button from "$lib/components/ui/Button.svelte";
     import Title from "$lib/components/Title.svelte";
+    import { Save } from "@lucide/svelte";
 
     interface Props {
         isGameOver: boolean;
@@ -9,7 +10,8 @@
         onSaveGame: () => void;
     }
 
-    let { isGameOver, connected, onAbandonAndQuit, onSaveGame }: Props = $props();
+    let { isGameOver, connected, onAbandonAndQuit, onSaveGame }: Props =
+        $props();
 </script>
 
 <div class="grid grid-cols-[1fr_auto_1fr] items-center mb-6">
@@ -47,7 +49,8 @@
             disabled={!connected || !isGameOver}
             disabledMessage="Game must be finished to save a replay"
         >
-            💾 Save Replay
+            <Save class="mr-1.5 size-4" />
+            &nbsp;Save Replay
         </Button>
     </div>
 </div>

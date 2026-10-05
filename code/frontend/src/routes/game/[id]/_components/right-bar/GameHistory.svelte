@@ -2,6 +2,7 @@
     import { tick } from "svelte";
     import Button from "$lib/components/ui/Button.svelte";
     import { gameStore } from "$lib/state/game.svelte";
+    import { ChevronLeft, ChevronRight } from "@lucide/svelte";
 
     interface Props {
         currentMoveIndex: number;
@@ -51,20 +52,20 @@
     </h3>
     {#if gameStore.gameState?.isGameOver}
         <span
-            class="text-[10px] font-bold bg-green-500/20 text-green-500 px-2 py-0.5 rounded-full uppercase"
+            class="text-[10px] font-bold border border-green-500/30 bg-green-500/10 text-green-400 px-2 py-0.5 rounded-md uppercase tracking-wider"
         >
             Finished
         </span>
     {:else if isReplaying}
         <span
-            class="text-[10px] font-bold bg-brand-secondary/20 text-brand-secondary px-2 py-0.5 rounded-full uppercase"
+            class="text-[10px] font-bold border border-brand-secondary/40 bg-brand-secondary/15 text-brand-secondary px-2 py-0.5 rounded-md uppercase tracking-wider"
         >
             Replay
         </span>
     {/if}
     {#if gameStore.isPaused && !gameStore.gameState?.isGameOver}
         <span
-            class="text-[10px] font-bold bg-yellow-500/20 text-yellow-500 px-2 py-0.5 rounded-full uppercase"
+            class="text-[10px] font-bold border border-amber-500/40 bg-amber-500/15 text-amber-400 px-2 py-0.5 rounded-md uppercase tracking-wider"
         >
             Paused
         </span>
@@ -83,7 +84,8 @@
             onclick={onPrevious}
             disabled={!canGoPrevious}
         >
-            ◀ Prev
+            <ChevronLeft class="mr-1 size-3.5" />
+            Prev
         </Button>
         <Button
             variant="outline"
@@ -91,7 +93,8 @@
             onclick={onNext}
             disabled={!canGoNext}
         >
-            Next ▶
+            Next
+            <ChevronRight class="ml-1 size-3.5" />
         </Button>
     </div>
 

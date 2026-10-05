@@ -40,7 +40,7 @@
             class:clash={stage === "clash"}
         >
             <h2
-                class="text-3xl font-black text-brand-accent text-center mb-6 uppercase tracking-widest animate-pulse"
+                class="text-3xl font-black text-brand-accent text-center mb-6 uppercase tracking-widest"
             >
                 Combat!
             </h2>
@@ -78,7 +78,7 @@
                 </div>
 
                 <span
-                    class="text-2xl font-black text-brand-secondary animate-pulse"
+                    class="text-2xl font-black text-brand-secondary"
                     >VS</span
                 >
 

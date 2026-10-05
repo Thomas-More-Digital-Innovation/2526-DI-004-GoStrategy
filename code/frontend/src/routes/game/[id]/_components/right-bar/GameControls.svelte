@@ -2,6 +2,7 @@
     import Button from "$lib/components/ui/Button.svelte";
     import { gamemodes } from "$lib/data/gamemodes.data";
     import { gameStore } from "$lib/state/game.svelte";
+    import { Play, Pause, StepForward } from "@lucide/svelte";
 
     interface Props {
         isReplaying: boolean;
@@ -43,7 +44,13 @@
                 onclick={onTogglePause}
                 class="flex-1"
             >
-                {gameStore.isPaused ? "▶ Resume" : "⏸ Pause"}
+                {#if gameStore.isPaused}
+                    <Play class="mr-1.5 size-3.5" />
+                    Resume
+                {:else}
+                    <Pause class="mr-1.5 size-3.5" />
+                    Pause
+                {/if}
             </Button>
             {#if gameStore.isPaused && gameStore.gameMode.mode === gamemodes.ai_vs_ai.mode}
                 <Button
@@ -52,9 +59,10 @@
                     onclick={onStep}
                     loading={gameStore.isStepping}
                     disabled={gameStore.isStepping}
-                    disabledMessage="AI is thinking..."
+                    disabledMessage="Processing move..."
                 >
-                    Step ⏭️
+                    <StepForward class="mr-1.5 size-3.5" />
+                    Step
                 </Button>
             {/if}
         {/if}

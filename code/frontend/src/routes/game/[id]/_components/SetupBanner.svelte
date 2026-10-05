@@ -7,6 +7,7 @@
     import type { GameMode } from "$lib/types/game";
     import { gamemodes } from "$lib/data/gamemodes.data";
     import { gameStore } from "$lib/state/game.svelte";
+    import { Clock, FolderOpen, Dices } from "@lucide/svelte";
     import LoadSavedSetup from "./LoadSavedSetup.svelte";
     import AiPlayerSelector from "./AiPlayerSelector.svelte";
 
@@ -85,12 +86,16 @@
 {#snippet TimeLimit()}
     <div class="group cursor-help relative">
         <p
-            class="text-white/20 text-[9px] font-bold uppercase tracking-[0.2em] flex items-center gap-1 w-fit"
+            class="text-white/40 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 w-fit"
         >
-            ⏳ TIME LIMIT: {formatTime(gameStore.setupRemainingSecs)}
+            <Clock class="size-3 text-white/50" />
+            <span>Time Remaining:</span>
+            <span class="text-white font-mono"
+                >{formatTime(gameStore.setupRemainingSecs)}</span
+            >
         </p>
         <div
-            class="hidden group-hover:block absolute top-full left-0 mt-2 bg-surface-elevated rounded-lg p-4 text-xs w-64 text-white shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/10 z-50 animate-in fade-in slide-in-from-top-1 duration-200"
+            class="hidden group-hover:block absolute top-full left-0 mt-2 bg-surface-elevated rounded-lg p-3 text-xs w-64 text-white shadow-xl border border-white/10 z-50 animate-in fade-in slide-in-from-top-1 duration-200"
         >
             A time limit is set for this game to prevent infinite setup times.
             The game will start automatically when the time runs out.
@@ -129,10 +134,10 @@
             </div>
         </div>
 
-        <div class="flex gap-4 items-center">
+        <div class="flex gap-3 items-center">
             {#if gameMode.mode === gamemodes.ai_vs_ai.mode}
                 <div
-                    class="flex items-center gap-2 px-3 py-2 bg-white/5 rounded-xl border border-white/5"
+                    class="flex items-center gap-2 px-3 py-2 bg-white/5 rounded-xl border border-white/10"
                 >
                     <input
                         type="checkbox"
@@ -142,7 +147,7 @@
                     />
                     <label
                         for="headless-mode"
-                        class="text-[10px] font-bold text-white/60 uppercase tracking-tighter cursor-pointer"
+                        class="text-[10px] font-bold text-white/60 uppercase tracking-wider cursor-pointer"
                     >
                         Headless Mode
                     </label>
@@ -151,10 +156,11 @@
             <Button
                 variant="ghost"
                 onclick={() => (showSelector = true)}
-                class="gap-3 bg-white/5! hover:bg-white/10!"
+                class="bg-white/5! hover:bg-white/10!"
                 disabled={loadingSetups || savedSetups.length === 0}
             >
-                📁 Load Saved Setup
+                <FolderOpen class="size-4" />
+                &nbsp; Load Setup
             </Button>
 
             <Button
@@ -166,7 +172,8 @@
                             : undefined,
                     )}
             >
-                🎲 Randomize
+                <Dices class="size-4" />
+                &nbsp; Randomize
             </Button>
             <Button variant="primary" onclick={() => onStart(headless)}
                 >Start Game</Button
