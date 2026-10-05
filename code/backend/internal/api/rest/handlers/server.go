@@ -9,7 +9,6 @@ import (
 	"digital-innovation/gostrategy/internal/utils"
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -61,7 +60,7 @@ func (h *Handler) HandleCreateGame(c *gin.Context) {
 	}
 
 	if req.GameID == "" {
-		req.GameID = fmt.Sprintf("game-%d-%d", time.Now().Unix(), time.Now().UnixNano()%1000000)
+		req.GameID = utils.NewGameID()
 	}
 
 	if req.GameType == "" {
