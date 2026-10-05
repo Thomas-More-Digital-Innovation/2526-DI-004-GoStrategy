@@ -1,9 +1,8 @@
 name: Backend CI
 
 permissions:
-  contents: write
+  contents: read
   pull-requests: write
-  statuses: write
 
 concurrency:
   group: backend-ci-${{ github.ref }}
@@ -14,20 +13,21 @@ on:
     branches: ["main"]
     paths:
       - "code/backend/**"
+      - ".golangci.yaml"
+      - ".github/.testcoverage.yml"
       - ".github/workflows/backend-ci.yml"
   pull_request:
     branches: ["*"]
     paths:
       - "code/backend/**"
+      - ".golangci.yaml"
+      - ".github/.testcoverage.yml"
       - ".github/workflows/backend-ci.yml"
 
 jobs:
   lint:
     name: Static Code Analysis
     runs-on: ubuntu-latest
-    outputs:
-      commit_hash: ${{ steps.auto_commit.outputs.commit_hash }}
-      changes_detected: ${{ steps.auto_commit.outputs.changes_detected }}
     strategy:
       matrix:
         go-version: ["1.25"]
@@ -35,8 +35,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref || github.ref }}
 
       - name: Set up Go
         uses: actions/setup-go@v5
@@ -53,26 +51,22 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-golangci-cache-
 
-      - name: Ensure dependencies
-        working-directory: code/backend
-        run: go mod download
-
       - name: Check formatting (gofmt)
         working-directory: code/backend
-        run: gofmt -l -w -s .
-
-      - name: Commit Changes
-        id: auto_commit
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: fix gofmt errors"
+        run: |
+          UNFORMATTED=$(gofmt -l -s .)
+          if [ -n "$UNFORMATTED" ]; then
+            echo "Unformatted files found:"
+            echo "$UNFORMATTED"
+            exit 1
+          fi
 
       - name: Cache golangci-lint binary
         id: cache-golangci-lint
         uses: actions/cache@v4
         with:
           path: ~/go/bin/golangci-lint
-          key: ${{ runner.os }}-golangci-lint-${{ matrix.go-version }}
+          key: ${{ runner.os }}-golangci-lint-v2.12.2-${{ matrix.go-version }}
 
       - name: Install golangci-lint
         if: steps.cache-golangci-lint.outputs.cache-hit != 'true'
@@ -84,18 +78,8 @@ jobs:
           # The binary is installed to GOPATH/bin
           $(go env GOPATH)/bin/golangci-lint run --config=../../.golangci.yaml
 
-      - name: Mark formatting commit as green
-        if: steps.auto_commit.outputs.changes_detected == 'true'
-        run: |
-          curl -X POST \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/statuses/${{ steps.auto_commit.outputs.commit_hash }} \
-            -d '{"state":"success", "target_url":"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}", "description":"gofmt auto-formatting applied", "context":"Static Code Analysis"}'
-
   test:
     name: Build & Test
-    if: ${{ always() }}
     runs-on: ubuntu-latest
     needs: lint
     strategy:
@@ -118,8 +102,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref || github.ref }}
 
       - name: Set up Go
         uses: actions/setup-go@v5
@@ -127,10 +109,6 @@ jobs:
           go-version: ${{ matrix.go-version }}
           cache: true
           cache-dependency-path: code/backend/go.sum
-
-      - name: Ensure dependencies
-        working-directory: code/backend
-        run: go mod download
 
       - name: Create non-superuser for RLS tests
         # POSTGRES_USER is always a superuser which bypasses RLS even with FORCE.
@@ -151,11 +129,11 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/go/bin/gotestsum
-          key: ${{ runner.os }}-gotestsum-${{ matrix.go-version }}
+          key: ${{ runner.os }}-gotestsum-v1.13.0-${{ matrix.go-version }}
 
       - name: Install gotestsum
         if: steps.cache-gotestsum.outputs.cache-hit != 'true'
-        run: go install gotest.tools/gotestsum@latest
+        run: go install gotest.tools/gotestsum@v1.13.0
 
       - name: Run tests with coverage
         working-directory: code/backend
@@ -230,6 +208,7 @@ jobs:
       - name: post coverage report
         if: always() && steps.find_pr.outputs.pull_request_id
         uses: thollander/actions-comment-pull-request@v3
+        continue-on-error: true
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           comment-tag: coverage-report
@@ -260,16 +239,3 @@ jobs:
         run: |
           echo "### ❌ CI Failed" >> $GITHUB_STEP_SUMMARY
           echo "Backend CI failed. Review the logs above to see test/lint failures." >> $GITHUB_STEP_SUMMARY
-
-      - name: Post test status to formatting commit
-        if: always() && needs.lint.outputs.changes_detected == 'true'
-        run: |
-          STATE="success"
-          if [ "${{ job.status }}" = "failure" ] || [ "${{ job.status }}" = "cancelled" ] || [ "${{ steps.coverage.outcome }}" = "failure" ]; then
-            STATE="failure"
-          fi
-          curl -X POST \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/statuses/${{ needs.lint.outputs.commit_hash }} \
-            -d "{\"state\":\"$STATE\", \"target_url\":\"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\", \"description\":\"Unit tests and coverage validation\", \"context\":\"Build & Test\"}"

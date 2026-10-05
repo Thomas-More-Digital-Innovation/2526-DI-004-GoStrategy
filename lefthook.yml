@@ -1,0 +1,9 @@
+pre-commit:
+  commands:
+    fmt:
+      glob: "*.go"
+      run: gofmt -w -s {staged_files}
+      stage_fixed: true
+    lint:
+      glob: "*.go"
+      run: just lint

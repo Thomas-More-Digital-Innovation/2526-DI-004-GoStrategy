@@ -162,6 +162,7 @@ func (p *Piece) resolveStandardAttack(target *Piece) {
 func ShufflePieces(pieces []*Piece) []*Piece {
 	shuffled := make([]*Piece, len(pieces))
 	copy(shuffled, pieces)
+	//nolint:gosec
 	rand.Shuffle(len(shuffled), func(i, j int) {
 		shuffled[i], shuffled[j] = shuffled[j], shuffled[i]
 	})

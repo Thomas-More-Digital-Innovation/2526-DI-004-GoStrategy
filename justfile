@@ -2,7 +2,7 @@ lint:
     cd code/backend && golangci-lint run --config=../../.golangci.yaml
 
 fmt:
-    cd code/backend && gofmt -l .
+    cd code/backend && gofmt -w -s .
 
 dev: 
     docker compose up --build
