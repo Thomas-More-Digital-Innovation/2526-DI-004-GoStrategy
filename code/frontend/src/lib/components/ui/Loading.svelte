@@ -26,13 +26,10 @@
 <div
     class="flex flex-col items-center justify-center min-h-[50vh] gap-8 animate-in fade-in zoom-in-95 duration-700"
 >
-    <!-- Image Container with Glow -->
-    <div class="relative group">
+    <!-- Image Container -->
+    <div class="relative">
         <div
-            class="absolute -inset-4 bg-brand-primary/20 rounded-full blur-2xl opacity-50 group-hover:opacity-80 transition-opacity duration-1000 animate-pulse"
-        ></div>
-        <div
-            class="relative w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-white/10 shadow-2xl z-10"
+            class="relative w-40 h-40 md:w-52 md:h-52 rounded-full overflow-hidden border border-white/10 bg-surface-elevated/60 shadow-xl"
         >
             <img
                 src={selectedImage}
@@ -40,14 +37,6 @@
                 class="w-full h-full object-contain animate-spin"
             />
         </div>
-
-        <!-- Decorative Rings -->
-        <div
-            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] border border-white/5 rounded-full animate-ping-slow"
-        ></div>
-        <div
-            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[125%] h-[125%] border border-white/5 rounded-full animate-ping-slower"
-        ></div>
     </div>
 
     <!-- Text Content -->

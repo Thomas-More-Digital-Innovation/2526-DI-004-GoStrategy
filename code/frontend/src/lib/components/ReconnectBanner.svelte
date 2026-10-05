@@ -4,6 +4,7 @@
     import Button from "$lib/components/ui/Button.svelte";
     import { games as gamesApi } from "$lib/api/client";
     import { toastStore } from "$lib/state/toast.svelte";
+    import { AlertTriangle } from "@lucide/svelte";
 
     let reconnectableGame = $state<{
         gameId: string;
@@ -111,20 +112,13 @@
 
 {#if reconnectableGame}
     <div
-        class="relative overflow-hidden rounded-2xl glass border border-brand-accent/20 p-6 flex flex-col md:flex-row items-center justify-between gap-4 transition-all duration-300 shadow-lg glow-accent"
+        class="relative overflow-hidden rounded-2xl glass border border-brand-accent/20 p-6 flex flex-col md:flex-row items-center justify-between gap-4 transition-all duration-300 shadow-xl"
     >
-        <div
-            class="absolute -right-16 -top-16 w-32 h-32 bg-brand-accent/10 blur-3xl pointer-events-none rounded-full"
-        ></div>
-        <div
-            class="absolute -left-16 -bottom-16 w-32 h-32 bg-brand-primary/10 blur-3xl pointer-events-none rounded-full"
-        ></div>
-
         <div class="flex items-center gap-4 z-10">
             <div
-                class="flex items-center justify-center w-12 h-12 rounded-xl bg-brand-accent/10 border border-brand-accent/30 text-brand-accent text-2xl animate-pulse"
+                class="flex items-center justify-center w-12 h-12 rounded-xl bg-brand-accent/10 border border-brand-accent/30 text-brand-accent"
             >
-                ⚠️
+                <AlertTriangle class="size-6" />
             </div>
             <div>
                 <h3 class="text-white font-bold text-lg tracking-widest">

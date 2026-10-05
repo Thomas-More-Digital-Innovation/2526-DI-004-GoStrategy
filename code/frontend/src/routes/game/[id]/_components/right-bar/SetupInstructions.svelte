@@ -1,7 +1,8 @@
 <script lang="ts">
+    import Card from "$lib/components/ui/Card.svelte";
 </script>
 
-<div class="glass rounded-2xl p-6 space-y-3 border border-white/10">
+<Card class="space-y-3">
     <h3 class="text-sm font-bold text-brand-accent uppercase tracking-wider">
         Setup Instructions
     </h3>
@@ -10,4 +11,4 @@
         <li>Use "Randomize" for a random setup</li>
         <li>Click "Start Game" when ready</li>
     </ul>
-</div>
+</Card>
