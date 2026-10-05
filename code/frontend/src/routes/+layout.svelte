@@ -39,7 +39,7 @@
     {/if}
 
     <main class="flex-1 {isFullPage ? '' : 'ml-64'} p-10">
-        <div class="max-w-6xl mx-auto">
+        <div class="{isFullPage ? 'max-w-350' : 'max-w-6xl'} mx-auto w-full">
             {@render children()}
         </div>
     </main>
