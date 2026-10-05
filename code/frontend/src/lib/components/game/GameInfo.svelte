@@ -1,6 +1,8 @@
 <script lang="ts">
     import Card from "$lib/components/ui/Card.svelte";
     import type { GameMode, GameState } from "$lib/types/game";
+    import { gamemodes } from "$lib/data/gamemodes.data";
+    import { AIs } from "$lib/data/AI.data";
 
     interface Props {
         gameState: GameState | null;
@@ -12,14 +14,55 @@
     function formatPossessiveUsername(username: string) {
         return username.endsWith("s") ? `${username}'` : `${username}'s`;
     }
+
+    function formatAiName(raw?: string): string {
+        if (!raw) return "AI";
+        const numMatch = raw.match(/\s+\d+$/);
+        const numSuffix = numMatch ? numMatch[0] : "";
+        const base = raw.replace(/\s+\d+$/, "").trim();
+        const match = AIs.find(
+            (a) =>
+                a.id.toLowerCase() === base.toLowerCase() ||
+                a.name.toLowerCase() === base.toLowerCase(),
+        );
+        const name = match ? match.name : base;
+        return `${name}${numSuffix}`;
+    }
+
+    const title = $derived.by(() => {
+        if (!gameState) return gameMode.title;
+
+        if (
+            gameMode.mode === gamemodes.human_vs_ai.mode ||
+            gameMode.mode === "human_vs_ai"
+        ) {
+            if (!gameState.player2Username) return gameMode.title;
+            const ai = formatAiName(gameState.player2Username);
+            return `you vs ${ai} ai`;
+        }
+
+        if (
+            gameMode.mode === gamemodes.ai_vs_ai.mode ||
+            gameMode.mode === "ai_vs_ai"
+        ) {
+            if (!gameState.player1Username || !gameState.player2Username) {
+                return gameMode.title;
+            }
+            const ai1 = formatAiName(gameState.player1Username);
+            const ai2 = formatAiName(gameState.player2Username);
+            return `${ai1} ai vs ${ai2} ai`;
+        }
+        // TODO: add human vs human title once implemented
+        return gameMode.title;
+    });
 </script>
 
 <Card class="space-y-4">
     <div class="border-b border-white/10 pb-3">
         <h2
-            class="text-lg font-bold text-brand-accent uppercase tracking-wider"
+            class="text-md font-bold text-brand-accent uppercase tracking-wider"
         >
-            {gameMode.title}
+            {title}
         </h2>
     </div>
 
