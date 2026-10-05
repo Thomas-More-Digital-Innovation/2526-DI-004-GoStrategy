@@ -1,43 +1,35 @@
-export type AIInfoType =
+export type TrainingSupport =
     | "None"
-    | "Piece Memory"
-    | "Expert Rules"
-    | "Deterministic"
-    | "Statistical";
-
-export type AITrainability = "None" | "Partial" | "Full";
-
-export interface AIStats {
-    speed: number;
-    strategicDepth: number;
-    adaptability: number;
-    avgMoveTime?: string;
-}
+    | "Partial"
+    | "Full";
 
 export interface AIDossier {
     id: string;
     name: string;
-    tagline: string;
+    category: string;
     description: string;
     image: string;
-    concept: string;
-    infoType: AIInfoType;
-    trainability: AITrainability;
-    trainabilityDetails: string;
+    algorithm: string;
+    stateModel: string;
+    complexity: string;
+    trainingSupport: TrainingSupport;
+    trainingDetails: string;
     strengths: string[];
     weaknesses: string[];
-    stats: AIStats;
     notes?: string;
 }
 
 export interface AITournamentBenchmark {
     aiId: string;
     aiName: string;
-    sampleSize: string;
-    totalRuntime: string;
-    avgRoundsPerGame: string;
+    sampleSize: number;
+    totalRuntimeSeconds: number;
+    avgRoundsPerGame: number;
+    flagCaptures: number;
     flagCaptureRate: string;
+    noMoveWins: number;
     noMoveWinsRate: string;
+    maxTurnCutoffs: number;
     maxTurnCutoffsRate: string;
-    notes: string;
+    summary: string;
 }

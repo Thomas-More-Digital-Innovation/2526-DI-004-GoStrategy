@@ -1,4 +1,4 @@
-// TODO: source of truth should eventually come from a .json file in documents/files/ai-data/
+// TODO: source of truth should eventually be loaded from documents/files/ai-data/*.json
 
 import type { AIDossier, AITournamentBenchmark } from "$lib/types/ai";
 import fafoImage from "$lib/assets/ai/fafo.webp";
@@ -11,179 +11,153 @@ export const aiDossiers: AIDossier[] = [
     {
         id: "fafo",
         name: "FAFO",
-        tagline: "Pure Random Chaos Baseline",
+        category: "Uniform Random",
         description:
-            "The baseline agent selects moves uniformly at random from all legal actions without board awareness.",
+            "Selects uniformly from all legal moves on each turn with zero board evaluation or state memory.",
         image: fafoImage,
-        concept:
-            "Evaluates all legal moves available in the current turn and picks one with uniform probability. Serves as our performance and regression baseline.",
-        infoType: "None",
-        trainability: "None",
-        trainabilityDetails:
-            "Random agents cannot be trained directly. They function as foundational sparring partners for training smarter models during RL warm-up phases.",
+        algorithm: "Uniform random selection across legal action list.",
+        stateModel: "Stateless (no history, no piece tracking).",
+        complexity: "O(1) decision time.",
+        trainingSupport: "None",
+        trainingDetails:
+            "Cannot be trained. Functions as a baseline for regression tests and early-stage RL opponent pools.",
         strengths: [
-            "Extremely fast with virtually zero computational overhead (~0.001ms/move).",
-            "Completely unpredictable move vectors disrupt fixed opening patterns.",
-            "Ideal baseline benchmark for measuring tactical intelligence gains.",
+            "Near-zero computational cost (<0.01ms per move).",
+            "Unpredictable baseline useful for detecting degenerate play patterns.",
         ],
         weaknesses: [
-            "No state evaluation, long-term memory, or tactical foresight.",
-            "Frequently blunders high-value pieces and leaves flags undefended.",
-            "Struggles against any agent with basic piece prioritization.",
+            "No tactical awareness or objective pursuit.",
+            "High rate of moves into known enemy threats.",
         ],
-        stats: {
-            speed: 5,
-            strategicDepth: 1,
-            adaptability: 1,
-            avgMoveTime: "< 0.01 ms",
-        },
-        notes: "Averaged 336.5 rounds per game in 100k simulation tournament; captures flag in ~62% of random wins.",
+        notes: "Averaged 336.7 rounds per game across 10,000 automated tournament matches.",
     },
     {
         id: "fato",
         name: "FATO",
-        tagline: "Piece Memory Tactical Hunter",
+        category: "Heuristic with Piece Memory",
         description:
-            "Builds on random exploration with piece-memory caching and opportunistic targeting of revealed enemy pieces.",
+            "Extends random exploration with piece-memory caching, prioritizing immediate attacks on revealed enemy targets.",
         image: fatoImage,
-        concept:
-            "Maintains an internal memory map of observed enemy piece identities. When a known target is in range, it switches from random walk to tactical capture.",
-        infoType: "Piece Memory",
-        trainability: "None",
-        trainabilityDetails:
-            "Logic is deterministic heuristics combined with random walk exploration; weights are fixed but memory retention window is tunable.",
+        algorithm:
+            "Random walk with deterministic override when revealed enemy pieces enter strike range.",
+        stateModel:
+            "Local board state plus revealed enemy piece position and rank cache.",
+        complexity: "O(N) range check against tracked enemy pieces.",
+        trainingSupport: "None",
+        trainingDetails:
+            "Static priority rules. Memory retention window and targeting weights can be parameterized.",
         strengths: [
-            "Capitalizes immediately on revealed enemy vulnerabilities.",
-            "Drastically reduces match length compared to pure random play.",
-            "Low CPU overhead while punishing opponent scouts and exposed flags.",
+            "Directly exploits revealed enemy positions and exposed flags.",
+            "Reduces match duration by ~29% compared to random play.",
         ],
         weaknesses: [
-            "Cannot predict movement of unrevealed enemy units.",
-            "Lacks deep positional understanding or multi-turn coordination.",
-            "Can be baited into ambushes by higher-ranking hidden defenders.",
+            "Cannot infer positions or ranks of unrevealed pieces.",
+            "Vulnerable to ambush by higher-ranking hidden defenders.",
         ],
-        stats: {
-            speed: 5,
-            strategicDepth: 2,
-            adaptability: 2,
-            avgMoveTime: "~0.05 ms",
-        },
-        notes: "Increases flag capture win rate to 70%+ in AI vs AI testing, reducing average match length to ~238 rounds.",
+        notes: "Achieved 70.8% flag capture rate in 10k matches, lowering average game length to 238.2 rounds.",
     },
     {
         id: "heuristic",
         name: "Heuristic",
-        tagline: "Tactical Evaluation Scout",
+        category: "1-Ply Evaluation Engine",
         description:
-            "Rule-based evaluator weighing material balance, board advancement, flag protection, and threat zones.",
+            "Evaluates candidate 1-ply board states against expert-designed positional and material scoring rules.",
         image: heuristicImage,
-        concept:
-            "Applies expert domain scoring across 1-ply candidate states: piece values, center control, threat proximity, and defensive screening.",
-        infoType: "Expert Rules",
-        trainability: "Partial",
-        trainabilityDetails:
-            "Evaluation weights can be optimized through genetic algorithms, hill-climbing, or parameter sweeps against game logs.",
+        algorithm:
+            "Linear evaluation function weighting material balance, territory advancement, and flag defense.",
+        stateModel: "Full 1-ply forward board state with rule-based features.",
+        complexity: "O(M) where M is the count of legal moves.",
+        trainingSupport: "Partial",
+        trainingDetails:
+            "Evaluation weights can be tuned via genetic algorithms, hill-climbing, or game log regression.",
         strengths: [
-            "Calculates sharp, disciplined tactical decisions without lag.",
-            "Encodes Stratego domain principles into piece positioning.",
-            "Solid defensive structure protecting high-rank units and the flag.",
+            "Low latency with consistent defensive piece structuring.",
+            "Encodes standard Stratego principles without deep search overhead.",
         ],
         weaknesses: [
-            "Susceptible to designer bias and rigid positional assumptions.",
-            "Struggles with imperfect information bluffing and deceptive scouts.",
-            "Static evaluation cannot forecast deep multi-turn tactics.",
+            "No multi-ply forward lookahead.",
+            "Vulnerable to tactical sacrifices and bluffing in hidden information states.",
         ],
-        stats: {
-            speed: 4,
-            strategicDepth: 3,
-            adaptability: 2,
-        },
-        notes: "Serves as the primary tactical gatekeeper for testing deeper tree-search algorithms.",
+        notes: "Benchmark evaluation currently pending.",
     },
     {
         id: "minimax",
         name: "Minimax",
-        tagline: "Strategic Alpha-Beta Commander",
+        category: "Alpha-Beta Adversarial Search",
         description:
-            "Explores game trees with alpha-beta pruning and transposition tables, assuming optimal adversarial responses.",
+            "Recursive game tree search assuming optimal play, pruned with alpha-beta bounds and transposition tables.",
         image: minimaxImage,
-        concept:
-            "Recursive adversarial search alternating between maximizing friendly payoff and minimizing opponent counter-moves up to a bounded depth limit.",
-        infoType: "Deterministic",
-        trainability: "Partial",
-        trainabilityDetails:
-            "The leaf evaluation function can be trained via self-play value nets, while the tree search mechanics remain algorithmic.",
+        algorithm:
+            "Depth-limited minimax search with alpha-beta cutoffs and transposition cache.",
+        stateModel:
+            "Recursive board tree states with deterministic leaf evaluations.",
+        complexity: "O(b^(d/2)) best-case with optimal move ordering.",
+        trainingSupport: "Partial",
+        trainingDetails:
+            "Leaf evaluation function is trainable via self-play; search algorithm remains deterministic.",
         strengths: [
-            "Theoretically optimal play under bounded lookahead horizons.",
-            "Alpha-beta pruning aggressively eliminates unpromising move branches.",
-            "Dominant in tactical endgames when piece positions are mostly exposed.",
+            "Optimal play within bounded lookahead horizons.",
+            "Strong endgame tactical execution once pieces are revealed.",
         ],
         weaknesses: [
-            "Imperfect information creates uncertainty that standard minimax struggles to model.",
-            "Branching factor explodes without strict depth cutoffs.",
-            "Vulnerable to bluffs when opponent ranks are unknown.",
+            "Hidden information requires belief-state approximations.",
+            "Branching factor limits search depth without aggressive pruning.",
         ],
-        stats: {
-            speed: 3,
-            strategicDepth: 4,
-            adaptability: 3,
-        },
-        notes: "Best deployed in deterministic phases or augmented with belief-state sampling.",
+        notes: "Benchmark evaluation currently pending.",
     },
     {
         id: "mcts",
         name: "MCTS",
-        tagline: "Monte Carlo Probabilistic Planner",
+        category: "Monte Carlo Tree Search",
         description:
-            "Simulates rollout games per move, balancing exploration of unknown vectors and exploitation of proven wins.",
+            "Simulates rollout games from current position, balancing exploration and exploitation to evaluate moves statistically.",
         image: mctsImage,
-        concept:
-            "Four-stage Monte Carlo Tree Search: Selection (UCT formula), Expansion, Simulation rollouts, and Backpropagation of win statistics.",
-        infoType: "Statistical",
-        trainability: "Full",
-        trainabilityDetails:
-            "Fully trainable with AlphaZero-style architecture: policy networks direct tree expansion while value networks replace random rollouts.",
+        algorithm:
+            "UCT tree search: Selection, Expansion, Simulation rollouts, and Backpropagation.",
+        stateModel: "Tree of visited board states with win/loss visit counts.",
+        complexity: "O(S × d) where S is simulation count and d is rollout depth.",
+        trainingSupport: "Full",
+        trainingDetails:
+            "Compatible with AlphaZero architectures: policy networks guide expansion, value networks replace rollouts.",
         strengths: [
-            "Excels in large, uncertain state spaces with hidden information.",
-            "Dynamically converges towards optimal lines without hand-crafted heuristics.",
-            "Foundational architecture for modern reinforcement learning engines.",
+            "Handles large state spaces and imperfect information without fixed heuristics.",
+            "Scales decision quality directly with available compute budget.",
         ],
         weaknesses: [
-            "High computational cost scaling with simulation budget.",
-            "Rollout accuracy depends on playout policy quality.",
-            "Requires careful time budgeting per turn in live interactive matches.",
+            "High CPU demand per decision compared to 1-ply heuristics.",
+            "Requires rollout budget tuning for interactive latency constraints.",
         ],
-        stats: {
-            speed: 2,
-            strategicDepth: 5,
-            adaptability: 5,
-        },
-        notes: "Long-term champion architecture; scales smoothly with additional compute and trained neural policy networks.",
+        notes: "Benchmark evaluation currently pending.",
     },
 ];
 
-// TODO: source of truth should eventually be loaded from documents/files/ai-data/*.json
 export const tournamentBenchmarks: AITournamentBenchmark[] = [
     {
         aiId: "fafo",
         aiName: "FAFO",
-        sampleSize: "10,000 matches",
-        totalRuntime: "16.96 s",
-        avgRoundsPerGame: "336.7",
+        sampleSize: 10000,
+        totalRuntimeSeconds: 16.96,
+        avgRoundsPerGame: 336.67,
+        flagCaptures: 5404,
         flagCaptureRate: "62.3%",
+        noMoveWins: 243,
         noMoveWinsRate: "2.8%",
+        maxTurnCutoffs: 3027,
         maxTurnCutoffsRate: "34.9%",
-        notes: "Baseline random mover; high rate of max-turn timeouts and accidental flag stumble captures.",
+        summary: "Baseline random mover; high rate of max-turn timeouts.",
     },
     {
         aiId: "fato",
         aiName: "FATO",
-        sampleSize: "10,000 matches",
-        totalRuntime: "57.78 s",
-        avgRoundsPerGame: "238.2",
+        sampleSize: 10000,
+        totalRuntimeSeconds: 57.78,
+        avgRoundsPerGame: 238.18,
+        flagCaptures: 5328,
         flagCaptureRate: "70.8%",
+        noMoveWins: 1090,
         noMoveWinsRate: "14.5%",
+        maxTurnCutoffs: 1111,
         maxTurnCutoffsRate: "14.8%",
-        notes: "Piece memory increases flag captures by +8.5% and cuts match durations down by ~29.3%.",
+        summary: "Piece memory reduces stall draws by 20% and accelerates flag captures.",
     },
 ];

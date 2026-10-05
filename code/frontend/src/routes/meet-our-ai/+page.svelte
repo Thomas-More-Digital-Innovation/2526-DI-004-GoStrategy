@@ -12,9 +12,9 @@
     let activeView = $state<ViewMode>("dossiers");
 
     const tabs: { id: ViewMode; label: string }[] = [
-        { id: "dossiers", label: "AI Dossiers" },
-        { id: "matrix", label: "Algorithm Matrix" },
-        { id: "benchmarks", label: "Tournament Benchmarks" },
+        { id: "dossiers", label: "Engines" },
+        { id: "matrix", label: "Specifications" },
+        { id: "benchmarks", label: "Tournament Results" },
     ];
 </script>
 
@@ -22,40 +22,28 @@
     <title>GoStrategy — Meet our AI</title>
 </svelte:head>
 
-<div class="space-y-8 animate-fade-in pb-12">
-    <!-- Page Header -->
-    <header
-        class="flex flex-col md:flex-row md:items-center justify-between gap-4"
-    >
-        <div>
-            <h1
-                class="text-3xl font-extrabold text-white uppercase tracking-widest"
-            >
-                Meet our AI
-            </h1>
-            <p class="text-white/50 text-sm mt-1">
-                Explore the algorithms, heuristic models, and decision
-                architectures powering GoStrategy opponents.
-            </p>
-        </div>
+<div class="space-y-6 pb-12">
+    <header>
+        <h1 class="text-2xl font-bold text-white uppercase tracking-wider">
+            Meet our AI
+        </h1>
+        <p class="text-white/50 text-xs mt-1">
+            Technical specifications and tournament benchmarks for GoStrategy AI opponents.
+        </p>
     </header>
 
     <Tabs {tabs} bind:active={activeView}>
         {#snippet children(current)}
             {#if current === "dossiers"}
-                <div class="grid grid-cols-1 gap-6">
+                <div class="space-y-4">
                     {#each aiDossiers as dossier}
                         <AIDossierCard {dossier} />
                     {/each}
                 </div>
             {:else if current === "matrix"}
-                <div class="space-y-6">
-                    <AIComparisonTable dossiers={aiDossiers} />
-                </div>
+                <AIComparisonTable dossiers={aiDossiers} />
             {:else if current === "benchmarks"}
-                <div class="space-y-6">
-                    <AITournamentBenchmark benchmarks={tournamentBenchmarks} />
-                </div>
+                <AITournamentBenchmark benchmarks={tournamentBenchmarks} />
             {/if}
         {/snippet}
     </Tabs>
