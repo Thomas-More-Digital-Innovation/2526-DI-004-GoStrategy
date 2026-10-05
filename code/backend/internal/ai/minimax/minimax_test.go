@@ -135,4 +135,25 @@ func TestMinimaxAI_MinimaxBranches(t *testing.T) {
 		assert.True(t, ok)
 		assert.Equal(t, ttBeta, entry.flag)
 	})
+
+	t.Run("flag captured evaluations", func(t *testing.T) {
+		flagAIPlayer := game.NewPlayer(0, "us", "red")
+		flagOpponent := game.NewPlayer(1, "them", "blue")
+		aiObj := NewAIWithParams(&flagAIPlayer, false, params)
+
+		ourFlag := game.NewPiece(models.Flag, &flagAIPlayer)
+		oppFlag := game.NewPiece(models.Flag, &flagOpponent)
+		flagAIPlayer.AddPiece(ourFlag, game.NewPosition(0, 0))
+		flagOpponent.AddPiece(oppFlag, game.NewPosition(9, 9))
+
+		boardLostFlag := game.NewBoard()
+		boardLostFlag.SetPieceAt(game.NewPosition(9, 9), oppFlag)
+		scoreLoss := aiObj.minimax(boardLostFlag, 1, -1e9, 1e9, true, &flagOpponent)
+		assert.Equal(t, -2e6, scoreLoss)
+
+		boardWonFlag := game.NewBoard()
+		boardWonFlag.SetPieceAt(game.NewPosition(0, 0), ourFlag)
+		scoreWin := aiObj.minimax(boardWonFlag, 1, -1e9, 1e9, true, &flagOpponent)
+		assert.Equal(t, 2e6, scoreWin)
+	})
 }

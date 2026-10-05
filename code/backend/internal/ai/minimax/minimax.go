@@ -196,20 +196,32 @@ func (aiObj *AI) minimax(board *game.Board, depth int, alpha, beta float64, maxi
 }
 
 func isFlagCaptured(board *game.Board, player *game.Player) bool {
-	if player == nil {
-		return true
+	if player == nil || !playerHasFlag(player) {
+		return false
 	}
 	playerID := player.GetID()
 	field := board.GetField()
 	for y := range 10 {
 		for x := range 10 {
 			piece := field[y][x]
-			if piece != nil && piece.GetOwner().GetID() == playerID && piece.GetType().GetName() == ai_const.Flag {
+			if piece != nil && piece.GetOwner() != nil && piece.GetOwner().GetID() == playerID && piece.GetType() != nil && piece.GetType().GetName() == ai_const.Flag {
 				return false
 			}
 		}
 	}
 	return true
+}
+
+func playerHasFlag(player *game.Player) bool {
+	if player == nil {
+		return false
+	}
+	for _, piece := range player.GetAlivePieces() {
+		if piece != nil && piece.GetType() != nil && piece.GetType().GetName() == ai_const.Flag {
+			return true
+		}
+	}
+	return false
 }
 
 func getBoardStateKey(board *game.Board, maximizingPlayer bool) string {
