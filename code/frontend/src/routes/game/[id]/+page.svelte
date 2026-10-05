@@ -1,317 +1,45 @@
 <script lang="ts">
     import { onMount, onDestroy } from "svelte";
     import { page } from "$app/stores";
-    import { GameSocket } from "$lib/api/websocket";
     import { gameStore } from "$lib/state/game.svelte";
-    import { toastStore, type ToastType } from "$lib/state/toast.svelte";
-    import Board from "$lib/components/game/Board.svelte";
-    import GameInfo from "$lib/components/game/GameInfo.svelte";
-    import RightBar from "$lib/components/game/right-bar/RightBar.svelte";
-    import CombatAnimation from "$lib/components/game/CombatAnimation.svelte";
-    import SetupBanner from "$lib/components/game/SetupBanner.svelte";
-    import Loading from "$lib/components/ui/Loading.svelte";
-    import Button from "$lib/components/ui/Button.svelte";
-    import type { Position } from "$lib/types/game";
     import { gamemodes } from "$lib/data/gamemodes.data";
-    import ConnectionOverlay from "$lib/components/game/ConnectionOverlay.svelte";
-    import { games as gamesApi } from "$lib/api/client";
-    import { serverStore } from "$lib/state/server.svelte";
-    import Title from "$lib/components/Title.svelte";
+    import Board from "$lib/components/game/Board.svelte";
+    import Loading from "$lib/components/ui/Loading.svelte";
+    import { GameSessionController } from "./_state/game-session.svelte";
+    import ConnectionOverlay from "./_components/ConnectionOverlay.svelte";
+    import CombatAnimation from "./_components/CombatAnimation.svelte";
+    import SetupBanner from "./_components/SetupBanner.svelte";
+    import GameInfo from "./_components/GameInfo.svelte";
+    import GameTopBar from "./_components/GameTopBar.svelte";
+    import SetupInstructions from "./_components/right-bar/SetupInstructions.svelte";
+    import RightBar from "./_components/right-bar/RightBar.svelte";
 
-    let socket = new GameSocket();
-    let gameId = $state("");
-    let connected = $state(false);
-    let validMoves = $state<Position[]>([]);
-    let setupSwapPos1 = $state<Position | null>(null);
-    let setupSelectedPlayer = $state(0);
+    const session = new GameSessionController();
 
-    // Reconnection tracking state
-    let isReconnecting = $state(false);
-    let reconnectAttempts = $state(0);
-    const maxReconnectAttempts = 5;
-    let seatIndex = -1;
-
-    const isSetupPhase = $derived(gameStore.gameState?.isSetupPhase ?? false);
-
-    const isHumanTurn = $derived.by(() => {
-        return (
-            gameStore.gameState?.currentPlayerId === 0 &&
-            gameStore.gameMode.mode === gamemodes.human_vs_ai.mode &&
-            !gameStore.gameState?.isGameOver &&
-            !isSetupPhase
+    onMount(() => {
+        session.init(
+            $page.params.id || "",
+            new URLSearchParams(window.location.search),
         );
-    });
-
-    const viewerId = $derived(
-        gameStore.gameMode.mode === gamemodes.human_vs_ai.mode ? 0 : -1,
-    );
-
-    onMount(async () => {
-        gameId = $page.params.id || "";
-        const params = new URLSearchParams(window.location.search);
-        gameStore.gameMode = gamemodes.fromString(params.get("mode") || "");
-
-        const seatParam = params.get("seat");
-        const defaultSeat = gameStore.gameMode.mode === "human_vs_ai" ? 0 : -1;
-        seatIndex = seatParam !== null ? parseInt(seatParam) : defaultSeat;
-
-        setupHandlers();
-
-        try {
-            await socket.connect(gameId, seatIndex);
-            connected = true;
-        } catch (e: any) {
-            await serverStore.check();
-            if (serverStore.isOnline) {
-                toastStore.error("Game session not found or cleaned up.");
-            } else {
-                toastStore.handleApiMessage(
-                    e,
-                    "Failed to connect to game server",
-                );
-            }
-            setTimeout(() => (window.location.href = "/"), 3000);
-        }
     });
 
     onDestroy(() => {
-        socket.disconnect();
-        gameStore.reset();
+        session.destroy();
     });
-
-    async function attemptReconnect() {
-        if (isReconnecting) return;
-        isReconnecting = true;
-        reconnectAttempts = 0;
-
-        while (reconnectAttempts < maxReconnectAttempts) {
-            reconnectAttempts++;
-            try {
-                await socket.connect(gameId, seatIndex);
-                connected = true;
-                isReconnecting = false;
-                reconnectAttempts = 0;
-                toastStore.success("Reconnected to game session successfully.");
-                return;
-            } catch (e) {
-                const delay = Math.pow(2, reconnectAttempts) * 1000;
-                await new Promise((resolve) => setTimeout(resolve, delay));
-            }
-        }
-
-        isReconnecting = false;
-        await serverStore.check();
-        if (serverStore.isOnline) {
-            toastStore.error(
-                "Failed to restore connection: Game session not found or cleaned up.",
-            );
-        } else {
-            toastStore.error(
-                "Failed to restore server connection after multiple attempts.",
-            );
-        }
-    }
-
-    async function abandonAndQuit() {
-        try {
-            socket.disconnect();
-            await gamesApi.abandon(gameId);
-        } catch (e) {
-            console.error("Failed to abandon session:", e);
-        } finally {
-            window.location.href = "/";
-        }
-    }
-
-    function setupHandlers() {
-        socket.on("gameState", (data) => gameStore.updateGameState(data));
-        socket.on("boardState", (data) =>
-            gameStore.updateBoardState(data, viewerId),
-        );
-        socket.on("moveHistory", (data) =>
-            gameStore.loadMoveHistory(data, gameId, viewerId),
-        );
-
-        socket.on("moveResult", (data) => {
-            if (!data.success) {
-                toastStore.handleApiMessage(data.error || data, "Move failed");
-                gameStore.setSelectedPosition(null);
-                validMoves = [];
-            }
-        });
-
-        socket.on("validMoves", (data) => {
-            validMoves = data.validMoves || [];
-        });
-
-        socket.on("combat", (data) => {
-            gameStore.showCombatAnimation({
-                attacker: data.attacker,
-                defender: data.defender,
-                attackerWon: data.attackerWon,
-                defenderWon: data.defenderWon,
-            });
-        });
-
-        socket.on("gameOver", () => {
-            toastStore.success(
-                "Game Over! You can review the game replay or go back to the menu.",
-                5000,
-            );
-        });
-
-        socket.on("error", (data) => {
-            toastStore.handleApiMessage(data.error || data);
-            gameStore.setSelectedPosition(null);
-            validMoves = [];
-        });
-
-        socket.onClose(() => {
-            if (connected && !gameStore.gameState?.isGameOver) {
-                connected = false;
-                attemptReconnect();
-            }
-        });
-    }
-
-    function handleCellClick(x: number, y: number) {
-        if (isSetupPhase) {
-            if (gameStore.gameMode.mode === gamemodes.human_vs_ai.mode) {
-                handleSetupClick(x, y);
-            } else if (gameStore.gameMode.mode === gamemodes.ai_vs_ai.mode) {
-                handleSetupClick(x, y, setupSelectedPlayer);
-            }
-            return;
-        }
-
-        if (gameStore.isReplaying || !isHumanTurn) return;
-
-        const board = gameStore.boardState?.board;
-        if (!board) return;
-
-        const clickedPiece = board[y][x];
-        const selected = gameStore.selectedPosition;
-        const hasValidPiece = clickedPiece && clickedPiece.ownerName;
-
-        if (!selected) {
-            if (hasValidPiece && clickedPiece.ownerId === 0) {
-                gameStore.setSelectedPosition({ x, y });
-                socket.requestValidMoves({ x, y });
-            }
-            return;
-        }
-
-        if (selected.x === x && selected.y === y) {
-            gameStore.setSelectedPosition(null);
-            validMoves = [];
-            return;
-        }
-
-        const isValid = validMoves.some((m) => m.x === x && m.y === y);
-
-        if (isValid) {
-            socket.sendMove(selected, { x, y });
-            gameStore.setSelectedPosition(null);
-            validMoves = [];
-        } else if (hasValidPiece && clickedPiece.ownerId === 0) {
-            gameStore.setSelectedPosition({ x, y });
-            validMoves = [];
-            socket.requestValidMoves({ x, y });
-        } else {
-            gameStore.setSelectedPosition(null);
-            validMoves = [];
-        }
-    }
-
-    function handleSetupClick(x: number, y: number, playerId: number = 0) {
-        const startRow = playerId === 0 ? 6 : 0;
-        const endRow = playerId === 0 ? 9 : 3;
-
-        if (y < startRow || y > endRow) return;
-
-        if (!setupSwapPos1) {
-            setupSwapPos1 = { x, y };
-        } else {
-            socket.sendSwapPieces(setupSwapPos1, { x, y });
-            setupSwapPos1 = null;
-        }
-    }
-
-    function handleCellDragStart(e: DragEvent, x: number, y: number) {
-        if (!isSetupPhase) return;
-        e.dataTransfer?.setData("text/plain", JSON.stringify({ x, y }));
-    }
-
-    function handleCellDrop(e: DragEvent, x: number, y: number) {
-        if (!isSetupPhase) return;
-        const data = e.dataTransfer?.getData("text/plain");
-        if (!data) return;
-
-        try {
-            const from = JSON.parse(data) as Position;
-            if (from.x === x && from.y === y) return;
-            socket.sendSwapPieces(from, { x, y });
-        } catch (e) {
-            console.error("Failed to parse drop data", e);
-        }
-    }
-
-    function handleRandomize(playerId?: number) {
-        socket.sendRandomizeSetup(playerId);
-        setupSwapPos1 = null;
-    }
-
-    function handleStartGame(headless: boolean = false) {
-        socket.sendStartGame(headless);
-        setupSwapPos1 = null;
-    }
-
-    function handleLoadSetup(setupData: string, playerId?: number) {
-        socket.sendLoadSetup(setupData, playerId);
-        setupSwapPos1 = null;
-    }
-
-    function handleSetSpeed(speedMs: number) {
-        socket.sendSetSpeed(speedMs);
-    }
-
-    function handleStep() {
-        gameStore.isStepping = true;
-        socket.sendStep();
-    }
-
-    function saveGame() {
-        try {
-            const data = gameStore.exportGame();
-            if (!data) {
-                toastStore.warning("No history available to save");
-                return;
-            }
-            const blob = new Blob([data], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = `gostrategy-${gameId}-${Date.now()}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-        } catch {
-            toastStore.error("Failed to save game");
-        }
-    }
 </script>
 
 <svelte:head>
-    <title>GoStrategy — Game {gameId}</title>
+    <title>GoStrategy — Game {session.gameId}</title>
 </svelte:head>
 
-{#if !connected}
+{#if !session.connected}
     <ConnectionOverlay
-        {isReconnecting}
-        {gameId}
-        {reconnectAttempts}
-        {maxReconnectAttempts}
-        onRetry={attemptReconnect}
-        onReturnToMenu={abandonAndQuit}
+        isReconnecting={session.isReconnecting}
+        gameId={session.gameId}
+        reconnectAttempts={session.reconnectAttempts}
+        maxReconnectAttempts={session.maxReconnectAttempts}
+        onRetry={() => session.attemptReconnect()}
+        onReturnToMenu={() => session.abandonAndQuit()}
     />
 {:else if gameStore.gameState?.headless && !gameStore.gameState?.isGameOver}
     <Loading
@@ -320,43 +48,12 @@
         subtitle="AI is thinking"
     />
 {:else}
-    <div class="grid grid-cols-[1fr_auto_1fr] items-center mb-6">
-        <div class="flex justify-start">
-            {#if gameStore.gameState?.isGameOver}
-                <Button
-                    onclick={() => {
-                        window.location.href = "/";
-                    }}
-                    variant="secondary">Return to menu</Button
-                >
-            {:else}
-                <Button
-                    variant="ghost"
-                    onclick={() => {
-                        if (confirm("Are you sure you want to quit?")) {
-                            abandonAndQuit();
-                        }
-                    }}
-                >
-                    Quit Game
-                </Button>
-            {/if}
-        </div>
-
-        <Title />
-
-        <div class="flex justify-end">
-            <Button
-                variant="outline"
-                size="sm"
-                onclick={saveGame}
-                disabled={!connected || !gameStore.gameState?.isGameOver}
-                disabledMessage="Game must be finished to save a replay"
-            >
-                💾 Save Replay
-            </Button>
-        </div>
-    </div>
+    <GameTopBar
+        isGameOver={gameStore.gameState?.isGameOver ?? false}
+        connected={session.connected}
+        onAbandonAndQuit={() => session.abandonAndQuit()}
+        onSaveGame={() => session.saveGame()}
+    />
 
     <div class="grid grid-cols-[280px_1fr_280px] gap-6 items-start">
         <div>
@@ -369,92 +66,42 @@
         <div class="flex justify-center">
             <Board
                 boardState={gameStore.boardState}
-                selectedPosition={isSetupPhase
-                    ? setupSwapPos1
+                selectedPosition={session.isSetupPhase
+                    ? session.setupSwapPos1
                     : gameStore.selectedPosition}
-                onCellClick={handleCellClick}
-                onCellDragStart={handleCellDragStart}
-                onCellDrop={handleCellDrop}
+                onCellClick={(x, y) => session.handleCellClick(x, y)}
+                onCellDragStart={(e, x, y) =>
+                    session.handleCellDragStart(e, x, y)}
+                onCellDrop={(e, x, y) => session.handleCellDrop(e, x, y)}
                 isInteractive={!gameStore.isReplaying &&
-                    (isHumanTurn || isSetupPhase)}
-                {viewerId}
-                {validMoves}
-                disabledRows={isSetupPhase
-                    ? gameStore.gameMode.mode === gamemodes.human_vs_ai.mode
-                        ? [0, 1, 2, 3, 4, 5]
-                        : setupSelectedPlayer === 0
-                          ? [0, 1, 2, 3, 4, 5]
-                          : [4, 5, 6, 7, 8, 9]
-                    : []}
-                visualDisabledRows={isSetupPhase ? [4, 5] : []}
-                highlightedRows={isSetupPhase
-                    ? gameStore.gameMode.mode === gamemodes.human_vs_ai.mode
-                        ? [6, 7, 8, 9]
-                        : setupSelectedPlayer === 0
-                          ? [6, 7, 8, 9]
-                          : [0, 1, 2, 3]
-                    : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}
-                highlightColor={isSetupPhase
-                    ? gameStore.gameMode.mode === gamemodes.human_vs_ai.mode
-                        ? "red"
-                        : setupSelectedPlayer === 0
-                          ? "red"
-                          : "blue"
-                    : gameStore.gameState?.currentPlayerId === 0
-                      ? "red"
-                      : "blue"}
+                    (session.isHumanTurn || session.isSetupPhase)}
+                viewerId={session.viewerId}
+                validMoves={session.validMoves}
+                disabledRows={session.disabledRows}
+                visualDisabledRows={session.visualDisabledRows}
+                highlightedRows={session.highlightedRows}
+                highlightColor={session.highlightColor}
                 scale={1.3}
                 lastMove={gameStore.lastMove}
             />
         </div>
 
         <div>
-            {#if !isSetupPhase}
+            {#if !session.isSetupPhase}
                 <RightBar
                     currentMoveIndex={gameStore.currentHistoryIndex}
                     totalMoves={gameStore.history.length}
                     isReplaying={gameStore.isReplaying}
-                    onPrevious={() => {
-                        if (!gameStore.isPaused) socket.sendPause();
-                        gameStore.previousMove();
-                    }}
-                    onNext={() => {
-                        if (!gameStore.isPaused) socket.sendPause();
-                        gameStore.nextMove();
-                    }}
-                    onGoToMove={(index) => {
-                        if (!gameStore.isPaused) socket.sendPause();
-                        gameStore.goToMove(index);
-                    }}
-                    onExitReplay={() => {
-                        socket.sendUnpause();
-                        gameStore.exitReplay();
-                    }}
-                    onTogglePause={() => {
-                        if (gameStore.isPaused) {
-                            socket.sendUnpause();
-                        } else {
-                            socket.sendPause();
-                        }
-                    }}
-                    onSetSpeed={handleSetSpeed}
-                    onStep={handleStep}
+                    onPrevious={() => session.handlePreviousMove()}
+                    onNext={() => session.handleNextMove()}
+                    onGoToMove={(index) => session.handleGoToMove(index)}
+                    onExitReplay={() => session.handleExitReplay()}
+                    onTogglePause={() => session.handleTogglePause()}
+                    onSetSpeed={(speed) => session.handleSetSpeed(speed)}
+                    onStep={() => session.handleStep()}
                 />
             {:else}
-                <div
-                    class="glass rounded-2xl p-6 space-y-3 border border-white/10"
-                >
-                    <h3
-                        class="text-sm font-bold text-brand-accent uppercase tracking-wider"
-                    >
-                        Setup Instructions
-                    </h3>
-                    <ul class="text-white/50 text-sm space-y-2">
-                        <li>Click two pieces to swap them</li>
-                        <li>Use "Randomize" for a random setup</li>
-                        <li>Click "Start Game" when ready</li>
-                    </ul>
-                </div>
+                <SetupInstructions />
             {/if}
         </div>
     </div>
@@ -466,25 +113,22 @@
         defender={gameStore.combatAnimation.defender}
         attackerWon={gameStore.combatAnimation.attackerWon}
         defenderWon={gameStore.combatAnimation.defenderWon}
-        onComplete={() => {
-            socket.sendAnimationComplete();
-            gameStore.hideCombatAnimation();
-        }}
+        onComplete={() => session.handleAnimationComplete()}
     />
 {/if}
 
-{#if isSetupPhase && (gameStore.gameMode.mode === gamemodes.human_vs_ai.mode || gameStore.gameMode.mode === gamemodes.ai_vs_ai.mode)}
+{#if session.isSetupPhase && (gameStore.gameMode.mode === gamemodes.human_vs_ai.mode || gameStore.gameMode.mode === gamemodes.ai_vs_ai.mode)}
     <SetupBanner
-        onRandomize={handleRandomize}
-        onStart={handleStartGame}
-        onLoadSetup={handleLoadSetup}
-        onBackToMenu={abandonAndQuit}
-        {viewerId}
+        onRandomize={(p) => session.handleRandomize(p)}
+        onStart={(h) => session.handleStartGame(h)}
+        onLoadSetup={(setup, p) => session.handleLoadSetup(setup, p)}
+        onBackToMenu={() => session.abandonAndQuit()}
+        viewerId={session.viewerId}
         gameMode={gameStore.gameMode}
-        selectedPlayer={setupSelectedPlayer}
+        selectedPlayer={session.setupSelectedPlayer}
         onSelectPlayer={(p: number) => {
-            setupSelectedPlayer = p;
-            setupSwapPos1 = null;
+            session.setupSelectedPlayer = p;
+            session.setupSwapPos1 = null;
         }}
     />
 {/if}

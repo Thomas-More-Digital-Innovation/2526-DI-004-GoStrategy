@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Piece } from "$lib/types/game";
-    import PieceDisplay from "./Piece.svelte";
+    import PieceDisplay from "$lib/components/game/Piece.svelte";
 
     interface Props {
         attacker: Piece | null;
@@ -202,11 +202,11 @@
     }
     @keyframes zoomIn {
         from {
-            transform: scale(0.5);
+            opacity: 0.5;
             opacity: 0;
         }
         to {
-            transform: scale(1);
+            opacity: 1;
             opacity: 1;
         }
     }

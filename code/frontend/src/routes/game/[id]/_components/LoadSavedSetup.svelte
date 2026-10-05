@@ -2,7 +2,7 @@
     import Button from "$lib/components/ui/Button.svelte";
     import type { BoardSetup } from "$lib/types/board-setup";
     import { gameStore } from "$lib/state/game.svelte";
-    import BoardSetupCard from "../setup/BoardSetupCard.svelte";
+    import BoardSetupCard from "$lib/components/setup/BoardSetupCard.svelte";
 
     interface Props {
         savedSetups: BoardSetup[];
