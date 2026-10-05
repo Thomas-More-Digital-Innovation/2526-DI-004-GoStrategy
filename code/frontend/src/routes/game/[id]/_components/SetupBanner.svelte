@@ -4,7 +4,6 @@
     import { boardSetups } from "$lib/api/client";
     import { flipSetup } from "$lib/utils/board-binary";
     import type { BoardSetup } from "$lib/types/board-setup";
-    import BoardSetupCard from "$lib/components/setup/BoardSetupCard.svelte";
     import type { GameMode } from "$lib/types/game";
     import { gamemodes } from "$lib/data/gamemodes.data";
     import { gameStore } from "$lib/state/game.svelte";

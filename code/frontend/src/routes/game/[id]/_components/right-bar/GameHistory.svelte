@@ -1,6 +1,8 @@
 <script lang="ts">
+    import { tick } from "svelte";
     import Button from "$lib/components/ui/Button.svelte";
     import { gameStore } from "$lib/state/game.svelte";
+
     interface Props {
         currentMoveIndex: number;
         totalMoves: number;
@@ -23,6 +25,24 @@
 
     const canGoPrevious = $derived(currentMoveIndex > 0);
     const canGoNext = $derived(currentMoveIndex < totalMoves - 1);
+
+    let scrollContainer = $state<HTMLDivElement | null>(null);
+    let isInitialMount = true;
+
+    $effect(() => {
+        if (totalMoves > 0 && !isReplaying) {
+            const smooth = !isInitialMount;
+            isInitialMount = false;
+            tick().then(() => {
+                if (scrollContainer) {
+                    scrollContainer.scrollTo({
+                        top: scrollContainer.scrollHeight,
+                        behavior: smooth ? "smooth" : "auto",
+                    });
+                }
+            });
+        }
+    });
 </script>
 
 <div class="flex items-center justify-between">
@@ -75,14 +95,23 @@
         </Button>
     </div>
 
-    <div class="flex-1 overflow-y-auto space-y-1 min-h-0">
+    <div
+        bind:this={scrollContainer}
+        class="custom-scrollbar flex-1 overflow-y-auto space-y-1 min-h-0 pr-1"
+    >
         {#each Array(totalMoves) as _, index}
             <button
                 class="w-full text-left px-3 py-1.5 rounded-lg text-xs transition-all {index ===
                 currentMoveIndex
                     ? 'bg-brand-primary/20 text-brand-primary font-semibold'
                     : 'text-white/40 hover:bg-white/5 hover:text-white/70'}"
-                onclick={() => onGoToMove(index)}
+                onclick={() => {
+                    if (index === totalMoves - 1) {
+                        onExitReplay();
+                    } else {
+                        onGoToMove(index);
+                    }
+                }}
             >
                 Move {index + 1}
             </button>
@@ -91,3 +120,23 @@
 {:else}
     <p class="text-white/30 text-center py-4 text-sm">No moves yet</p>
 {/if}
+
+<style>
+    .custom-scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.18);
+        border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.35);
+    }
+</style>

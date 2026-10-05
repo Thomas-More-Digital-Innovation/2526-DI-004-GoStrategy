@@ -1,6 +1,7 @@
 <script lang="ts">
     import Card from "$lib/components/ui/Card.svelte";
-    import Button from "$lib/components/ui/Button.svelte";
+    import GameControls from "./GameControls.svelte";
+    import GameHistory from "./GameHistory.svelte";
 
     interface Props {
         currentMoveIndex: number;
@@ -27,12 +28,9 @@
         onSetSpeed,
         onStep,
     }: Props = $props();
-
-    import GameControls from "./GameControls.svelte";
-    import GameHistory from "./GameHistory.svelte";
 </script>
 
-<Card class="space-y-3 max-h-[500px] flex flex-col">
+<Card class="space-y-3 max-h-125 flex flex-col">
     <GameControls
         {isReplaying}
         {onSetSpeed}

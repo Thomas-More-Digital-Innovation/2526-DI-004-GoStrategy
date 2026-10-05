@@ -53,7 +53,6 @@
                     loading={gameStore.isStepping}
                     disabled={gameStore.isStepping}
                     disabledMessage="AI is thinking..."
-
                 >
                     Step ⏭️
                 </Button>
