@@ -19,6 +19,7 @@
         gameMode?: GameMode;
         selectedPlayer?: number;
         onSelectPlayer?: (player: number) => void;
+        onBackToMenu?: () => void;
     }
 
     let {
@@ -29,6 +30,7 @@
         gameMode = gamemodes.human_vs_ai,
         selectedPlayer = 0,
         onSelectPlayer,
+        onBackToMenu,
     }: Props = $props();
 
     const ownerId = $derived(
@@ -102,10 +104,7 @@
         class="glass pointer-events-auto flex items-center justify-between gap-6 px-8 py-4 border-b border-white/10"
     >
         <div class="flex items-center gap-3">
-            <Button
-                variant="outline"
-                onclick={() => (window.location.href = "/")}
-            >
+            <Button variant="outline" onclick={onBackToMenu}>
                 Back To Menu
             </Button>
 
