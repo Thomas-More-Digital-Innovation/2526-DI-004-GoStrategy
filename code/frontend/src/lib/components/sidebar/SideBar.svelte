@@ -7,6 +7,7 @@
     import Title from "../Title.svelte";
     import favicon from "$lib/assets/favicon.webp";
     import GridOverlay from "$lib/components/GridOverlay.svelte";
+    import Connecting from "./_components/Connecting.svelte";
 
     const navItems = [
         { name: "Command Center", href: "/" },
@@ -45,7 +46,7 @@
 
     <div class="group p-4 border-t border-brand-accent/20 bg-black/20">
         {#if authStore.loading}
-            Who are you?
+            <Connecting />
         {:else if authStore.user}
             <LoggedIn />
         {:else}
