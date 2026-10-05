@@ -16,6 +16,7 @@
     import ConnectionOverlay from "$lib/components/game/ConnectionOverlay.svelte";
     import { games as gamesApi } from "$lib/api/client";
     import { serverStore } from "$lib/state/server.svelte";
+    import Title from "$lib/components/Title.svelte";
 
     let socket = new GameSocket();
     let gameId = $state("");
@@ -64,7 +65,10 @@
             if (serverStore.isOnline) {
                 toastStore.error("Game session not found or cleaned up.");
             } else {
-                toastStore.handleApiMessage(e, "Failed to connect to game server");
+                toastStore.handleApiMessage(
+                    e,
+                    "Failed to connect to game server",
+                );
             }
             setTimeout(() => (window.location.href = "/"), 3000);
         }
@@ -98,9 +102,13 @@
         isReconnecting = false;
         await serverStore.check();
         if (serverStore.isOnline) {
-            toastStore.error("Failed to restore connection: Game session not found or cleaned up.");
+            toastStore.error(
+                "Failed to restore connection: Game session not found or cleaned up.",
+            );
         } else {
-            toastStore.error("Failed to restore server connection after multiple attempts.");
+            toastStore.error(
+                "Failed to restore server connection after multiple attempts.",
+            );
         }
     }
 
@@ -332,9 +340,8 @@
                 Quit Game
             </Button>
         {/if}
-        <h1 class="text-lg font-bold text-white uppercase tracking-wider">
-            Game
-        </h1>
+        <Title />
+
         <Button
             variant="outline"
             size="sm"
