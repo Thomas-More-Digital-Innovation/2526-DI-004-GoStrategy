@@ -37,6 +37,8 @@ This project aims to provide a robust platform for playing GoStrategy while serv
 - Docker and Docker Compose
 - Bun (for local frontend development)
 - Go 1.25+ (for local backend development)
+- [just](https://github.com/casey/just) command runner
+- [lefthook](https://github.com/evilmartians/lefthook) Git hooks manager
 
 ### Running with Docker (Recommended)
 The easiest way to get the full stack running is using docker compose:
@@ -47,6 +49,16 @@ This will spin up the backend, frontend, and database containers. The app will b
 
 ### Local Development
 If you prefer running services outside of Docker:
+
+**Git Hooks (Lefthook & Just):**
+Install the pre-commit hooks to automatically format and lint code before committing:
+```bash
+lefthook install
+```
+Lefthook runs on `git commit` to auto-format staged Go files and execute `just lint` (which runs `golangci-lint`). You can also run the hooks manually at any time:
+```bash
+lefthook run pre-commit
+```
 
 **Backend:**
 ```bash
