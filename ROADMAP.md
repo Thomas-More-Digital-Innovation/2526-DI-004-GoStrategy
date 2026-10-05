@@ -12,7 +12,7 @@ This document outlines the planned improvements and future directions for the Go
 - [x] **Minimax**: Create a minimax-based evaluation engine.
 - [x] **MCTS**: Create a Monte Carlo Tree Search-based evaluation engine.
 - [x] **AI In Game**: Add the new AIs to the game as available opponents.
-- [ ] **AI Info**: Add an info page about each AIs algorithm, strengths and weaknesses, and how they work.
+- [x] **AI Info**: Add an info page about each AIs algorithm, strengths and weaknesses, and how they work.
 - [ ] **Export Tools**: Add ability to export board setups as JSON for external AI training/testing.
 
 
