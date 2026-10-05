@@ -6,6 +6,7 @@ import (
 	ai_const "digital-innovation/gostrategy/internal/ai/const"
 	"digital-innovation/gostrategy/internal/game"
 	"digital-innovation/gostrategy/internal/game/models"
+	"math"
 	"math/rand/v2"
 	"runtime"
 	"sync"
@@ -101,8 +102,6 @@ func (aiObj *AI) rollout(board *game.Board, ourPlayer *game.Player, opponent *ga
 		oppIndex = ai.BuildMobileIndex(tempBoard, opponent)
 	}
 
-	captureOccurred := false
-
 	maxRolloutDepth := 10
 	for range maxRolloutDepth {
 		if aiObj.isFlagCapturedAt(tempBoard, oppFlagPos, opponent) {
@@ -129,9 +128,6 @@ func (aiObj *AI) rollout(board *game.Board, ourPlayer *game.Player, opponent *ga
 
 		move := pickRolloutMove(tempBoard, moves)
 		captured := aiObj.applySimulatedMoveInPlace(tempBoard, move)
-		if captured {
-			captureOccurred = true
-		}
 
 		// Update index: remove old position, add new if piece survived.
 		updateIndex(currentIndex, move.GetFrom(), move.GetTo(), captured)
@@ -139,18 +135,15 @@ func (aiObj *AI) rollout(board *game.Board, ourPlayer *game.Player, opponent *ga
 		currentPlayer, nextPlayer = nextPlayer, currentPlayer
 	}
 
-	// Skip EvaluateBoard for non-decisive rollouts — returns indeterminate 0.5 directly.
-	if !captureOccurred {
-		return 0.5
-	}
-
 	eval := ai.EvaluateBoard(tempBoard, ourPlayer, aiObj.GetMemory(), aiObj.params.Weights, aiObj.params.Aggression)
-	if eval > 10.0 {
+	score := 0.5 + math.Tanh(eval/50.0)*0.5
+	if score > 1.0 {
 		return 1.0
-	} else if eval < -10.0 {
+	}
+	if score < 0.0 {
 		return 0.0
 	}
-	return 0.5
+	return score
 }
 
 // pickRolloutMove biases rollout selection toward capture moves (80% preference when available).

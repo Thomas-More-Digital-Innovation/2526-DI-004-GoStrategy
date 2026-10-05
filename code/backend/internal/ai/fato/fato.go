@@ -263,25 +263,3 @@ func (ai *AI) findExplorationMove(board *game.Board) (game.Move, bool) {
 	}
 	return game.Move{}, false
 }
-
-// AnalyzeMove observes opponent moves and updates memory
-// Overrides BaseAI to add scout detection
-func (ai *AI) AnalyzeMove(opponentMove game.Move, opponent *game.Player, round int) {
-	memory := ai.GetMemory()
-	from := opponentMove.GetFrom()
-	to := opponentMove.GetTo()
-
-	// First, apply default memory updates (move tracking)
-	if memory.Recall(from) != nil {
-		memory.MovePiece(from, to)
-	}
-
-	// Detect scout moves (moving >1 square in straight line)
-	deltaX := int(math.Abs(float64(from.X - to.X)))
-	deltaY := int(math.Abs(float64(from.Y - to.Y)))
-
-	if deltaX > 1 || deltaY > 1 {
-		scoutPiece := game.NewPiece(models.Scout, opponent)
-		memory.Remember(to, scoutPiece, 1.0, round)
-	}
-}

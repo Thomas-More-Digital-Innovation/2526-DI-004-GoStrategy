@@ -12,6 +12,7 @@
     const navItems = [
         { name: "Command Center", href: "/" },
         { name: "Profile", href: "/profile" },
+        { name: "Meet our AI", href: "/meet-our-ai" },
         { name: "Board Setups", href: "/board-setups" },
     ];
 

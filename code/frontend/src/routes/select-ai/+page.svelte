@@ -7,8 +7,10 @@
     import { gamemodes } from "$lib/data/gamemodes.data";
     import SelectionSummary from "$lib/components/setup/SelectionSummary.svelte";
 
+    import { onMount } from "svelte";
+
     const gameMode = gamemodes.fromString(
-        $page.url.searchParams.get("mode") || "",
+        $page.url.searchParams.get("mode") || "human_vs_ai",
     );
 
     let step = $state<"ai1" | "ai2">("ai1");
@@ -44,6 +46,19 @@
             creating = false;
         }
     }
+
+    onMount(async () => {
+        const aiParam = $page.url.searchParams.get("ai");
+        if (!aiParam) return;
+
+        const target = aiParam.toLowerCase();
+        const matched = AIs.find(
+            (a) => a.id.toLowerCase() === target || a.name.toLowerCase() === target,
+        );
+        if (matched) {
+            await selectAi(matched.id);
+        }
+    });
 
     function back() {
         if (step === "ai2") {
