@@ -51,7 +51,7 @@ func placePiecesInRows(board *Board, pieces []*Piece, startRow, endRow int) erro
 // RandomSetup creates a random valid piece placement for a player
 func RandomSetup(player *Player) []*Piece {
 	pieces := GetPieceList(player)
-	// Shuffle pieces for random placement
+	//nolint:gosec
 	rand.Shuffle(len(pieces), func(i, j int) {
 		pieces[i], pieces[j] = pieces[j], pieces[i]
 	})
