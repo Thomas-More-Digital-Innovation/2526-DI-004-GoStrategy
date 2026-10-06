@@ -1,20 +1,10 @@
-lint:
-    cd code/backend && golangci-lint run --config=../../.golangci.yaml
+mod go 'just/go.just'
+mod web 'just/web.just'
 
-fmt:
-    cd code/backend && gofmt -w -s .
+# list available recipes
+default:
+    @just --list
 
-dev: 
+# start full-stack environment with Docker Compose
+dev:
     docker compose up --build
-
-update-swagger:
-    ./scripts/update-swagger.sh
-
-update-asyncapi:
-    ./scripts/update-asyncapi.sh
-
-update-docs:
-    ./scripts/update-swagger.sh && ./scripts/update-asyncapi.sh
-
-update-locks:
-    cd code/frontend && pnpm install && bun install

@@ -55,7 +55,7 @@ Install the pre-commit hooks to automatically format and lint code before commit
 ```bash
 lefthook install
 ```
-Lefthook runs on `git commit` to auto-format staged Go files and execute `just lint` (which runs `golangci-lint`). You can also run the hooks manually at any time:
+Lefthook runs on `git commit` to auto-format staged Go files and execute `just go lint` (which runs `golangci-lint`). You can also run the hooks manually at any time:
 ```bash
 lefthook run pre-commit
 ```

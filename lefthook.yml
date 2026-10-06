@@ -6,4 +6,4 @@ pre-commit:
       stage_fixed: true
     lint:
       glob: "*.go"
-      run: just lint
+      run: just go lint

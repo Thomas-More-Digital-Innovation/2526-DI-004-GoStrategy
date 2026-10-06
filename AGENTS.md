@@ -44,7 +44,7 @@ Before writing any code, stop at the first rung that holds:
 
 ### 1.4 Development & Tooling Guardrails
 - **Package Managers:** Frontend strictly uses `pnpm` or `bun`. Never run `npm` or `yarn`.
-- **Pre-commit Automation:** Enforced via `lefthook` (runs `gofmt` and `just lint`).
+- **Pre-commit Automation:** Enforced via `lefthook` (runs `gofmt` and `just go lint`).
 - **AI Tooling Constraints:**
   - AI assistants must **never** run `git commit` or `git push`.
   - AI assistants must **never** execute destructive migration or refactoring plans without approval.
@@ -130,3 +130,50 @@ code/frontend/src/
             └── _state/              # Page-specific state & controllers
                 ├── context.ts
                 └── game-session.svelte.ts
+```
+
+### 3.2 Svelte 5 Runes & Reactivity
+- **Runes Standard:** Exclusively use Svelte 5 runes (`$state`, `$derived`, `$props`, `$effect`, `$bindable`).
+- **Legacy Syntax Ban:** Absolute ban on legacy Svelte v4 reactive statements (`$:`) and `export let` syntax.
+- **Universal State Modules:** Encapsulate state using `.svelte.ts` files with reactive classes or functions using runes.
+- **Styling:** Exclusively Tailwind CSS utility classes (Tailwind v4 via `@tailwindcss/vite`). No inline `style="..."` or unstructured raw CSS blocks.
+
+---
+
+## 4. Verification Commands Reference
+
+### Root Workflows
+
+| Command | Description |
+| :--- | :--- |
+| `just default` | List all available recipes and submodules (`just`) |
+| `just dev` | Start full local development stack with Docker Compose |
+
+### Backend Submodule (`just go <cmd>`)
+
+| Command | Description |
+| :--- | :--- |
+| `just go fmt` | Format Go code (`gofmt -w -s .`) |
+| `just go fmt-check` | Verify Go code formatting |
+| `just go lint` | Run `golangci-lint` with root `.golangci.yaml` |
+| `just go test` | Run Go unit/integration tests |
+| `just go test-ci` | Run tests with `gotestsum` and atomic coverage profiling |
+| `just go coverage` | Run test suite and print function coverage summary |
+| `just go dev` | Run backend standalone (`go run ./cmd/server`) |
+| `just go migrate` | Run database migrations tool (`go run scripts/migrate.go`) |
+| `just go swagger` | Update Swag OpenAPI specifications |
+| `just go asyncapi` | Update AsyncAPI HTML documentation |
+| `just go docs` | Update both Swagger and AsyncAPI documentation |
+
+### Frontend Submodule (`just web <cmd>`)
+
+| Command | Description |
+| :--- | :--- |
+| `just web install` | Install frontend dependencies (`pnpm install`) |
+| `just web update-locks` | Update and sync lockfiles (`pnpm install && bun install`) |
+| `just web check` | Run `svelte-check` type checking against `tsconfig.json` |
+| `just web lint` | Alias to `check` |
+| `just web dev` | Run Vite development server (`pnpm dev`) |
+| `just web build` | Build static production assets (`pnpm build`) |
+| `just web preview` | Preview production build locally (`pnpm preview`) |
+| `just web audit` | Audit frontend dependencies for security advisories |
