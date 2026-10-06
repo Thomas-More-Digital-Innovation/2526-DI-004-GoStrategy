@@ -7,3 +7,16 @@ pre-commit:
     lint:
       glob: "*.go"
       run: just go lint
+    web-fmt:
+      root: "code/frontend"
+      glob: "*.{js,ts,svelte,json,css,html}"
+      run: pnpm prettier --write {staged_files}
+      stage_fixed: true
+    web-lint:
+      root: "code/frontend"
+      glob: "*.{js,ts,svelte}"
+      run: pnpm eslint {staged_files}
+    web-check:
+      root: "code/frontend"
+      glob: "*.{js,ts,svelte}"
+      run: pnpm check
