@@ -50,11 +50,14 @@ jobs:
       - name: Run Svelte type check
         working-directory: code/frontend
         run: pnpm check
+      - name: Run linter (Prettier & ESLint)
+        working-directory: code/frontend
+        run: pnpm lint
 
       - name: Summary
         if: failure()
         run: |
-          echo "Frontend type checking failed. Review the logs above to see errors."
+          echo "Frontend linting, format checking, and/or type checking failed. Review the logs above to see errors."
 
   build:
     name: Build
