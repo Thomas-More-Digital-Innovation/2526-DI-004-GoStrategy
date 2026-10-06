@@ -1,11 +1,11 @@
 <script lang="ts">
     import { onMount, onDestroy } from "svelte";
     import { page } from "$app/state";
-    import { gameStore } from "$lib/state/game.svelte";
     import { gamemodes } from "$lib/data/gamemodes.data";
     import Board from "$lib/components/game/Board.svelte";
     import Loading from "$lib/components/ui/Loading.svelte";
     import { GameSessionController } from "./_state/game-session.svelte";
+    import { setGameSession } from "./_state/context";
     import ConnectionOverlay from "./_components/ConnectionOverlay.svelte";
     import CombatAnimation from "./_components/CombatAnimation.svelte";
     import SetupBanner from "./_components/SetupBanner.svelte";
@@ -14,7 +14,7 @@
     import SetupInstructions from "./_components/right-bar/SetupInstructions.svelte";
     import RightBar from "./_components/right-bar/RightBar.svelte";
 
-    const session = new GameSessionController();
+    const session = setGameSession(new GameSessionController());
 
     onMount(() => {
         session.init(
@@ -41,39 +41,31 @@
         onRetry={() => session.attemptReconnect()}
         onReturnToMenu={() => session.abandonAndQuit()}
     />
-{:else if gameStore.gameState?.headless && !gameStore.gameState?.isGameOver}
+{:else if session.store.gameState?.headless && !session.store.isGameOver}
     <Loading
         title="Game in progress"
         description="2 AI's are having the battle of their lives"
         subtitle="AI is thinking"
     />
 {:else}
-    <GameTopBar
-        isGameOver={gameStore.gameState?.isGameOver ?? false}
-        connected={session.connected}
-        onAbandonAndQuit={() => session.abandonAndQuit()}
-        onSaveGame={() => session.saveGame()}
-    />
+    <GameTopBar />
 
     <div class="grid grid-cols-[280px_1fr_280px] gap-6 items-start">
         <div>
-            <GameInfo
-                gameState={gameStore.gameState}
-                gameMode={gameStore.gameMode}
-            />
+            <GameInfo />
         </div>
 
         <div class="flex justify-center">
             <Board
-                boardState={gameStore.boardState}
+                boardState={session.store.boardState}
                 selectedPosition={session.isSetupPhase
                     ? session.setupSwapPos1
-                    : gameStore.selectedPosition}
+                    : session.store.selectedPosition}
                 onCellClick={(x, y) => session.handleCellClick(x, y)}
                 onCellDragStart={(e, x, y) =>
                     session.handleCellDragStart(e, x, y)}
                 onCellDrop={(e, x, y) => session.handleCellDrop(e, x, y)}
-                isInteractive={!gameStore.isReplaying &&
+                isInteractive={!session.store.isReplaying &&
                     (session.isHumanTurn || session.isSetupPhase)}
                 viewerId={session.viewerId}
                 validMoves={session.validMoves}
@@ -82,24 +74,17 @@
                 highlightedRows={session.highlightedRows}
                 highlightColor={session.highlightColor}
                 scale={1.3}
-                lastMove={gameStore.lastMove}
+                lastMove={session.store.lastMove}
+                isSetupPhase={session.isSetupPhase}
+                currentPlayerId={session.store.gameState?.currentPlayerId}
+                isGameOver={session.store.isGameOver}
+                winnerId={session.store.gameState?.winnerId}
             />
         </div>
 
         <div>
             {#if !session.isSetupPhase}
-                <RightBar
-                    currentMoveIndex={gameStore.currentHistoryIndex}
-                    totalMoves={gameStore.history.length}
-                    isReplaying={gameStore.isReplaying}
-                    onPrevious={() => session.handlePreviousMove()}
-                    onNext={() => session.handleNextMove()}
-                    onGoToMove={(index) => session.handleGoToMove(index)}
-                    onExitReplay={() => session.handleExitReplay()}
-                    onTogglePause={() => session.handleTogglePause()}
-                    onSetSpeed={(speed) => session.handleSetSpeed(speed)}
-                    onStep={() => session.handleStep()}
-                />
+                <RightBar />
             {:else}
                 <SetupInstructions />
             {/if}
@@ -107,28 +92,16 @@
     </div>
 {/if}
 
-{#if gameStore.combatAnimation}
+{#if session.store.combatAnimation}
     <CombatAnimation
-        attacker={gameStore.combatAnimation.attacker}
-        defender={gameStore.combatAnimation.defender}
-        attackerWon={gameStore.combatAnimation.attackerWon}
-        defenderWon={gameStore.combatAnimation.defenderWon}
+        attacker={session.store.combatAnimation.attacker}
+        defender={session.store.combatAnimation.defender}
+        attackerWon={session.store.combatAnimation.attackerWon}
+        defenderWon={session.store.combatAnimation.defenderWon}
         onComplete={() => session.handleAnimationComplete()}
     />
 {/if}
 
-{#if session.isSetupPhase && (gameStore.gameMode.mode === gamemodes.human_vs_ai.mode || gameStore.gameMode.mode === gamemodes.ai_vs_ai.mode)}
-    <SetupBanner
-        onRandomize={(p) => session.handleRandomize(p)}
-        onStart={(h) => session.handleStartGame(h)}
-        onLoadSetup={(setup, p) => session.handleLoadSetup(setup, p)}
-        onBackToMenu={() => session.abandonAndQuit()}
-        viewerId={session.viewerId}
-        gameMode={gameStore.gameMode}
-        selectedPlayer={session.setupSelectedPlayer}
-        onSelectPlayer={(p: number) => {
-            session.setupSelectedPlayer = p;
-            session.setupSwapPos1 = null;
-        }}
-    />
+{#if session.isSetupPhase && (session.store.gameMode.mode === gamemodes.human_vs_ai.mode || session.store.gameMode.mode === gamemodes.ai_vs_ai.mode)}
+    <SetupBanner />
 {/if}

@@ -1,8 +1,8 @@
 <script lang="ts">
     import type { BoardSetup } from "$lib/types/board-setup";
-    import { gameStore } from "$lib/state/game.svelte";
     import BoardSetupCard from "$lib/components/setup/BoardSetupCard.svelte";
     import Modal from "$lib/components/ui/Modal.svelte";
+    import { useGameSession } from "../_state/context";
 
     interface Props {
         savedSetups: BoardSetup[];
@@ -20,10 +20,12 @@
         onSelectSetup,
     }: Props = $props();
 
+    const session = useGameSession();
+
     const playerName = $derived(
         selectedPlayer === 0
-            ? gameStore.gameState?.player1Username || "Player 1"
-            : gameStore.gameState?.player2Username || "Player 2",
+            ? session.store.gameState?.player1Username || "Player 1"
+            : session.store.gameState?.player2Username || "Player 2",
     );
 </script>
 

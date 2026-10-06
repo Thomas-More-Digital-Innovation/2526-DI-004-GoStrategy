@@ -1,4 +1,4 @@
-import { gameStore } from "$lib/state/game.svelte";
+import { GameStore } from "./game-store.svelte";
 import { toastStore } from "$lib/state/toast.svelte";
 import { gamemodes } from "$lib/data/gamemodes.data";
 import type { Position } from "$lib/types/game";
@@ -14,7 +14,8 @@ import {
 } from "./board-interaction";
 
 export class GameSessionController {
-    connection = new GameConnectionManager();
+    readonly store = new GameStore();
+    readonly connection = new GameConnectionManager();
     gameId = $state("");
     seatIndex = $state(-1);
 
@@ -35,25 +36,25 @@ export class GameSessionController {
         return this.connection.maxReconnectAttempts;
     }
 
-    isSetupPhase = $derived(gameStore.gameState?.isSetupPhase ?? false);
+    isSetupPhase = $derived(this.store.gameState?.isSetupPhase ?? false);
 
     isHumanTurn = $derived.by(() => {
         return (
-            gameStore.gameState?.currentPlayerId === 0 &&
-            gameStore.gameMode.mode === gamemodes.human_vs_ai.mode &&
-            !gameStore.gameState?.isGameOver &&
+            this.store.gameState?.currentPlayerId === 0 &&
+            this.store.gameMode.mode === gamemodes.human_vs_ai.mode &&
+            !this.store.gameState?.isGameOver &&
             !this.isSetupPhase
         );
     });
 
     viewerId = $derived(
-        gameStore.gameMode.mode === gamemodes.human_vs_ai.mode ? 0 : -1,
+        this.store.gameMode.mode === gamemodes.human_vs_ai.mode ? 0 : -1,
     );
 
     disabledRows = $derived(
         getDisabledRows(
             this.isSetupPhase,
-            gameStore.gameMode,
+            this.store.gameMode,
             this.setupSelectedPlayer,
         ),
     );
@@ -63,7 +64,7 @@ export class GameSessionController {
     highlightedRows = $derived(
         getHighlightedRows(
             this.isSetupPhase,
-            gameStore.gameMode,
+            this.store.gameMode,
             this.setupSelectedPlayer,
         ),
     );
@@ -71,18 +72,18 @@ export class GameSessionController {
     highlightColor = $derived(
         getHighlightColor(
             this.isSetupPhase,
-            gameStore.gameMode,
+            this.store.gameMode,
             this.setupSelectedPlayer,
-            gameStore.gameState?.currentPlayerId,
+            this.store.gameState?.currentPlayerId,
         ),
     );
 
     async init(id: string, params: URLSearchParams) {
         this.gameId = id;
-        gameStore.gameMode = gamemodes.fromString(params.get("mode") || "");
+        this.store.gameMode = gamemodes.fromString(params.get("mode") || "");
 
         const seatParam = params.get("seat");
-        const defaultSeat = gameStore.gameMode.mode === "human_vs_ai" ? 0 : -1;
+        const defaultSeat = this.store.gameMode.mode === "human_vs_ai" ? 0 : -1;
         this.seatIndex = seatParam !== null ? parseInt(seatParam) : defaultSeat;
 
         this.setupHandlers();
@@ -91,23 +92,23 @@ export class GameSessionController {
 
     destroy() {
         this.connection.disconnect();
-        gameStore.reset();
+        this.store.reset();
     }
 
     setupHandlers() {
         const socket = this.connection.socket;
-        socket.on("gameState", (data) => gameStore.updateGameState(data));
+        socket.on("gameState", (data) => this.store.updateGameState(data));
         socket.on("boardState", (data) =>
-            gameStore.updateBoardState(data, this.viewerId),
+            this.store.updateBoardState(data, this.viewerId),
         );
         socket.on("moveHistory", (data) =>
-            gameStore.loadMoveHistory(data, this.gameId, this.viewerId),
+            this.store.loadMoveHistory(data, this.gameId, this.viewerId),
         );
 
         socket.on("moveResult", (data) => {
             if (!data.success) {
                 toastStore.handleApiMessage(data.error || data, "Move failed");
-                gameStore.setSelectedPosition(null);
+                this.store.setSelectedPosition(null);
                 this.validMoves = [];
             }
         });
@@ -117,7 +118,7 @@ export class GameSessionController {
         });
 
         socket.on("combat", (data) => {
-            gameStore.showCombatAnimation({
+            this.store.showCombatAnimation({
                 attacker: data.attacker,
                 defender: data.defender,
                 attackerWon: data.attackerWon,
@@ -134,12 +135,12 @@ export class GameSessionController {
 
         socket.on("error", (data) => {
             toastStore.handleApiMessage(data.error || data);
-            gameStore.setSelectedPosition(null);
+            this.store.setSelectedPosition(null);
             this.validMoves = [];
         });
 
         socket.onClose(() => {
-            if (this.connection.connected && !gameStore.gameState?.isGameOver) {
+            if (this.connection.connected && !this.store.gameState?.isGameOver) {
                 this.connection.connected = false;
                 this.connection.attemptReconnect(this.gameId, this.seatIndex);
             }
@@ -157,7 +158,7 @@ export class GameSessionController {
     handleCellClick(x: number, y: number) {
         if (this.isSetupPhase) {
             const pid =
-                gameStore.gameMode.mode === gamemodes.human_vs_ai.mode
+                this.store.gameMode.mode === gamemodes.human_vs_ai.mode
                     ? 0
                     : this.setupSelectedPlayer;
             this.setupSwapPos1 = handleSetupPieceSwap(
@@ -174,11 +175,13 @@ export class GameSessionController {
             const { newSelected, newValidMoves } = handlePieceCellClick(
                 x,
                 y,
-                gameStore.selectedPosition,
+                this.store.selectedPosition,
                 this.validMoves,
                 this.connection.socket,
+                this.store.isReplaying,
+                this.store.boardState,
             );
-            gameStore.setSelectedPosition(newSelected);
+            this.store.setSelectedPosition(newSelected);
             this.validMoves = newValidMoves;
         }
     }
@@ -222,12 +225,12 @@ export class GameSessionController {
     }
 
     handleStep() {
-        gameStore.isStepping = true;
+        this.store.isStepping = true;
         this.connection.socket.sendStep();
     }
 
     handleTogglePause() {
-        if (gameStore.isPaused) {
+        if (this.store.isPaused) {
             this.connection.socket.sendUnpause();
         } else {
             this.connection.socket.sendPause();
@@ -236,32 +239,32 @@ export class GameSessionController {
 
     handleAnimationComplete() {
         this.connection.socket.sendAnimationComplete();
-        gameStore.hideCombatAnimation();
+        this.store.hideCombatAnimation();
     }
 
     handlePreviousMove() {
-        if (!gameStore.isPaused) this.connection.socket.sendPause();
-        gameStore.previousMove();
+        if (!this.store.isPaused) this.connection.socket.sendPause();
+        this.store.previousMove();
     }
 
     handleNextMove() {
-        if (!gameStore.isPaused) this.connection.socket.sendPause();
-        gameStore.nextMove();
+        if (!this.store.isPaused) this.connection.socket.sendPause();
+        this.store.nextMove();
     }
 
     handleGoToMove(index: number) {
-        if (!gameStore.isPaused) this.connection.socket.sendPause();
-        gameStore.goToMove(index);
+        if (!this.store.isPaused) this.connection.socket.sendPause();
+        this.store.goToMove(index);
     }
 
     handleExitReplay() {
         this.connection.socket.sendUnpause();
-        gameStore.exitReplay();
+        this.store.exitReplay();
     }
 
     saveGame() {
         try {
-            const data = gameStore.exportGame();
+            const data = this.store.exportGame();
             if (!data) {
                 toastStore.warning("No history available to save");
                 return;
