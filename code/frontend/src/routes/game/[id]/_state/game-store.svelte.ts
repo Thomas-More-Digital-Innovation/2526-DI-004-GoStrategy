@@ -1,7 +1,20 @@
-import type { GameMode, GameState, BoardState, HistoryMove, Piece, CombatAnimation } from '$lib/types/game';
-import { getBoardAtMove, type PieceData, type GameHistory, type HistoricalMove } from '$lib/replayEngine';
-import { gamemodes } from '$lib/data/gamemodes.data';
-class GameStore {
+import type {
+    GameMode,
+    GameState,
+    BoardState,
+    HistoryMove,
+    Piece,
+    CombatAnimation,
+} from "$lib/types/game";
+import {
+    getBoardAtMove,
+    type PieceData,
+    type GameHistory,
+    type HistoricalMove,
+} from "$lib/replayEngine";
+import { gamemodes } from "$lib/data/gamemodes.data";
+
+export class GameStore {
     gameState = $state<GameState | null>(null);
     boardState = $state<BoardState | null>(null);
     history = $state<HistoryMove[]>([]);
@@ -15,11 +28,14 @@ class GameStore {
     rawHistory = $state<GameHistory | null>(null);
     lastMove = $state<HistoricalMove | null>(null);
     setupRemainingSecs = $state<number | null>(null);
-    private setupCountdownInterval: any = null;
+    private setupCountdownInterval: ReturnType<typeof setInterval> | null = null;
 
-
-    get isPaused() {
+    get isPaused(): boolean {
         return this.gameState?.paused ?? false;
+    }
+
+    get isGameOver(): boolean {
+        return this.gameState?.isGameOver ?? false;
     }
 
     updateGameState(state: GameState) {
@@ -67,8 +83,11 @@ class GameStore {
         }
     }
 
-    private addToHistory(board: Piece[][], lastMove: HistoricalMove, viewerId: number) {
-        // Prevent duplicate history entries for the same move index
+    private addToHistory(
+        board: Piece[][],
+        lastMove: HistoricalMove,
+        viewerId: number,
+    ) {
         if (this.history.length > 0) {
             const lastEntry = this.history[this.history.length - 1];
             if (lastEntry.move.moveIndex === lastMove.moveIndex) {
@@ -76,26 +95,26 @@ class GameStore {
             }
         }
 
-        const boardCopy = board.map(row => row.map(cell => {
-            const newCell = { ...cell };
-            // Strip opponent piece identity in history if it's Human vs AI (viewerId !== -1)
-            if (viewerId !== -1 && newCell.ownerId !== viewerId) {
-                newCell.type = undefined;
-                newCell.rank = undefined;
-                newCell.iconBlue = undefined;
-                newCell.iconRed = undefined;
-            }
-            return newCell;
-        }));
+        const boardCopy = board.map((row) =>
+            row.map((cell) => {
+                const newCell = { ...cell };
+                if (viewerId !== -1 && newCell.ownerId !== viewerId) {
+                    newCell.type = undefined;
+                    newCell.rank = undefined;
+                    newCell.iconBlue = undefined;
+                    newCell.iconRed = undefined;
+                }
+                return newCell;
+            }),
+        );
 
-        // Redact opponent piece info in history move to prevent leakage when scrubbing back
-        let historyMove = { ...lastMove };
+        const historyMove = { ...lastMove };
         if (viewerId !== -1) {
             if (historyMove.attacker && historyMove.attacker.ownerId !== viewerId) {
-                historyMove.attacker = { ...historyMove.attacker, type: '', rank: '' };
+                historyMove.attacker = { ...historyMove.attacker, type: "", rank: "" };
             }
             if (historyMove.defender && historyMove.defender.ownerId !== viewerId) {
-                historyMove.defender = { ...historyMove.defender, type: '', rank: '' };
+                historyMove.defender = { ...historyMove.defender, type: "", rank: "" };
             }
         }
 
@@ -122,7 +141,18 @@ class GameStore {
         this.combatAnimation = null;
     }
 
-    loadMoveHistory(data: { moves: Array<{ from: { x: number; y: number }; to: { x: number; y: number } }>; fullHistory: any[]; initialState: any[][] }, gameId: string = '', viewerId: number = -1) {
+    loadMoveHistory(
+        data: {
+            moves: Array<{
+                from: { x: number; y: number };
+                to: { x: number; y: number };
+            }>;
+            fullHistory: any[];
+            initialState: any[][];
+        },
+        gameId: string = "",
+        viewerId: number = -1,
+    ) {
         if (!data.fullHistory || !data.initialState) {
             this.history = data.moves.map((move, index) => ({
                 moveNumber: index,
@@ -132,7 +162,7 @@ class GameStore {
                     fromY: move.from.y,
                     toX: move.to.x,
                     toY: move.to.y,
-                    result: 'move',
+                    result: "move",
                     playerId: 0,
                 },
                 boardState: [],
@@ -145,22 +175,26 @@ class GameStore {
             };
             this.rawHistory = gameHistory;
 
-
             this.history = data.moves.map((move, index) => {
                 const moveBoard = getBoardAtMove(gameHistory, index + 1);
 
-                // Map PieceData back to Piece interface
-                const mappedBoard = moveBoard.map((row: (PieceData | null)[], y: number) => row.map((cell: PieceData | null, x: number) => {
-                    if (!cell) return null;
-                    const revealed = this.gameMode.mode === gamemodes.ai_vs_ai.mode || (this.gameState?.isGameOver ?? false) || cell.ownerId === viewerId;
-                    return {
-                        type: cell.type,
-                        rank: cell.rank,
-                        ownerId: cell.ownerId,
-                        revealed: revealed,
-                        position: { x, y }
-                    } as Piece;
-                }));
+                const mappedBoard = moveBoard.map(
+                    (row: (PieceData | null)[], y: number) =>
+                        row.map((cell: PieceData | null, x: number) => {
+                            if (!cell) return null;
+                            const revealed =
+                                this.gameMode.mode === gamemodes.ai_vs_ai.mode ||
+                                (this.gameState?.isGameOver ?? false) ||
+                                cell.ownerId === viewerId;
+                            return {
+                                type: cell.type,
+                                rank: cell.rank,
+                                ownerId: cell.ownerId,
+                                revealed: revealed,
+                                position: { x, y },
+                            } as Piece;
+                        }),
+                );
 
                 return {
                     moveNumber: index,
@@ -169,9 +203,9 @@ class GameStore {
                 };
             });
         }
-        this.currentHistoryIndex = this.history.length > 0 ? this.history.length - 1 : -1;
+        this.currentHistoryIndex =
+            this.history.length > 0 ? this.history.length - 1 : -1;
 
-        // auto go to last move if game is over
         if (this.gameState?.isGameOver && !this.isReplaying && this.history.length > 0) {
             this.goToMove(this.history.length - 1);
         }
@@ -227,12 +261,8 @@ class GameStore {
         this.stopSetupCountdown();
     }
 
-
     exportGame() {
         if (!this.rawHistory) return null;
         return JSON.stringify(this.rawHistory, null, 2);
     }
-
 }
-
-export const gameStore = new GameStore();

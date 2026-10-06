@@ -1,6 +1,5 @@
-import type { Position } from "$lib/types/game";
+import type { Position, BoardState } from "$lib/types/game";
 import type { GameSocket } from "$lib/api/websocket";
-import { gameStore } from "$lib/state/game.svelte";
 
 export function handlePieceCellClick(
     x: number,
@@ -8,12 +7,14 @@ export function handlePieceCellClick(
     selected: Position | null,
     validMoves: Position[],
     socket: GameSocket,
+    isReplaying: boolean,
+    boardState: BoardState | null,
 ): { newSelected: Position | null; newValidMoves: Position[] } {
-    if (gameStore.isReplaying) {
+    if (isReplaying) {
         return { newSelected: selected, newValidMoves: validMoves };
     }
 
-    const board = gameStore.boardState?.board;
+    const board = boardState?.board;
     if (!board) return { newSelected: null, newValidMoves: [] };
 
     const clickedPiece = board[y][x];

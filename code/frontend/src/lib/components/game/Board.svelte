@@ -15,7 +15,6 @@
         isLake,
         announceMove,
     } from "$lib/utils/a11y.svelte";
-    import { gameStore } from "$lib/state/game.svelte";
 
     interface Props {
         boardState?: BoardState | null;
@@ -40,6 +39,9 @@
         highlightedRows?: number[];
         highlightColor?: "red" | "blue" | "";
         isSetupPhase?: boolean;
+        currentPlayerId?: number;
+        isGameOver?: boolean;
+        winnerId?: number | null;
     }
 
     let {
@@ -65,6 +67,9 @@
         highlightedRows = [],
         highlightColor = "",
         isSetupPhase = false,
+        currentPlayerId,
+        isGameOver = false,
+        winnerId = null,
     }: Props = $props();
 
     const displayBoard = $derived(board || boardState?.board || []);
@@ -98,23 +103,20 @@
     });
 
     $effect(() => {
-        const turnId = gameStore.gameState?.currentPlayerId;
-        const isSetup = gameStore.gameState?.isSetupPhase ?? false;
         if (
-            turnId !== undefined &&
-            !gameStore.gameState?.isGameOver &&
-            !isSetup
+            currentPlayerId !== undefined &&
+            !isGameOver &&
+            !isSetupPhase
         ) {
             const turnName =
-                turnId === 0 ? "Your turn (Blue)" : "Opponent's turn (Red)";
+                currentPlayerId === 0 ? "Your turn (Blue)" : "Opponent's turn (Red)";
             a11yStore.announce(turnName);
         }
     });
 
     $effect(() => {
-        const move = gameStore.lastMove;
-        if (move) {
-            const msg = announceMove(move, viewerId);
+        if (lastMove) {
+            const msg = announceMove(lastMove, viewerId);
             if (msg) {
                 a11yStore.announce(msg);
             }
@@ -122,8 +124,7 @@
     });
 
     $effect(() => {
-        if (gameStore.gameState?.isGameOver) {
-            const winnerId = gameStore.gameState?.winnerId;
+        if (isGameOver) {
             const msg =
                 winnerId === 0
                     ? "Game over! You won!"

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { gameStore } from "$lib/state/game.svelte";
+    import { useGameSession } from "../_state/context";
 
     interface Props {
         selectedPlayer: number;
@@ -7,6 +7,8 @@
     }
 
     let { selectedPlayer, onSelectPlayer }: Props = $props();
+
+    const session = useGameSession();
 </script>
 
 <button
@@ -24,7 +26,7 @@
         <span
             class="text-[10px] font-bold text-white uppercase tracking-wider"
         >
-            {gameStore.gameState?.player1Username || "AI Red"}
+            {session.store.gameState?.player1Username || "AI Red"}
         </span>
     </div>
     <div class="text-[10px] font-bold text-white/20 uppercase tracking-widest">vs</div>
@@ -37,7 +39,7 @@
         <span
             class="text-[10px] font-bold text-white uppercase tracking-wider"
         >
-            {gameStore.gameState?.player2Username || "AI Blue"}
+            {session.store.gameState?.player2Username || "AI Blue"}
         </span>
         <div class="w-2 h-2 rounded-full bg-blue-500"></div>
     </div>

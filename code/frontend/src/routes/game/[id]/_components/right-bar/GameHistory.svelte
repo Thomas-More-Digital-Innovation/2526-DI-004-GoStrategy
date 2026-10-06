@@ -1,28 +1,14 @@
 <script lang="ts">
     import { tick } from "svelte";
     import Button from "$lib/components/ui/Button.svelte";
-    import { gameStore } from "$lib/state/game.svelte";
     import { ChevronLeft, ChevronRight } from "@lucide/svelte";
+    import { useGameSession } from "../../_state/context";
 
-    interface Props {
-        currentMoveIndex: number;
-        totalMoves: number;
-        isReplaying: boolean;
-        onPrevious: () => void;
-        onNext: () => void;
-        onGoToMove: (index: number) => void;
-        onExitReplay: () => void;
-    }
+    const session = useGameSession();
 
-    let {
-        currentMoveIndex,
-        totalMoves,
-        isReplaying,
-        onPrevious,
-        onNext,
-        onGoToMove,
-        onExitReplay,
-    }: Props = $props();
+    const currentMoveIndex = $derived(session.store.currentHistoryIndex);
+    const totalMoves = $derived(session.store.history.length);
+    const isReplaying = $derived(session.store.isReplaying);
 
     const canGoPrevious = $derived(currentMoveIndex > 0);
     const canGoNext = $derived(currentMoveIndex < totalMoves - 1);
@@ -50,7 +36,7 @@
     <h3 class="text-sm font-bold text-brand-accent uppercase tracking-wider">
         Move History
     </h3>
-    {#if gameStore.gameState?.isGameOver}
+    {#if session.store.isGameOver}
         <span
             class="text-[10px] font-bold border border-green-500/30 bg-green-500/10 text-green-400 px-2 py-0.5 rounded-md uppercase tracking-wider"
         >
@@ -63,7 +49,7 @@
             Replay
         </span>
     {/if}
-    {#if gameStore.isPaused && !gameStore.gameState?.isGameOver}
+    {#if session.store.isPaused && !session.store.isGameOver}
         <span
             class="text-[10px] font-bold border border-amber-500/40 bg-amber-500/15 text-amber-400 px-2 py-0.5 rounded-md uppercase tracking-wider"
         >
@@ -81,7 +67,7 @@
         <Button
             variant="outline"
             size="sm"
-            onclick={onPrevious}
+            onclick={() => session.handlePreviousMove()}
             disabled={!canGoPrevious}
         >
             <ChevronLeft class="mr-1 size-3.5" />
@@ -90,7 +76,7 @@
         <Button
             variant="outline"
             size="sm"
-            onclick={onNext}
+            onclick={() => session.handleNextMove()}
             disabled={!canGoNext}
         >
             Next
@@ -108,13 +94,7 @@
                 currentMoveIndex
                     ? 'bg-brand-primary/20 text-brand-primary font-semibold'
                     : 'text-white/40 hover:bg-white/5 hover:text-white/70'}"
-                onclick={() => {
-                    if (index === totalMoves - 1) {
-                        onExitReplay();
-                    } else {
-                        onGoToMove(index);
-                    }
-                }}
+                onclick={() => session.handleGoToMove(index)}
             >
                 Move {index + 1}
             </button>
@@ -138,8 +118,5 @@
     .custom-scrollbar::-webkit-scrollbar-thumb {
         background: rgba(255, 255, 255, 0.18);
         border-radius: 9999px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-        background: rgba(255, 255, 255, 0.35);
     }
 </style>

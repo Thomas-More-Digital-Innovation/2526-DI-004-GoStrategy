@@ -2,21 +2,14 @@
     import Button from "$lib/components/ui/Button.svelte";
     import Title from "$lib/components/Title.svelte";
     import { Save } from "@lucide/svelte";
+    import { useGameSession } from "../_state/context";
 
-    interface Props {
-        isGameOver: boolean;
-        connected: boolean;
-        onAbandonAndQuit: () => void;
-        onSaveGame: () => void;
-    }
-
-    let { isGameOver, connected, onAbandonAndQuit, onSaveGame }: Props =
-        $props();
+    const session = useGameSession();
 </script>
 
 <div class="grid grid-cols-[1fr_auto_1fr] items-center mb-6">
     <div class="flex justify-start">
-        {#if isGameOver}
+        {#if session.store.isGameOver}
             <Button
                 onclick={() => {
                     window.location.href = "/";
@@ -30,7 +23,7 @@
                 variant="ghost"
                 onclick={() => {
                     if (confirm("Are you sure you want to quit?")) {
-                        onAbandonAndQuit();
+                        session.abandonAndQuit();
                     }
                 }}
             >
@@ -45,8 +38,8 @@
         <Button
             variant="outline"
             size="sm"
-            onclick={onSaveGame}
-            disabled={!connected || !isGameOver}
+            onclick={() => session.saveGame()}
+            disabled={!session.connected || !session.store.isGameOver}
             disabledMessage="Game must be finished to save a replay"
         >
             <Save class="mr-1.5 size-4" />

@@ -3,13 +3,18 @@
     import type { GameMode, GameState } from "$lib/types/game";
     import { gamemodes } from "$lib/data/gamemodes.data";
     import { AIs } from "$lib/data/AI.data";
+    import { useGameSession } from "../_state/context";
 
     interface Props {
-        gameState: GameState | null;
-        gameMode: GameMode;
+        gameState?: GameState | null;
+        gameMode?: GameMode;
     }
 
-    let { gameState, gameMode }: Props = $props();
+    let { gameState: propGameState, gameMode: propGameMode }: Props = $props();
+
+    const session = useGameSession();
+    const gameState = $derived(propGameState ?? session.store.gameState);
+    const gameMode = $derived(propGameMode ?? session.store.gameMode);
 
     function formatPossessiveUsername(username: string) {
         return username.endsWith("s") ? `${username}'` : `${username}'s`;

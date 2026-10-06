@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" fill="none">
+    <!-- Defensive Perimeter Boundary (Dashed Line) -->
+    <path
+        d="M 5 60 L 115 60"
+        stroke="white"
+        stroke-width="1"
+        stroke-dasharray="4 6"
+        opacity="0.5"
+    />
+
+    <!-- Enemy Fortification / Flag Objective (North Center) -->
+    <rect
+        x="52"
+        y="12"
+        width="16"
+        height="16"
+        stroke="white"
+        stroke-width="1.2"
+        rx="2"
+    />
+    <path
+        d="M 60 16 L 60 24 M 56 20 L 64 20"
+        stroke="white"
+        stroke-width="1.2"
+        stroke-linecap="round"
+    />
+
+    <!-- Infiltration S-Curve Route from South-West through Obstacles to North -->
+    <path
+        d="M 18 108 C 25 78, 95 90, 85 55 C 78 28, 68 34, 60 30"
+        stroke="white"
+        stroke-width="1.3"
+        stroke-dasharray="3 3"
+    />
+    <!-- Infiltration Arrowhead at Objective -->
+    <path
+        d="M 66 33 L 60 28 L 57 36"
+        stroke="white"
+        stroke-width="1.3"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    />
+
+    <!-- Avoided Danger Crosses (Mines / Enemy sentries) -->
+    <path
+        d="M 45 78 L 53 86 M 53 78 L 45 86"
+        stroke="white"
+        stroke-width="1.2"
+        stroke-linecap="round"
+    />
+    <path
+        d="M 92 30 L 100 38 M 100 30 L 92 38"
+        stroke="white"
+        stroke-width="1.2"
+        stroke-linecap="round"
+    />
+
+    <!-- Waypoint Markers -->
+    <circle cx="85" cy="55" r="3" stroke="white" stroke-width="1" />
+    <circle cx="18" cy="108" r="3" fill="white" opacity="0.6" />
+
+    <!-- Corner Grid Crosshairs -->
+    <path d="M 10 10 L 18 10 M 14 6 L 14 14" stroke="white" stroke-width="1" stroke-linecap="round" />
+    <path d="M 102 106 L 110 106 M 106 102 L 106 110" stroke="white" stroke-width="1" stroke-linecap="round" />
+</svg>

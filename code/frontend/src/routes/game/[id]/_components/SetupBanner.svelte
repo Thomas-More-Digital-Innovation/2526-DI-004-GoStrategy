@@ -4,43 +4,22 @@
     import { boardSetups } from "$lib/api/client";
     import { flipSetup } from "$lib/utils/board-binary";
     import type { BoardSetup } from "$lib/types/board-setup";
-    import type { GameMode } from "$lib/types/game";
     import { gamemodes } from "$lib/data/gamemodes.data";
-    import { gameStore } from "$lib/state/game.svelte";
     import { Clock, FolderOpen, Dices } from "@lucide/svelte";
     import LoadSavedSetup from "./LoadSavedSetup.svelte";
     import AiPlayerSelector from "./AiPlayerSelector.svelte";
+    import { useGameSession } from "../_state/context";
 
-    interface Props {
-        onRandomize: (player?: number) => void;
-        onStart: (headless?: boolean) => void;
-        onLoadSetup: (setupData: string, player?: number) => void;
-        viewerId?: number;
-        gameMode?: GameMode;
-        selectedPlayer?: number;
-        onSelectPlayer?: (player: number) => void;
-        onBackToMenu?: () => void;
-    }
-
-    let {
-        onRandomize,
-        onStart,
-        onLoadSetup,
-        viewerId = 0,
-        gameMode = gamemodes.human_vs_ai,
-        selectedPlayer = 0,
-        onSelectPlayer,
-        onBackToMenu,
-    }: Props = $props();
+    const session = useGameSession();
 
     const ownerId = $derived(
-        gameMode.mode === gamemodes.ai_vs_ai.mode
-            ? selectedPlayer === 0
+        session.store.gameMode.mode === gamemodes.ai_vs_ai.mode
+            ? session.setupSelectedPlayer === 0
                 ? 2
                 : 1
-            : viewerId === -1
+            : session.viewerId === -1
               ? 2
-              : viewerId === 0
+              : session.viewerId === 0
                 ? 2
                 : 1,
     );
@@ -63,13 +42,16 @@
 
     function selectSetup(setupData: string) {
         let finalSetup = setupData;
-        if (gameMode.mode === gamemodes.ai_vs_ai.mode && selectedPlayer === 1) {
+        if (
+            session.store.gameMode.mode === gamemodes.ai_vs_ai.mode &&
+            session.setupSelectedPlayer === 1
+        ) {
             finalSetup = flipSetup(setupData);
         }
-        onLoadSetup(
+        session.handleLoadSetup(
             finalSetup,
-            gameMode.mode === gamemodes.ai_vs_ai.mode
-                ? selectedPlayer
+            session.store.gameMode.mode === gamemodes.ai_vs_ai.mode
+                ? session.setupSelectedPlayer
                 : undefined,
         );
         showSelector = false;
@@ -91,7 +73,7 @@
             <Clock class="size-3 text-white/50" />
             <span>Time Remaining:</span>
             <span class="text-white font-mono"
-                >{formatTime(gameStore.setupRemainingSecs)}</span
+                >{formatTime(session.store.setupRemainingSecs)}</span
             >
         </p>
         <div
@@ -108,7 +90,7 @@
         class="glass pointer-events-auto flex items-center justify-between gap-6 px-8 py-4 border-b border-white/10"
     >
         <div class="flex items-center gap-3">
-            <Button variant="outline" onclick={onBackToMenu}>
+            <Button variant="outline" onclick={() => session.abandonAndQuit()}>
                 Back To Menu
             </Button>
 
@@ -122,8 +104,14 @@
                     {@render TimeLimit()}
                 </div>
 
-                {#if gameMode.mode === gamemodes.ai_vs_ai.mode}
-                    <AiPlayerSelector {selectedPlayer} {onSelectPlayer} />
+                {#if session.store.gameMode.mode === gamemodes.ai_vs_ai.mode}
+                    <AiPlayerSelector
+                        selectedPlayer={session.setupSelectedPlayer}
+                        onSelectPlayer={(p: number) => {
+                            session.setupSelectedPlayer = p;
+                            session.setupSwapPos1 = null;
+                        }}
+                    />
                 {:else}
                     <div class="flex flex-col gap-0.5">
                         <p class="text-white/40 text-xs font-medium">
@@ -135,7 +123,7 @@
         </div>
 
         <div class="flex gap-3 items-center">
-            {#if gameMode.mode === gamemodes.ai_vs_ai.mode}
+            {#if session.store.gameMode.mode === gamemodes.ai_vs_ai.mode}
                 <div
                     class="flex items-center gap-2 px-3 py-2 bg-white/5 rounded-xl border border-white/10"
                 >
@@ -166,18 +154,21 @@
             <Button
                 variant="outline"
                 onclick={() =>
-                    onRandomize(
-                        gameMode.mode === gamemodes.ai_vs_ai.mode
-                            ? selectedPlayer
+                    session.handleRandomize(
+                        session.store.gameMode.mode === gamemodes.ai_vs_ai.mode
+                            ? session.setupSelectedPlayer
                             : undefined,
                     )}
             >
                 <Dices class="size-4" />
                 &nbsp; Randomize
             </Button>
-            <Button variant="primary" onclick={() => onStart(headless)}
-                >Start Game</Button
+            <Button
+                variant="primary"
+                onclick={() => session.handleStartGame(headless)}
             >
+                Start Game
+            </Button>
         </div>
     </div>
 </div>
@@ -186,7 +177,7 @@
     <LoadSavedSetup
         {savedSetups}
         {ownerId}
-        {selectedPlayer}
+        selectedPlayer={session.setupSelectedPlayer}
         onSelectSetup={selectSetup}
         bind:showSelector
     />

@@ -1,24 +1,10 @@
 <script lang="ts">
     import Button from "$lib/components/ui/Button.svelte";
     import { gamemodes } from "$lib/data/gamemodes.data";
-    import { gameStore } from "$lib/state/game.svelte";
     import { Play, Pause, StepForward } from "@lucide/svelte";
+    import { useGameSession } from "../../_state/context";
 
-    interface Props {
-        isReplaying: boolean;
-        onSetSpeed: (speedMs: number) => void;
-        onTogglePause: () => void;
-        onStep: () => void;
-        onExitReplay: () => void;
-    }
-
-    let {
-        isReplaying,
-        onSetSpeed,
-        onTogglePause,
-        onStep,
-        onExitReplay,
-    }: Props = $props();
+    const session = useGameSession();
 
     let speedMs = $state(1000);
 </script>
@@ -28,23 +14,23 @@
 </h3>
 <div class="flex flex-col gap-2">
     <div class="flex gap-2">
-        {#if isReplaying && !gameStore.gameState?.isGameOver}
+        {#if session.store.isReplaying && !session.store.isGameOver}
             <Button
                 variant="secondary"
                 size="sm"
                 class="flex-1"
-                onclick={onExitReplay}
+                onclick={() => session.handleExitReplay()}
             >
                 Exit Replay
             </Button>
-        {:else if !gameStore.gameState?.isGameOver}
+        {:else if !session.store.isGameOver}
             <Button
                 variant="outline"
                 size="sm"
-                onclick={onTogglePause}
+                onclick={() => session.handleTogglePause()}
                 class="flex-1"
             >
-                {#if gameStore.isPaused}
+                {#if session.store.isPaused}
                     <Play class="mr-1.5 size-3.5" />
                     Resume
                 {:else}
@@ -52,13 +38,13 @@
                     Pause
                 {/if}
             </Button>
-            {#if gameStore.isPaused && gameStore.gameMode.mode === gamemodes.ai_vs_ai.mode}
+            {#if session.store.isPaused && session.store.gameMode.mode === gamemodes.ai_vs_ai.mode}
                 <Button
                     variant="ghost"
                     size="sm"
-                    onclick={onStep}
-                    loading={gameStore.isStepping}
-                    disabled={gameStore.isStepping}
+                    onclick={() => session.handleStep()}
+                    loading={session.store.isStepping}
+                    disabled={session.store.isStepping}
                     disabledMessage="Processing move..."
                 >
                     <StepForward class="mr-1.5 size-3.5" />
@@ -79,7 +65,7 @@
             max="5000"
             step="100"
             bind:value={speedMs}
-            onchange={() => onSetSpeed(speedMs)}
+            onchange={() => session.handleSetSpeed(speedMs)}
             class="w-full accent-brand-primary h-1 bg-white/10 rounded-lg appearance-none cursor-pointer"
         />
     </div>

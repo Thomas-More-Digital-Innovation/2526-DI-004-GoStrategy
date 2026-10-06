@@ -1,8 +1,8 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { authStore } from "$lib/state/auth.svelte";
-    import Card from "$lib/components/ui/Card.svelte";
     import Button from "$lib/components/ui/Button.svelte";
+    import Alert from "$lib/components/ui/Alert.svelte";
     import type { GameMode } from "$lib/types/game";
     import { allGamemodes, gamemodes } from "$lib/data/gamemodes.data";
     import ChangelogButton from "$lib/components/changelog/ChangelogButton.svelte";
@@ -48,11 +48,7 @@
     <ReconnectBanner />
 
     {#if error}
-        <div
-            class="bg-brand-secondary/20 border border-brand-secondary/30 text-brand-secondary rounded-xl px-4 py-3 text-sm text-center"
-        >
-            {error}
-        </div>
+        <Alert variant="error" message={error} />
     {/if}
 
     {#if selectedMode}
@@ -62,20 +58,18 @@
                 <button
                     class="text-left cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed rounded-2xl p-6 border-2 transition-all duration-200 {selectedMode.mode ===
                     gamemode.mode
-                        ? 'border-brand-primary bg-brand-primary/10 scale-102 shadow-glow'
+                        ? 'border-brand-primary bg-brand-primary/10 scale-[1.02]'
                         : 'border-white/5 bg-surface-elevated/20 hover:border-white/20 hover:bg-white/5'}"
                     onclick={() => (selectedMode = gamemode)}
                     disabled={gamemode.disabled}
                 >
                     <div class="text-3xl mb-3">{gamemode.icon}</div>
                     <h3
-                        class="font-bold text-white text-lg lowercase tracking-widest"
+                        class="font-bold text-white text-lg tracking-wide uppercase"
                     >
                         {gamemode.title}
                     </h3>
-                    <p
-                        class="text-white/50 text-xs mt-1 leading-relaxed italic"
-                    >
+                    <p class="text-white/50 text-xs mt-1 leading-relaxed">
                         {gamemode.desc}
                     </p>
                 </button>
@@ -86,13 +80,18 @@
             variant="primary"
             size="lg"
             class="w-full"
-            onclick={startFlow}
-            disabled={!authStore.user}
+            onclick={() => {
+                if (!authStore.user) {
+                    goto("/login");
+                } else {
+                    startFlow();
+                }
+            }}
         >
             {#if !authStore.user}
                 Sign In to Play
             {:else}
-                Proceed to Intelligence Selection
+                Choose AI Opponent
             {/if}
         </Button>
     {/if}

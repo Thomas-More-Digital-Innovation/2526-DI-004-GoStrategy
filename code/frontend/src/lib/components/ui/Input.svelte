@@ -1,4 +1,7 @@
 <script lang="ts">
+    import type { Snippet } from "svelte";
+    import { Eye, EyeOff } from "@lucide/svelte";
+
     interface Props {
         type?: string;
         placeholder?: string;
@@ -8,6 +11,10 @@
         class?: string;
         disabled?: boolean;
         sanitize?: "username" | "password" | "generic";
+        error?: string;
+        leadingIcon?: Snippet;
+        showPasswordToggle?: boolean;
+        focusColor?: "primary" | "secondary";
     }
 
     let {
@@ -19,7 +26,17 @@
         class: className = "",
         disabled = false,
         sanitize = undefined,
+        error = "",
+        leadingIcon,
+        showPasswordToggle = false,
+        focusColor = "primary",
     }: Props = $props();
+
+    let passwordVisible = $state(false);
+
+    const actualType = $derived(
+        type === "password" ? (passwordVisible ? "text" : "password") : type,
+    );
 
     function handleInput(e: Event) {
         const input = e.target as HTMLInputElement;
@@ -44,18 +61,51 @@
     {#if label}
         <label
             for={id}
-            class="text-xs font-bold text-brand-accent uppercase tracking-widest ml-1"
+            class="text-[10px] font-bold text-brand-accent uppercase tracking-widest ml-1"
         >
             {label}
         </label>
     {/if}
-    <input
-        {id}
-        {type}
-        {placeholder}
-        {disabled}
-        bind:value
-        oninput={handleInput}
-        class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary/50 transition-all duration-200"
-    />
+
+    <div class="relative group">
+        {#if leadingIcon}
+            <span
+                class="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center pointer-events-none text-white/30 {focusColor === 'secondary' ? 'group-focus-within:text-brand-secondary' : 'group-focus-within:text-brand-primary'} transition-colors"
+            >
+                {@render leadingIcon()}
+            </span>
+        {/if}
+
+        <input
+            {id}
+            type={actualType}
+            {placeholder}
+            {disabled}
+            bind:value
+            oninput={handleInput}
+            class="w-full bg-white/5 border rounded-xl py-2.5 text-xs text-white placeholder:text-white/20 transition-all duration-200 focus:outline-none focus:ring-2 {leadingIcon ? 'pl-11' : 'px-4'} {showPasswordToggle && type === 'password' ? 'pr-11' : 'pr-4'} {error ? 'border-red-500/50 focus:ring-red-500/35 focus:border-red-500/35' : focusColor === 'secondary' ? 'border-white/10 focus:ring-brand-secondary/45 focus:border-brand-secondary/45' : 'border-white/10 focus:ring-brand-primary/45 focus:border-brand-primary/45'}"
+        />
+
+        {#if showPasswordToggle && type === "password"}
+            <button
+                type="button"
+                aria-label={passwordVisible ? "Hide password" : "Show password"}
+                onclick={() => (passwordVisible = !passwordVisible)}
+                disabled={!value}
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-colors cursor-pointer disabled:opacity-0 disabled:pointer-events-none p-1 rounded-md"
+            >
+                {#if passwordVisible}
+                    <EyeOff class="size-4" />
+                {:else}
+                    <Eye class="size-4" />
+                {/if}
+            </button>
+        {/if}
+    </div>
+
+    {#if error}
+        <p class="text-[9px] text-red-400 font-bold uppercase tracking-wider ml-1 animate-fade-in">
+            {error}
+        </p>
+    {/if}
 </div>
