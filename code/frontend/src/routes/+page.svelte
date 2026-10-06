@@ -69,9 +69,7 @@
                     >
                         {gamemode.title}
                     </h3>
-                    <p
-                        class="text-white/50 text-xs mt-1 leading-relaxed"
-                    >
+                    <p class="text-white/50 text-xs mt-1 leading-relaxed">
                         {gamemode.desc}
                     </p>
                 </button>
@@ -82,8 +80,13 @@
             variant="primary"
             size="lg"
             class="w-full"
-            onclick={startFlow}
-            disabled={!authStore.user}
+            onclick={() => {
+                if (!authStore.user) {
+                    goto("/login");
+                } else {
+                    startFlow();
+                }
+            }}
         >
             {#if !authStore.user}
                 Sign In to Play
