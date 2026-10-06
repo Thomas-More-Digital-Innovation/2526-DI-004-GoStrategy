@@ -54,7 +54,7 @@ export function getCellAriaLabel(params: {
         return label;
     }
 
-    if (params.piece) {
+    if (params.piece && params.piece.ownerId !== undefined && params.piece.ownerId >= 0) {
         const isOwn = params.piece.ownerId === params.viewerId || (params.isSetupPhase && params.piece.ownerId === 0);
         const ownerStr = isOwn ? "Your" : (params.piece.ownerId === 0 ? "Blue" : "Red");
 

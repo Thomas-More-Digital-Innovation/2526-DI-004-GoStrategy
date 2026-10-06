@@ -191,6 +191,8 @@
                             }}
                             draggable={isInteractive &&
                                 !!piece &&
+                                piece.ownerId !== undefined &&
+                                piece.ownerId >= 0 &&
                                 !isLake(x, y, rows, isLakeCell) &&
                                 !disabledRows.includes(y)}
                             ondragstart={(e) => {

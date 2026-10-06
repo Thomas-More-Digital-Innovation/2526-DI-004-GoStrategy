@@ -20,18 +20,33 @@
         scale = 1,
     }: Props = $props();
 
-    const canSeePiece = $derived(() => {
-        if (!piece) return false;
-        // In setup or preview, we usually want to see our own pieces
-        return piece.ownerId === viewerId || piece.revealed;
-    });
+    const isOccupied = $derived(
+        Boolean(
+            piece &&
+                piece.ownerId !== undefined &&
+                piece.ownerId >= 0 &&
+                (piece.ownerName || piece.rank || piece.type),
+        ),
+    );
 
-    const pieceRank = $derived(() => {
+    const canSeePiece = $derived(
+        Boolean(
+            isOccupied &&
+                piece &&
+                (piece.ownerId === viewerId || piece.revealed),
+        ),
+    );
+
+    const isEnemy = $derived(
+        Boolean(isOccupied && piece && piece.ownerId !== viewerId),
+    );
+
+    const pieceRank = $derived.by(() => {
         if (!piece || !piece.rank) return null;
         return piece.rank;
     });
 
-    const pieceIcon = $derived(() => {
+    const pieceIcon = $derived.by(() => {
         if (!piece) return null;
 
         const directIcon = piece.ownerId === 1 ? piece.iconBlue : piece.iconRed;
@@ -53,55 +68,56 @@
             : inventoryItem.icon_red;
     });
 
-    const isAsset = $derived(() => {
-        const icon = pieceIcon();
-        return icon && (icon.includes("/") || icon.includes("."));
+    const isAsset = $derived.by(() => {
+        const icon = pieceIcon;
+        return Boolean(icon && (icon.includes("/") || icon.includes(".")));
     });
 
     const fontSize = $derived(18 * scale);
-    const subFontSize = $derived(10 * scale);
 </script>
 
 <div
     class="piece unselectable"
     class:selected={isSelected}
     class:highlighted={isHighlighted}
-    class:empty={!pieceRank() && !isLake}
+    class:empty={!isOccupied && !isLake}
     class:lake={isLake}
-    class:player1={piece && piece.ownerId === 1}
-    class:player2={piece && piece.ownerId === 2}
+    class:player1={isOccupied && piece && piece.ownerId === 1}
+    class:player2={isOccupied &&
+        piece &&
+        (piece.ownerId === 2 || piece.ownerId === 0)}
     style="--scale: {scale}"
 >
     {#if isLake}
         <span style="font-size: {24 * scale}px">🌊</span>
-    {:else if piece}
-        {#if canSeePiece()}
+    {:else if isOccupied}
+        {#if canSeePiece}
             <div
                 class="flex flex-col items-center justify-center w-full h-full overflow-hidden relative"
             >
-                {#if isAsset()}
+                {#if isAsset}
                     <img
-                        src={pieceIcon()}
-                        alt={pieceRank()}
+                        src={pieceIcon}
+                        alt={pieceRank}
                         class="w-full h-full object-fill pointer-events-none"
                     />
-                    {#if pieceRank() === "0"}
+                    {#if pieceRank === "0"}
                         <span class="piece-rank border-2 border-green-400"
                             >F</span
                         >
                     {:else}
-                        <span class="piece-rank">{pieceRank()}</span>
+                        <span class="piece-rank">{pieceRank}</span>
                     {/if}
-                {:else if pieceRank()}
+                {:else if pieceRank}
                     <span
                         class="font-bold text-white"
                         style="font-size: {fontSize}px"
                     >
-                        {pieceRank()}
+                        {pieceRank}
                     </span>
                 {/if}
             </div>
-        {:else}
+        {:else if isEnemy}
             <span
                 style="font-size: {20 *
                     scale}px; font-weight: bold; color: rgba(255,255,255,0.8)"
@@ -189,14 +205,5 @@
 
     .piece.highlighted {
         border: 2px solid oklch(0.75 0.18 145);
-    }
-
-    .rank-label {
-        font-weight: bold;
-        color: white;
-        background: rgba(0, 0, 0, 0.3);
-        padding: 0px 4px;
-        border-radius: 2px;
-        line-height: 1.2;
     }
 </style>
