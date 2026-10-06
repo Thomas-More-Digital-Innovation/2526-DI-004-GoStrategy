@@ -1,170 +1,133 @@
 <script lang="ts">
-    import { onMount } from "svelte";
-    import { goto } from "$app/navigation";
-    import { authStore } from "$lib/state/auth.svelte";
-    import { stats } from "$lib/api/client";
-    import Card from "$lib/components/ui/Card.svelte";
-    import Button from "$lib/components/ui/Button.svelte";
-    import { toastStore } from "$lib/state/toast.svelte";
-    import ChangePasswordModal from "$lib/components/ChangePasswordModal.svelte";
-    import type { UserStats } from "$lib/types/game";
+	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
+	import { authStore } from '$lib/state/auth.svelte';
+	import { stats } from '$lib/api/client';
+	import Card from '$lib/components/ui/Card.svelte';
+	import Button from '$lib/components/ui/Button.svelte';
+	import { toastStore } from '$lib/state/toast.svelte';
+	import ChangePasswordModal from '$lib/components/ChangePasswordModal.svelte';
+	import type { UserStats } from '$lib/types/game';
 
-    let userStats = $state<UserStats | null>(null);
-    let isChangePasswordOpen = $state(false);
+	let userStats = $state<UserStats | null>(null);
+	let isChangePasswordOpen = $state(false);
 
-    onMount(async () => {
-        await authStore.check();
-        if (!authStore.user) {
-            goto("/login");
-            return;
-        }
-        try {
-            userStats = await stats.getMine();
-        } catch (e: any) {
-            toastStore.handleApiMessage(e, "Failed to load stats");
-        }
-    });
+	onMount(async () => {
+		await authStore.check();
+		if (!authStore.user) {
+			goto(resolve('/login'));
+			return;
+		}
+		try {
+			userStats = await stats.getMine();
+		} catch (e) {
+			toastStore.handleApiMessage(e, 'Failed to load stats');
+		}
+	});
 
-    function formatDuration(seconds: number): string {
-        const mins = Math.floor(seconds / 60);
-        const secs = Math.floor(seconds % 60);
-        return `${mins}m ${secs}s`;
-    }
+	function formatDuration(seconds: number): string {
+		const mins = Math.floor(seconds / 60);
+		const secs = Math.floor(seconds % 60);
+		return `${mins}m ${secs}s`;
+	}
 
-    function getWinRate(): string {
-        if (!userStats || userStats.total_games === 0) return "0%";
-        return (
-            ((userStats.wins / userStats.total_games) * 100).toFixed(1) + "%"
-        );
-    }
+	function getWinRate(): string {
+		if (!userStats || userStats.total_games === 0) return '0%';
+		return ((userStats.wins / userStats.total_games) * 100).toFixed(1) + '%';
+	}
 
-    async function handleLogout() {
-        await authStore.logout();
-        goto("/login");
-    }
+	async function handleLogout() {
+		await authStore.logout();
+		goto(resolve('/login'));
+	}
 
-    function handleChangePassword() {
-        isChangePasswordOpen = true;
-    }
+	function handleChangePassword() {
+		isChangePasswordOpen = true;
+	}
 </script>
 
 <ChangePasswordModal
-    bind:isOpen={isChangePasswordOpen}
-    onClose={() => (isChangePasswordOpen = false)}
+	bind:isOpen={isChangePasswordOpen}
+	onClose={() => (isChangePasswordOpen = false)}
 />
 
 <svelte:head>
-    <title>GoStrategy — Profile</title>
+	<title>GoStrategy — Profile</title>
 </svelte:head>
 
 {#if authStore.user}
-    <div class="space-y-8">
-        <!-- Header -->
-        <Card class="flex items-center gap-6">
-            <div
-                class="w-16 h-16 rounded-full bg-linear-to-br from-brand-primary to-brand-secondary flex items-center justify-center text-white text-2xl font-bold shrink-0"
-            >
-                {authStore.user.username[0]?.toUpperCase() || "?"}
-            </div>
-            <div class="flex-1">
-                <h1 class="text-xl font-bold text-white">
-                    {authStore.user.username}
-                </h1>
-                <p class="text-white/40 text-sm">
-                    Joined {new Date(
-                        authStore.user.created_at,
-                    ).toLocaleDateString()}
-                </p>
-            </div>
-            <div>
-                <Button variant="outline" onclick={handleChangePassword}
-                    >Change Password</Button
-                >
-                <Button variant="secondary" onclick={handleLogout}
-                    >Logout</Button
-                >
-            </div>
-        </Card>
+	<div class="space-y-8">
+		<!-- Header -->
+		<Card class="flex items-center gap-6">
+			<div
+				class="w-16 h-16 rounded-full bg-linear-to-br from-brand-primary to-brand-secondary flex items-center justify-center text-white text-2xl font-bold shrink-0"
+			>
+				{authStore.user.username[0]?.toUpperCase() || '?'}
+			</div>
+			<div class="flex-1">
+				<h1 class="text-xl font-bold text-white">
+					{authStore.user.username}
+				</h1>
+				<p class="text-white/40 text-sm">
+					Joined {new Date(authStore.user.created_at).toLocaleDateString()}
+				</p>
+			</div>
+			<div>
+				<Button variant="outline" onclick={handleChangePassword}>Change Password</Button>
+				<Button variant="secondary" onclick={handleLogout}>Logout</Button>
+			</div>
+		</Card>
 
-        {#if userStats}
-            <!-- Stats Grid -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <Card class="text-center">
-                    <div class="text-3xl font-bold text-white">
-                        {userStats.total_games}
-                    </div>
-                    <div
-                        class="text-xs text-white/40 uppercase tracking-wider mt-1"
-                    >
-                        Total Games
-                    </div>
-                </Card>
-                <Card class="text-center">
-                    <div class="text-3xl font-bold text-brand-accent">
-                        {userStats.wins}
-                    </div>
-                    <div
-                        class="text-xs text-white/40 uppercase tracking-wider mt-1"
-                    >
-                        Wins
-                    </div>
-                </Card>
-                <Card class="text-center">
-                    <div class="text-3xl font-bold text-brand-secondary">
-                        {userStats.losses}
-                    </div>
-                    <div
-                        class="text-xs text-white/40 uppercase tracking-wider mt-1"
-                    >
-                        Losses
-                    </div>
-                </Card>
-                <Card class="text-center">
-                    <div class="text-3xl font-bold text-white">
-                        {userStats.draws}
-                    </div>
-                    <div
-                        class="text-xs text-white/40 uppercase tracking-wider mt-1"
-                    >
-                        Draws
-                    </div>
-                </Card>
-            </div>
+		{#if userStats}
+			<!-- Stats Grid -->
+			<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+				<Card class="text-center">
+					<div class="text-3xl font-bold text-white">
+						{userStats.total_games}
+					</div>
+					<div class="text-xs text-white/40 uppercase tracking-wider mt-1">Total Games</div>
+				</Card>
+				<Card class="text-center">
+					<div class="text-3xl font-bold text-brand-accent">
+						{userStats.wins}
+					</div>
+					<div class="text-xs text-white/40 uppercase tracking-wider mt-1">Wins</div>
+				</Card>
+				<Card class="text-center">
+					<div class="text-3xl font-bold text-brand-secondary">
+						{userStats.losses}
+					</div>
+					<div class="text-xs text-white/40 uppercase tracking-wider mt-1">Losses</div>
+				</Card>
+				<Card class="text-center">
+					<div class="text-3xl font-bold text-white">
+						{userStats.draws}
+					</div>
+					<div class="text-xs text-white/40 uppercase tracking-wider mt-1">Draws</div>
+				</Card>
+			</div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Card
-                    class="text-center bg-linear-to-br from-brand-primary/10 to-brand-secondary/10"
-                >
-                    <div class="text-3xl font-bold text-brand-accent">
-                        {getWinRate()}
-                    </div>
-                    <div
-                        class="text-xs text-white/40 uppercase tracking-wider mt-1"
-                    >
-                        Win Rate
-                    </div>
-                </Card>
-                <Card class="text-center">
-                    <div class="text-3xl font-bold text-white">
-                        {userStats.total_moves}
-                    </div>
-                    <div
-                        class="text-xs text-white/40 uppercase tracking-wider mt-1"
-                    >
-                        Total Moves
-                    </div>
-                </Card>
-                <Card class="text-center">
-                    <div class="text-3xl font-bold text-white">
-                        {formatDuration(userStats.avg_game_duration_seconds)}
-                    </div>
-                    <div
-                        class="text-xs text-white/40 uppercase tracking-wider mt-1"
-                    >
-                        Avg Duration
-                    </div>
-                </Card>
-            </div>
-        {/if}
-    </div>
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+				<Card class="text-center bg-linear-to-br from-brand-primary/10 to-brand-secondary/10">
+					<div class="text-3xl font-bold text-brand-accent">
+						{getWinRate()}
+					</div>
+					<div class="text-xs text-white/40 uppercase tracking-wider mt-1">Win Rate</div>
+				</Card>
+				<Card class="text-center">
+					<div class="text-3xl font-bold text-white">
+						{userStats.total_moves}
+					</div>
+					<div class="text-xs text-white/40 uppercase tracking-wider mt-1">Total Moves</div>
+				</Card>
+				<Card class="text-center">
+					<div class="text-3xl font-bold text-white">
+						{formatDuration(userStats.avg_game_duration_seconds)}
+					</div>
+					<div class="text-xs text-white/40 uppercase tracking-wider mt-1">Avg Duration</div>
+				</Card>
+			</div>
+		{/if}
+	</div>
 {/if}

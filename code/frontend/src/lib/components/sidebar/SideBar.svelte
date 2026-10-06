@@ -1,59 +1,58 @@
 <script lang="ts">
-    import { page } from "$app/state";
-    import { onMount } from "svelte";
-    import { authStore } from "$lib/state/auth.svelte";
-    import LoggedOut from "./_components/LoggedOut.svelte";
-    import LoggedIn from "./_components/LoggedIn.svelte";
-    import Title from "../Title.svelte";
-    import favicon from "$lib/assets/favicon.webp";
-    import TacticalPattern from "$lib/components/TacticalPattern.svelte";
-    import Connecting from "./_components/Connecting.svelte";
+	import { page } from '$app/state';
+	import { resolve } from '$app/paths';
+	import { onMount } from 'svelte';
+	import { authStore } from '$lib/state/auth.svelte';
+	import LoggedOut from './_components/LoggedOut.svelte';
+	import LoggedIn from './_components/LoggedIn.svelte';
+	import Title from '../Title.svelte';
+	import favicon from '$lib/assets/favicon.webp';
+	import TacticalPattern from '$lib/components/TacticalPattern.svelte';
+	import Connecting from './_components/Connecting.svelte';
 
-    const navItems = [
-        { name: "Command Center", href: "/" },
-        { name: "Meet our AI", href: "/meet-our-ai" },
-        { name: "Profile", href: "/profile" },
-        { name: "Board Setups", href: "/board-setups" },
-    ];
+	const navItems = [
+		{ name: 'Command Center', href: resolve('/') },
+		{ name: 'Meet our AI', href: resolve('/meet-our-ai') },
+		{ name: 'Profile', href: resolve('/profile') },
+		{ name: 'Board Setups', href: resolve('/board-setups') }
+	];
 
-    onMount(async () => {
-        await authStore.check();
-    });
+	onMount(async () => {
+		await authStore.check();
+	});
 </script>
 
 <aside
-    class="w-64 border-r border-white/5 bg-surface-elevated/30 backdrop-blur-xl flex flex-col fixed inset-y-0 overflow-hidden"
+	class="w-64 border-r border-white/5 bg-surface-elevated/30 backdrop-blur-xl flex flex-col fixed inset-y-0 overflow-hidden"
 >
-    <TacticalPattern variant="mixed" opacity={12} size={110} color="white" />
+	<TacticalPattern variant="mixed" opacity={12} size={110} color="white" />
 
-    <div class="px-4 py-8 flex justify-center z-10">
-        <img src={favicon} alt="Logo" class="w-12 h-12" />
-        <Title />
-    </div>
+	<div class="px-4 py-8 flex justify-center z-10">
+		<img src={favicon} alt="Logo" class="w-12 h-12" />
+		<Title />
+	</div>
 
-    <nav class="flex-1 px-4 space-y-1 relative z-10">
-        {#each navItems as item}
-            <a
-                href={item.href}
-                class="flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 group {item.href ===
-                page.url.pathname
-                    ? 'bg-brand-primary/10 text-brand-primary'
-                    : 'text-white/50 hover:bg-white/5 hover:text-white'}"
-            >
-                {item.name}
-            </a>
-        {/each}
-    </nav>
+	<nav class="flex-1 px-4 space-y-1 relative z-10">
+		{#each navItems as item (item.name)}
+			<a
+				href={item.href}
+				class="flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 group {item.href ===
+				page.url.pathname
+					? 'bg-brand-primary/10 text-brand-primary'
+					: 'text-white/50 hover:bg-white/5 hover:text-white'}"
+			>
+				{item.name}
+			</a>
+		{/each}
+	</nav>
 
-    <div
-        class="group p-4 border-t border-brand-accent/20 bg-black/20 relative z-10"
-    >
-        {#if authStore.loading}
-            <Connecting />
-        {:else if authStore.user}
-            <LoggedIn />
-        {:else}
-            <LoggedOut />
-        {/if}
-    </div>
+	<div class="group p-4 border-t border-brand-accent/20 bg-black/20 relative z-10">
+		{#if authStore.loading}
+			<Connecting />
+		{:else if authStore.user}
+			<LoggedIn />
+		{:else}
+			<LoggedOut />
+		{/if}
+	</div>
 </aside>

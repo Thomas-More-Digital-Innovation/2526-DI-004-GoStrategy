@@ -1,123 +1,123 @@
 export interface Position {
-    x: number;
-    y: number;
+	x: number;
+	y: number;
 }
 
 export interface Piece {
-    type?: string;
-    rank?: string;
-    ownerId: number;
-    ownerName?: string;
-    revealed: boolean;
-    iconBlue?: string;
-    iconRed?: string;
-    position: Position;
+	type?: string;
+	rank?: string;
+	ownerId: number;
+	ownerName?: string;
+	revealed: boolean;
+	iconBlue?: string;
+	iconRed?: string;
+	position: Position;
 }
 
 export interface Move {
-    from: Position;
-    to: Position;
+	from: Position;
+	to: Position;
 }
 
 export interface GameState {
-    round: number;
-    currentPlayerId: number;
-    currentPlayerName: string;
-    isGameOver: boolean;
-    winnerId?: number;
-    winnerName?: string;
-    winCause?: string;
-    player1Score: number;
-    player2Score: number;
-    waitingForInput: boolean;
-    paused: boolean;
-    moveCount: number;
-    player1AlivePieces: number;
-    player2AlivePieces: number;
-    isSetupPhase: boolean;
-    headless: boolean;
-    setupRemainingSecs?: number;
-    player1Username: string;
-    player2Username: string;
+	round: number;
+	currentPlayerId: number;
+	currentPlayerName: string;
+	isGameOver: boolean;
+	winnerId?: number;
+	winnerName?: string;
+	winCause?: string;
+	player1Score: number;
+	player2Score: number;
+	waitingForInput: boolean;
+	paused: boolean;
+	moveCount: number;
+	player1AlivePieces: number;
+	player2AlivePieces: number;
+	isSetupPhase: boolean;
+	headless: boolean;
+	setupRemainingSecs?: number;
+	player1Username: string;
+	player2Username: string;
 }
 
-export type MoveVisualizationHighlightState = 'move' | 'win' | 'loss'
+export type MoveVisualizationHighlightState = 'move' | 'win' | 'loss';
 
 export type MoveResultType = 'move' | 'win' | 'loss' | 'tie' | 'capture';
 
 export interface PieceData {
-    type: string;
-    rank: string;
-    ownerId: number;
+	type: string;
+	rank: string;
+	ownerId: number;
 }
 
 export interface HistoricalMove {
-    moveIndex: number;
-    playerId: number;
-    fromX: number;
-    fromY: number;
-    toX: number;
-    toY: number;
-    attacker?: PieceData;
-    defender?: PieceData;
-    result: MoveResultType;
+	moveIndex: number;
+	playerId: number;
+	fromX: number;
+	fromY: number;
+	toX: number;
+	toY: number;
+	attacker?: PieceData;
+	defender?: PieceData;
+	result: MoveResultType;
 }
 
 export interface BoardState {
-    board: Piece[][];
-    width: number;
-    height: number;
-    lastMove?: HistoricalMove;
+	board: Piece[][];
+	width: number;
+	height: number;
+	lastMove?: HistoricalMove;
 }
 
 export interface GameInfo {
-    gameId: string;
-    gameType: GameMode;
-    wsUrl: string;
+	gameId: string;
+	gameType: GameMode;
+	wsUrl: string;
 }
 
 export interface HistoryMove {
-    moveNumber: number;
-    move: HistoricalMove;
-    piece?: Piece;
-    boardState: Piece[][];
+	moveNumber: number;
+	move: HistoricalMove;
+	piece?: Piece;
+	boardState: Piece[][];
 }
 
 export interface CombatAnimation {
-    attacker: Piece;
-    defender: Piece;
-    attackerWon: boolean;
-    defenderWon: boolean;
+	attacker: Piece;
+	defender: Piece;
+	attackerWon: boolean;
+	defenderWon: boolean;
 }
 
 export interface GameMode {
-    mode: string;
-    icon: string;
-    title: string;
-    desc: string;
-    disabled?: boolean;
+	mode: string;
+	icon: string;
+	title: string;
+	desc: string;
+	disabled?: boolean;
 }
 
 export interface AI {
-    name: string;
-    id: string;
-    description: string;
-    image?: string;
+	name: string;
+	id: string;
+	description: string;
+	image?: string;
 }
 
 export interface User {
-    id: number;
-    username: string;
-    profile_picture?: string;
-    created_at: string;
-    updated_at: string;
+	id: number;
+	username: string;
+	profile_picture?: string;
+	created_at: string;
+	updated_at: string;
 }
 
 export interface UserStats {
-    total_games: number;
-    wins: number;
-    losses: number;
-    draws: number;
-    total_moves: number;
-    avg_game_duration_seconds: number;
+	total_games: number;
+	wins: number;
+	losses: number;
+	draws: number;
+	total_moves: number;
+	avg_game_duration_seconds: number;
 }

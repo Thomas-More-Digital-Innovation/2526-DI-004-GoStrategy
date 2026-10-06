@@ -10,57 +10,57 @@
  */
 
 export const PASSWORD_RULES = {
-    minLength: 8,
-    requireUppercase: true,
-    requireLowercase: true,
-    requireNumber: true,
-    forbiddenPattern: /[^a-zA-Z0-9!@#$%^&*()_+=\-\. ]/
+	minLength: 8,
+	requireUppercase: true,
+	requireLowercase: true,
+	requireNumber: true,
+	forbiddenPattern: /[^a-zA-Z0-9!@#$%^&*()_+=\-. ]/
 };
 
 export interface PasswordChecks {
-    isMinLength: boolean;
-    hasUppercase: boolean;
-    hasLowercase: boolean;
-    hasNumber: boolean;
-    isValidFormat: boolean;
+	isMinLength: boolean;
+	hasUppercase: boolean;
+	hasLowercase: boolean;
+	hasNumber: boolean;
+	isValidFormat: boolean;
 }
 
 export function validatePasswordInput(password: string): PasswordChecks {
-    const hasEdgeSpace = password.startsWith(" ") || password.endsWith(" ");
-    return {
-        isMinLength: password.length >= PASSWORD_RULES.minLength,
-        hasUppercase: /[A-Z]/.test(password),
-        hasLowercase: /[a-z]/.test(password),
-        hasNumber: /[0-9]/.test(password),
-        isValidFormat: !hasEdgeSpace && !PASSWORD_RULES.forbiddenPattern.test(password)
-    };
+	const hasEdgeSpace = password.startsWith(' ') || password.endsWith(' ');
+	return {
+		isMinLength: password.length >= PASSWORD_RULES.minLength,
+		hasUppercase: /[A-Z]/.test(password),
+		hasLowercase: /[a-z]/.test(password),
+		hasNumber: /[0-9]/.test(password),
+		isValidFormat: !hasEdgeSpace && !PASSWORD_RULES.forbiddenPattern.test(password)
+	};
 }
 
 export function isPasswordStrong(password: string): boolean {
-    const checks = validatePasswordInput(password);
-    return (
-        checks.isMinLength &&
-        checks.hasUppercase &&
-        checks.hasLowercase &&
-        checks.hasNumber &&
-        checks.isValidFormat
-    );
+	const checks = validatePasswordInput(password);
+	return (
+		checks.isMinLength &&
+		checks.hasUppercase &&
+		checks.hasLowercase &&
+		checks.hasNumber &&
+		checks.isValidFormat
+	);
 }
 
 export function getPasswordStrengthScore(password: string): number {
-    if (password.length === 0) return 0;
-    const checks = validatePasswordInput(password);
-    let score = 0;
-    
-    // 1. Length check
-    if (checks.isMinLength) score++;
-    // 2. Case check (both upper and lower)
-    if (checks.hasUppercase && checks.hasLowercase) score++;
-    // 3. Number check
-    if (checks.hasNumber) score++;
-    // 4. Clean formatting check
-    if (checks.isValidFormat) score++;
-    
-    // Returns 0 to 4 score
-    return score;
+	if (password.length === 0) return 0;
+	const checks = validatePasswordInput(password);
+	let score = 0;
+
+	// 1. Length check
+	if (checks.isMinLength) score++;
+	// 2. Case check (both upper and lower)
+	if (checks.hasUppercase && checks.hasLowercase) score++;
+	// 3. Number check
+	if (checks.hasNumber) score++;
+	// 4. Clean formatting check
+	if (checks.isValidFormat) score++;
+
+	// Returns 0 to 4 score
+	return score;
 }

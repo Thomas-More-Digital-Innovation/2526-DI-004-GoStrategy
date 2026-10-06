@@ -5,7 +5,7 @@ declare module 'virtual:changelog' {
 
 // Manual Node.js type declarations to fix compiler errors when @types/node is missing
 declare module 'node:fs' {
-	export function readFileSync(path: string, options?: any): any;
+	export function readFileSync(path: string, options?: unknown): string;
 }
 
 declare module 'node:url' {
