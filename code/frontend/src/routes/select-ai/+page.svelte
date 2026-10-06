@@ -1,16 +1,16 @@
 <script lang="ts">
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
     import { goto } from "$app/navigation";
     import { games } from "$lib/api/client";
     import { AIs } from "$lib/data/AI.data";
     import Button from "$lib/components/ui/Button.svelte";
+    import Alert from "$lib/components/ui/Alert.svelte";
     import { gamemodes } from "$lib/data/gamemodes.data";
     import SelectionSummary from "$lib/components/setup/SelectionSummary.svelte";
-
     import { onMount } from "svelte";
 
     const gameMode = gamemodes.fromString(
-        $page.url.searchParams.get("mode") || "human_vs_ai",
+        page.url.searchParams.get("mode") || "human_vs_ai",
     );
 
     let step = $state<"ai1" | "ai2">("ai1");
@@ -48,7 +48,7 @@
     }
 
     onMount(async () => {
-        const aiParam = $page.url.searchParams.get("ai");
+        const aiParam = page.url.searchParams.get("ai");
         if (!aiParam) return;
 
         const target = aiParam.toLowerCase();
@@ -104,19 +104,18 @@
     <SelectionSummary {gameMode} {ai1} {ai2} {step} />
 
     {#if error}
-        <div
-            class="bg-brand-secondary/20 border border-brand-secondary/30 text-brand-secondary rounded-2xl px-6 py-4 text-sm font-medium flex flex-col md:flex-row items-center justify-between gap-4 animate-in fade-in slide-in-from-top-2 duration-300"
-        >
-            <span class="flex-1 text-center md:text-left">{error}</span>
-            <Button
-                variant="secondary"
-                size="sm"
-                onclick={start}
-                disabled={creating}
-            >
-                {creating ? "Retrying..." : "Retry"}
-            </Button>
-        </div>
+        <Alert variant="error" message={error}>
+            {#snippet action()}
+                <Button
+                    variant="secondary"
+                    size="sm"
+                    onclick={start}
+                    disabled={creating}
+                >
+                    {creating ? "Retrying..." : "Retry"}
+                </Button>
+            {/snippet}
+        </Alert>
     {/if}
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -124,7 +123,7 @@
             <button
                 class="text-left p-6 rounded-2xl border-2 transition-all duration-300 flex items-center gap-6 group relative overflow-hidden {ai1 ===
                     ai.id || ai2 === ai.id
-                    ? 'border-brand-primary bg-brand-primary/10 shadow-[0_0_30px_rgba(var(--brand-primary-rgb),0.1)]'
+                    ? 'border-brand-primary bg-brand-primary/10'
                     : 'border-white/5 bg-surface-elevated/20 hover:border-white/20 hover:bg-white/5'}"
                 onclick={() => selectAi(ai.id)}
                 disabled={creating}
@@ -186,16 +185,16 @@
             <div
                 class="w-16 h-16 border-4 border-white/10 border-t-brand-primary rounded-full animate-spin"
             ></div>
-            <div class="text-center space-y-2">
+            <div class="text-center space-y-1">
                 <h2
-                    class="text-2xl font-black text-white uppercase tracking-tighter"
+                    class="text-xl font-bold text-white uppercase tracking-wider"
                 >
-                    Initializing Engines
+                    Preparing Match...
                 </h2>
                 <p
-                    class="text-white/40 text-sm font-medium animate-pulse uppercase tracking-[0.2em]"
+                    class="text-white/40 text-xs font-mono uppercase tracking-widest"
                 >
-                    Compiling strategic protocols...
+                    Configuring battlefield
                 </p>
             </div>
         </div>

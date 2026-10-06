@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount, onDestroy } from "svelte";
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
     import { gameStore } from "$lib/state/game.svelte";
     import { gamemodes } from "$lib/data/gamemodes.data";
     import Board from "$lib/components/game/Board.svelte";
@@ -18,7 +18,7 @@
 
     onMount(() => {
         session.init(
-            $page.params.id || "",
+            page.params.id || "",
             new URLSearchParams(window.location.search),
         );
     });

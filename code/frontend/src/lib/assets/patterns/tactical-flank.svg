@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" fill="none">
+    <!-- Target X marker (North-West) -->
+    <path
+        d="M 16 16 L 28 28 M 28 16 L 16 28"
+        stroke="white"
+        stroke-width="1.2"
+        stroke-linecap="round"
+    />
+
+    <!-- Objective Cross marker (South-East) -->
+    <path
+        d="M 85 80 L 85 92 M 79 86 L 91 86"
+        stroke="white"
+        stroke-width="1.2"
+        stroke-linecap="round"
+    />
+
+    <!-- Flanking Curved Maneuver Arrow (NW -> NE) -->
+    <path
+        d="M 32 20 Q 60 12, 75 30"
+        stroke="white"
+        stroke-width="1.2"
+        stroke-dasharray="3 3"
+    />
+    <!-- Arrowhead 1 -->
+    <path
+        d="M 72 24 L 76 31 L 69 32"
+        stroke="white"
+        stroke-width="1.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    />
+
+    <!-- Tactical Staging Node (Center) -->
+    <circle
+        cx="55"
+        cy="65"
+        r="4"
+        stroke="white"
+        stroke-width="1.2"
+    />
+
+    <!-- Retreat / Regroup Curved Arrow (Center -> SW) -->
+    <path
+        d="M 50 70 Q 30 85, 20 100"
+        stroke="white"
+        stroke-width="1.2"
+        stroke-dasharray="3 3"
+    />
+    <!-- Arrowhead 2 -->
+    <path
+        d="M 27 96 L 19 101 L 18 92"
+        stroke="white"
+        stroke-width="1.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    />
+
+    <!-- Secondary Tactical Waypoint Cross -->
+    <path
+        d="M 105 15 L 105 21 M 102 18 L 108 18"
+        stroke="white"
+        stroke-width="1"
+        stroke-linecap="round"
+    />
+</svg>

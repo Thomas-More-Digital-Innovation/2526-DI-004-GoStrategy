@@ -1,6 +1,6 @@
 <script lang="ts">
     import Title from "$lib/components/Title.svelte";
-    import GridOverlay from "$lib/components/GridOverlay.svelte";
+    import TacticalPattern from "$lib/components/TacticalPattern.svelte";
     import Commander from "./Commander.svelte";
 
     let { isBlueCommander = $bindable(true) } = $props();
@@ -13,8 +13,8 @@
 <div
     class="hidden md:flex md:col-span-5 bg-linear-to-br from-black/60 to-surface-base/30 p-8 border-r border-white/5 flex-col justify-between relative overflow-hidden select-none"
 >
-    <!-- Grid Overlay -->
-    <GridOverlay opacity={5} size={20} color="white" />
+    <!-- Tactical Blueprint Pattern -->
+    <TacticalPattern variant="mixed" opacity={12} size={110} color="white" />
 
     <!-- Briefing Header -->
     <div class="space-y-6 relative z-10">

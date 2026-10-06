@@ -6,7 +6,7 @@
     import LoggedIn from "./_components/LoggedIn.svelte";
     import Title from "../Title.svelte";
     import favicon from "$lib/assets/favicon.webp";
-    import GridOverlay from "$lib/components/GridOverlay.svelte";
+    import TacticalPattern from "$lib/components/TacticalPattern.svelte";
     import Connecting from "./_components/Connecting.svelte";
 
     const navItems = [
@@ -24,14 +24,14 @@
 <aside
     class="w-64 border-r border-white/5 bg-surface-elevated/30 backdrop-blur-xl flex flex-col fixed inset-y-0 overflow-hidden"
 >
-    <GridOverlay opacity={4} size={24} color="white" />
+    <TacticalPattern variant="mixed" opacity={12} size={110} color="white" />
 
     <div class="px-4 py-8 flex justify-center z-10">
         <img src={favicon} alt="Logo" class="w-12 h-12" />
         <Title />
     </div>
 
-    <nav class="flex-1 px-4 space-y-1">
+    <nav class="flex-1 px-4 space-y-1 relative z-10">
         {#each navItems as item}
             <a
                 href={item.href}
@@ -45,7 +45,7 @@
         {/each}
     </nav>
 
-    <div class="group p-4 border-t border-brand-accent/20 bg-black/20">
+    <div class="group p-4 border-t border-brand-accent/20 bg-black/20 relative z-10">
         {#if authStore.loading}
             <Connecting />
         {:else if authStore.user}

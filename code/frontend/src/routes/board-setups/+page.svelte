@@ -5,9 +5,9 @@
     import { boardSetups } from "$lib/api/client";
     import Card from "$lib/components/ui/Card.svelte";
     import Button from "$lib/components/ui/Button.svelte";
-    import Board from "$lib/components/game/Board.svelte";
+    import Alert from "$lib/components/ui/Alert.svelte";
     import type { BoardSetup } from "$lib/types/board-setup";
-    import { PIECE_INVENTORY, MAX_BOARD_SETUPS } from "$lib/types/board-setup";
+    import { MAX_BOARD_SETUPS } from "$lib/types/board-setup";
     import BoardSetupCard from "$lib/components/setup/BoardSetupCard.svelte";
 
     let setups = $state<BoardSetup[]>([]);
@@ -53,9 +53,7 @@
 <div class="space-y-6">
     <div class="flex items-center justify-between">
         <div>
-            <h1
-                class="text-2xl font-extrabold text-white uppercase tracking-widest"
-            >
+            <h1 class="text-2xl font-extrabold text-white uppercase tracking-widest">
                 Board Setups
             </h1>
             <p class="text-white/40 text-sm mt-1">
@@ -72,19 +70,15 @@
     </div>
 
     {#if error}
-        <div
-            class="bg-brand-secondary/20 border border-brand-secondary/30 text-brand-secondary rounded-xl px-4 py-3 text-sm text-center"
-        >
-            {error}
-        </div>
+        <Alert variant="error" message={error} />
     {/if}
 
     {#if loading}
-        <div class="text-center py-12 text-white/30">Loading...</div>
+        <div class="text-center py-12 text-white/40">Loading formations...</div>
     {:else if setups.length === 0}
         <Card class="text-center py-12">
-            <p class="text-white/30">
-                No board setups yet. Create your first setup!
+            <p class="text-white/40">
+                No board setups yet. Create your first battle formation!
             </p>
         </Card>
     {:else}
