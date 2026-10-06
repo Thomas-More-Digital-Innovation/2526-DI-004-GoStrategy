@@ -17,6 +17,7 @@ services:
       - ./code/frontend:/app:rw
       - ./CHANGELOG.md:/app/static/CHANGELOG.md:ro
       - /app/node_modules
+      - /app/.svelte-kit
     environment:
       - FRONTEND_INTERNAL_PORT=5173
     ports:
