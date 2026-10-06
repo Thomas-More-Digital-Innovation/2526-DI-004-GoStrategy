@@ -11,8 +11,8 @@
 
     const navItems = [
         { name: "Command Center", href: "/" },
-        { name: "Profile", href: "/profile" },
         { name: "Meet our AI", href: "/meet-our-ai" },
+        { name: "Profile", href: "/profile" },
         { name: "Board Setups", href: "/board-setups" },
     ];
 
@@ -45,7 +45,9 @@
         {/each}
     </nav>
 
-    <div class="group p-4 border-t border-brand-accent/20 bg-black/20 relative z-10">
+    <div
+        class="group p-4 border-t border-brand-accent/20 bg-black/20 relative z-10"
+    >
         {#if authStore.loading}
             <Connecting />
         {:else if authStore.user}
