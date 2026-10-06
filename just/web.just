@@ -12,8 +12,21 @@ update-locks:
 check:
     pnpm check
 
-# lint web code (alias to check)
-lint: check
+# run prettier
+fmt: 
+    pnpm fmt
+
+# run eslint
+lint:
+    pnpm lint
+
+# run unit tests (vitest)
+test:
+    pnpm test:unit
+
+# run e2e tests (playwright)
+test-e2e:
+    pnpm test:e2e
 
 # build Svelte static assets
 build:
