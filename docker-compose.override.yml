@@ -22,7 +22,7 @@ services:
       - FRONTEND_INTERNAL_PORT=5173
     ports:
       - "${FRONTEND_PORT}:5173"
-    command: sh -lc "bun install && bun run dev -- --host 0.0.0.0"
+    command: sh -lc "bun install && bun run prepare && bun run dev -- --host 0.0.0.0"
 
 volumes:
   go-mod-cache:
