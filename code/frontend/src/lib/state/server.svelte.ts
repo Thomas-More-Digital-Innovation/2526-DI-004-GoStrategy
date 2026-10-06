@@ -1,63 +1,63 @@
-import { monitoring } from "$lib/api/client";
+import { monitoring } from '$lib/api/client';
 
 class ServerState {
-    #isOnline = $state(true);
-    #lastChecked = $state<Date | null>(null);
-    #checkInterval: ReturnType<typeof setInterval> | null = null;
+	#isOnline = $state(true);
+	#lastChecked = $state<Date | null>(null);
+	#checkInterval: ReturnType<typeof setInterval> | null = null;
 
-    get isOnline() {
-        return this.#isOnline;
-    }
+	get isOnline() {
+		return this.#isOnline;
+	}
 
-    get lastChecked() {
-        return this.#lastChecked;
-    }
+	get lastChecked() {
+		return this.#lastChecked;
+	}
 
-    async check() {
-        // Quick check for browser's offline state
-        if (typeof navigator !== "undefined" && !navigator.onLine) {
-            this.#isOnline = false;
-            this.#lastChecked = new Date();
-            return false;
-        }
+	async check() {
+		// Quick check for browser's offline state
+		if (typeof navigator !== 'undefined' && !navigator.onLine) {
+			this.#isOnline = false;
+			this.#lastChecked = new Date();
+			return false;
+		}
 
-        try {
-            const response = await monitoring.health();
-            this.#isOnline = response.status === "ok";
-        } catch (error) {
-            this.#isOnline = false;
-        } finally {
-            this.#lastChecked = new Date();
-        }
+		try {
+			const response = await monitoring.health();
+			this.#isOnline = response.status === 'ok';
+		} catch (error) {
+			this.#isOnline = false;
+		} finally {
+			this.#lastChecked = new Date();
+		}
 
-        return this.#isOnline;
-    }
+		return this.#isOnline;
+	}
 
-    startPolling(ms = 30000) {
-        if (this.#checkInterval) return;
-        
-        // Initial check
-        this.check();
+	startPolling(ms = 30000) {
+		if (this.#checkInterval) return;
 
-        this.#checkInterval = setInterval(() => {
-            this.check();
-        }, ms);
+		// Initial check
+		this.check();
 
-        if (typeof window !== "undefined") {
-            window.addEventListener("online", () => this.check());
-            window.addEventListener("offline", () => {
-                this.#isOnline = false;
-                this.#lastChecked = new Date();
-            });
-        }
-    }
+		this.#checkInterval = setInterval(() => {
+			this.check();
+		}, ms);
 
-    stopPolling() {
-        if (this.#checkInterval) {
-            clearInterval(this.#checkInterval);
-            this.#checkInterval = null;
-        }
-    }
+		if (typeof window !== 'undefined') {
+			window.addEventListener('online', () => this.check());
+			window.addEventListener('offline', () => {
+				this.#isOnline = false;
+				this.#lastChecked = new Date();
+			});
+		}
+	}
+
+	stopPolling() {
+		if (this.#checkInterval) {
+			clearInterval(this.#checkInterval);
+			this.#checkInterval = null;
+		}
+	}
 }
 
 export const serverStore = new ServerState();

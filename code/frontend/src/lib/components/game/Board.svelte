@@ -1,364 +1,343 @@
 <script lang="ts">
-    import Piece from "./Piece.svelte";
-    import type {
-        BoardState,
-        Position,
-        Piece as PieceType,
-        HistoricalMove,
-    } from "$lib/types/game";
-    import MoveVisualization from "./move-visualization/MoveVisualization.svelte";
-    import { BOARD_CONFIG } from "$lib/data/board.data";
-    import {
-        a11yStore,
-        getCellAriaLabel,
-        handleBoardKeyDown,
-        isLake,
-        announceMove,
-    } from "$lib/utils/a11y.svelte";
+	import Piece from './Piece.svelte';
+	import type { BoardState, Position, Piece as PieceType, HistoricalMove } from '$lib/types/game';
+	import MoveVisualization from './move-visualization/MoveVisualization.svelte';
+	import { BOARD_CONFIG } from '$lib/data/board.data';
+	import {
+		a11yStore,
+		getCellAriaLabel,
+		handleBoardKeyDown,
+		isLake,
+		announceMove
+	} from '$lib/utils/a11y.svelte';
 
-    interface Props {
-        boardState?: BoardState | null;
-        board?: (PieceType | null)[][]; // Allow passing raw board array
-        selectedPosition?: Position | null;
-        onCellClick?: (x: number, y: number) => void;
-        isInteractive?: boolean;
-        viewerId?: number;
-        disabledRows?: number[];
-        validMoves?: Position[];
-        rows?: number;
-        cols?: number;
-        scale?: number; // Scale factor (e.g., 0.5 for small preview)
-        onCellDragStart?: (e: DragEvent, x: number, y: number) => void;
-        onCellDragOver?: (e: DragEvent, x: number, y: number) => void;
-        onCellDragLeave?: (e: DragEvent, x: number, y: number) => void;
-        onCellDrop?: (e: DragEvent, x: number, y: number) => void;
-        isLakeCell?: (x: number, y: number) => boolean;
-        responsive?: boolean;
-        visualDisabledRows?: number[];
-        lastMove?: HistoricalMove | null;
-        highlightedRows?: number[];
-        highlightColor?: "red" | "blue" | "";
-        isSetupPhase?: boolean;
-        currentPlayerId?: number;
-        isGameOver?: boolean;
-        winnerId?: number | null;
-    }
+	interface Props {
+		boardState?: BoardState | null;
+		board?: (PieceType | null)[][]; // Allow passing raw board array
+		selectedPosition?: Position | null;
+		onCellClick?: (x: number, y: number) => void;
+		isInteractive?: boolean;
+		viewerId?: number;
+		disabledRows?: number[];
+		validMoves?: Position[];
+		rows?: number;
+		cols?: number;
+		scale?: number; // Scale factor (e.g., 0.5 for small preview)
+		onCellDragStart?: (e: DragEvent, x: number, y: number) => void;
+		onCellDragOver?: (e: DragEvent, x: number, y: number) => void;
+		onCellDragLeave?: (e: DragEvent, x: number, y: number) => void;
+		onCellDrop?: (e: DragEvent, x: number, y: number) => void;
+		isLakeCell?: (x: number, y: number) => boolean;
+		responsive?: boolean;
+		visualDisabledRows?: number[];
+		lastMove?: HistoricalMove | null;
+		highlightedRows?: number[];
+		highlightColor?: 'red' | 'blue' | '';
+		isSetupPhase?: boolean;
+		currentPlayerId?: number;
+		isGameOver?: boolean;
+		winnerId?: number | null;
+	}
 
-    let {
-        boardState,
-        board,
-        selectedPosition,
-        onCellClick,
-        isInteractive = true,
-        viewerId = 0,
-        disabledRows = [],
-        validMoves = [],
-        rows = BOARD_CONFIG.rows,
-        cols = BOARD_CONFIG.cols,
-        scale = 1,
-        onCellDragStart,
-        onCellDragOver,
-        onCellDragLeave,
-        onCellDrop,
-        isLakeCell,
-        responsive = false,
-        visualDisabledRows = [],
-        lastMove = null,
-        highlightedRows = [],
-        highlightColor = "",
-        isSetupPhase = false,
-        currentPlayerId,
-        isGameOver = false,
-        winnerId = null,
-    }: Props = $props();
+	let {
+		boardState,
+		board,
+		selectedPosition,
+		onCellClick,
+		isInteractive = true,
+		viewerId = 0,
+		disabledRows = [],
+		validMoves = [],
+		rows = BOARD_CONFIG.rows,
+		cols = BOARD_CONFIG.cols,
+		scale = 1,
+		onCellDragStart,
+		onCellDragOver,
+		onCellDragLeave,
+		onCellDrop,
+		isLakeCell,
+		responsive = false,
+		visualDisabledRows = [],
+		lastMove = null,
+		highlightedRows = [],
+		highlightColor = '',
+		isSetupPhase = false,
+		currentPlayerId,
+		isGameOver = false,
+		winnerId = null
+	}: Props = $props();
 
-    const displayBoard = $derived(board || boardState?.board || []);
+	const displayBoard = $derived(board || boardState?.board || []);
 
-    const isSelected = (x: number, y: number) =>
-        selectedPosition?.x === x && selectedPosition?.y === y;
-    const isValidMove = (x: number, y: number) =>
-        validMoves.some((m) => m.x === x && m.y === y);
-    const isCellFocused = (x: number, y: number) =>
-        (a11yStore.focusedCell?.x === x && a11yStore.focusedCell?.y === y) ||
-        (a11yStore.focusedCell === null && x === 0 && y === 0);
-    const isCellDisabled = (x: number, y: number) =>
-        !isInteractive ||
-        isLake(x, y, rows, isLakeCell) ||
-        disabledRows.includes(y);
+	const isSelected = (x: number, y: number) =>
+		selectedPosition?.x === x && selectedPosition?.y === y;
+	const isValidMove = (x: number, y: number) => validMoves.some((m) => m.x === x && m.y === y);
+	const isCellFocused = (x: number, y: number) =>
+		(a11yStore.focusedCell?.x === x && a11yStore.focusedCell?.y === y) ||
+		(a11yStore.focusedCell === null && x === 0 && y === 0);
+	const isCellDisabled = (x: number, y: number) =>
+		!isInteractive || isLake(x, y, rows, isLakeCell) || disabledRows.includes(y);
 
-    const cellSize = $derived(BOARD_CONFIG.baseCellSize * scale);
+	const cellSize = $derived(BOARD_CONFIG.baseCellSize * scale);
 
-    const highlightStyle = $derived.by(() => {
-        if (highlightedRows.length === 0) return "";
-        const minRow = Math.min(...highlightedRows);
-        const maxRow = Math.max(...highlightedRows);
-        const rowCount = maxRow - minRow + 1;
-        const gap = BOARD_CONFIG.gap * scale;
+	const highlightStyle = $derived.by(() => {
+		if (highlightedRows.length === 0) return '';
+		const minRow = Math.min(...highlightedRows);
+		const maxRow = Math.max(...highlightedRows);
+		const rowCount = maxRow - minRow + 1;
+		const gap = BOARD_CONFIG.gap * scale;
 
-        const marginY = 12;
-        const top = minRow * (cellSize + gap);
-        const height = rowCount * cellSize + (rowCount - 1) * gap + marginY;
+		const marginY = 12;
+		const top = minRow * (cellSize + gap);
+		const height = rowCount * cellSize + (rowCount - 1) * gap + marginY;
 
-        return `top: ${top}px; height: ${height}px;`;
-    });
+		return `top: ${top}px; height: ${height}px;`;
+	});
 
-    $effect(() => {
-        if (
-            currentPlayerId !== undefined &&
-            !isGameOver &&
-            !isSetupPhase
-        ) {
-            const turnName =
-                currentPlayerId === 0 ? "Your turn (Blue)" : "Opponent's turn (Red)";
-            a11yStore.announce(turnName);
-        }
-    });
+	$effect(() => {
+		if (currentPlayerId !== undefined && !isGameOver && !isSetupPhase) {
+			const turnName = currentPlayerId === 0 ? 'Your turn (Blue)' : "Opponent's turn (Red)";
+			a11yStore.announce(turnName);
+		}
+	});
 
-    $effect(() => {
-        if (lastMove) {
-            const msg = announceMove(lastMove, viewerId);
-            if (msg) {
-                a11yStore.announce(msg);
-            }
-        }
-    });
+	$effect(() => {
+		if (lastMove) {
+			const msg = announceMove(lastMove, viewerId);
+			if (msg) {
+				a11yStore.announce(msg);
+			}
+		}
+	});
 
-    $effect(() => {
-        if (isGameOver) {
-            const msg =
-                winnerId === 0
-                    ? "Game over! You won!"
-                    : winnerId === 1
-                      ? "Game over! Red won!"
-                      : "Game over!";
-            a11yStore.announce(msg);
-        }
-    });
+	$effect(() => {
+		if (isGameOver) {
+			const msg =
+				winnerId === 0
+					? 'Game over! You won!'
+					: winnerId === 1
+						? 'Game over! Red won!'
+						: 'Game over!';
+			a11yStore.announce(msg);
+		}
+	});
 </script>
 
 <div
-    class="board-wrapper"
-    style="--cell-size: {cellSize}px; --cols: {cols}; --rows: {rows}; --scale: {scale}; --gap: {BOARD_CONFIG.gap}px;"
-    class:non-interactive={!isInteractive}
+	class="board-wrapper"
+	style="--cell-size: {cellSize}px; --cols: {cols}; --rows: {rows}; --scale: {scale}; --gap: {BOARD_CONFIG.gap}px;"
+	class:non-interactive={!isInteractive}
 >
-    <div class="sr-only" aria-live="polite" aria-atomic="true">
-        {a11yStore.announcement}
-    </div>
+	<div class="sr-only" aria-live="polite" aria-atomic="true">
+		{a11yStore.announcement}
+	</div>
 
-    {#if displayBoard.length > 0}
-        <div
-            class="board glass rounded-2xl p-3"
-            class:responsive
-            role="grid"
-            aria-label="Stratego Game Board"
-        >
-            {#each Array(rows) as _, y}
-                <div role="row" style="display: contents;">
-                    {#each Array(cols) as _, x}
-                        {@const piece = displayBoard[y]?.[x]}
-                        <button
-                            id="cell-{x}-{y}"
-                            class="cell focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-black/50"
-                            class:lake={isLake(x, y, rows, isLakeCell)}
-                            class:interactive={isInteractive &&
-                                !isLake(x, y, rows, isLakeCell)}
-                            class:valid-move={isValidMove(x, y)}
-                            class:visual-disabled={visualDisabledRows.includes(
-                                y,
-                            )}
-                            role="gridcell"
-                            tabindex={isCellFocused(x, y) ? 0 : -1}
-                            aria-disabled={isCellDisabled(x, y)
-                                ? "true"
-                                : undefined}
-                            aria-label={getCellAriaLabel({
-                                x,
-                                y,
-                                piece,
-                                isSelected: isSelected(x, y),
-                                isValidMove: isValidMove(x, y),
-                                isLake: isLake(x, y, rows, isLakeCell),
-                                viewerId,
-                                isSetupPhase,
-                            })}
-                            onclick={() => {
-                                if (isCellDisabled(x, y)) return;
-                                onCellClick?.(x, y);
-                            }}
-                            onkeydown={(e) =>
-                                handleBoardKeyDown(e, { x, y, cols, rows })}
-                            onfocus={() => {
-                                a11yStore.focusedCell = { x, y };
-                            }}
-                            draggable={isInteractive &&
-                                !!piece &&
-                                piece.ownerId !== undefined &&
-                                piece.ownerId >= 0 &&
-                                !isLake(x, y, rows, isLakeCell) &&
-                                !disabledRows.includes(y)}
-                            ondragstart={(e) => {
-                                if (isCellDisabled(x, y)) return;
-                                onCellDragStart?.(e, x, y);
-                            }}
-                            ondragover={(e) => {
-                                if (isCellDisabled(x, y)) return;
-                                if (onCellDrop) {
-                                    e.preventDefault();
-                                    onCellDragOver?.(e, x, y);
-                                }
-                            }}
-                            ondragleave={(e) => {
-                                if (isCellDisabled(x, y)) return;
-                                onCellDragLeave?.(e, x, y);
-                            }}
-                            ondrop={(e) => {
-                                if (isCellDisabled(x, y)) return;
-                                onCellDrop?.(e, x, y);
-                            }}
-                        >
-                            <Piece
-                                {piece}
-                                isSelected={isSelected(x, y)}
-                                isHighlighted={isValidMove(x, y)}
-                                isLake={isLake(x, y, rows, isLakeCell)}
-                                {viewerId}
-                                {scale}
-                            />
-                        </button>
-                    {/each}
-                </div>
-            {/each}
+	{#if displayBoard.length > 0}
+		<div
+			class="board glass rounded-2xl p-3"
+			class:responsive
+			role="grid"
+			aria-label="Stratego Game Board"
+		>
+			{#each Array(rows) as _, y}
+				<div role="row" style="display: contents;">
+					{#each Array(cols) as _, x}
+						{@const piece = displayBoard[y]?.[x]}
+						<button
+							id="cell-{x}-{y}"
+							class="cell focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-black/50"
+							class:lake={isLake(x, y, rows, isLakeCell)}
+							class:interactive={isInteractive && !isLake(x, y, rows, isLakeCell)}
+							class:valid-move={isValidMove(x, y)}
+							class:visual-disabled={visualDisabledRows.includes(y)}
+							role="gridcell"
+							tabindex={isCellFocused(x, y) ? 0 : -1}
+							aria-disabled={isCellDisabled(x, y) ? 'true' : undefined}
+							aria-label={getCellAriaLabel({
+								x,
+								y,
+								piece,
+								isSelected: isSelected(x, y),
+								isValidMove: isValidMove(x, y),
+								isLake: isLake(x, y, rows, isLakeCell),
+								viewerId,
+								isSetupPhase
+							})}
+							onclick={() => {
+								if (isCellDisabled(x, y)) return;
+								onCellClick?.(x, y);
+							}}
+							onkeydown={(e) => handleBoardKeyDown(e, { x, y, cols, rows })}
+							onfocus={() => {
+								a11yStore.focusedCell = { x, y };
+							}}
+							draggable={isInteractive &&
+								!!piece &&
+								piece.ownerId !== undefined &&
+								piece.ownerId >= 0 &&
+								!isLake(x, y, rows, isLakeCell) &&
+								!disabledRows.includes(y)}
+							ondragstart={(e) => {
+								if (isCellDisabled(x, y)) return;
+								onCellDragStart?.(e, x, y);
+							}}
+							ondragover={(e) => {
+								if (isCellDisabled(x, y)) return;
+								if (onCellDrop) {
+									e.preventDefault();
+									onCellDragOver?.(e, x, y);
+								}
+							}}
+							ondragleave={(e) => {
+								if (isCellDisabled(x, y)) return;
+								onCellDragLeave?.(e, x, y);
+							}}
+							ondrop={(e) => {
+								if (isCellDisabled(x, y)) return;
+								onCellDrop?.(e, x, y);
+							}}
+						>
+							<Piece
+								{piece}
+								isSelected={isSelected(x, y)}
+								isHighlighted={isValidMove(x, y)}
+								isLake={isLake(x, y, rows, isLakeCell)}
+								{viewerId}
+								{scale}
+							/>
+						</button>
+					{/each}
+				</div>
+			{/each}
 
-            {#if lastMove && !selectedPosition}
-                <MoveVisualization move={lastMove} {cellSize} {scale} />
-            {/if}
+			{#if lastMove && !selectedPosition}
+				<MoveVisualization move={lastMove} {cellSize} {scale} />
+			{/if}
 
-            {#if highlightedRows.length > 0}
-                <div
-                    class="row-highlight"
-                    class:red={highlightColor === "red"}
-                    class:blue={highlightColor === "blue"}
-                    style={highlightStyle}
-                ></div>
-            {/if}
-        </div>
-    {:else}
-        <div class="flex items-center justify-center p-10 text-white/40">
-            No board data available
-        </div>
-    {/if}
+			{#if highlightedRows.length > 0}
+				<div
+					class="row-highlight"
+					class:red={highlightColor === 'red'}
+					class:blue={highlightColor === 'blue'}
+					style={highlightStyle}
+				></div>
+			{/if}
+		</div>
+	{:else}
+		<div class="flex items-center justify-center p-10 text-white/40">No board data available</div>
+	{/if}
 </div>
 
 <style>
-    .board-wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .board-wrapper.non-interactive {
-        pointer-events: none;
-    }
-    .board {
-        position: relative;
-        display: grid;
-        grid-template-columns: repeat(var(--cols), var(--cell-size));
-        grid-template-rows: repeat(var(--rows), var(--cell-size));
-        gap: calc(var(--gap) * var(--scale, 1));
-    }
-    .board.responsive {
-        grid-template-columns: repeat(var(--cols), 1fr);
-        grid-template-rows: auto;
-        width: 100%;
-        gap: 2px;
-    }
-    .board.responsive .cell {
-        width: 100%;
-        height: auto;
-        aspect-ratio: 1;
-    }
-    .cell {
-        width: var(--cell-size);
-        height: var(--cell-size);
-        position: relative;
-        padding: 0;
-        border: none;
-        border-radius: 6px;
-        background: none;
-        cursor: default;
-    }
-    .cell.interactive {
-        cursor: pointer;
-    }
-    .cell.visual-disabled {
-        background-color: rgba(255, 0, 0, 0.1);
-    }
-    .cell.visual-disabled:not(.lake)::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(
-            to top right,
-            transparent calc(50% - 1px),
-            rgba(255, 255, 255, 0.2) 50%,
-            transparent calc(50% + 1px)
-        );
-        border-radius: 6px;
-        pointer-events: none;
-        z-index: 1;
-    }
-    .cell.valid-move::after {
-        content: "";
-        position: absolute;
-        inset: 3px;
-        border: 2px solid oklch(0.75 0.18 145);
-        border-radius: 4px;
-        pointer-events: none;
-        animation: pulse 1.5s ease-in-out infinite;
-    }
-    .row-highlight {
-        position: absolute;
-        left: 6px;
-        right: 6px;
-        margin-top: 6px;
-        border: 2px solid white;
-        border-radius: 10px;
-        pointer-events: none;
-        z-index: 5;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        opacity: 0;
-        animation: fade-in 0.3s forwards;
-    }
-    @keyframes fade-in {
-        from {
-            opacity: 0;
-            transform: scale(0.98);
-        }
-        to {
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
-    .row-highlight.red {
-        border-color: oklch(0.6688 0.1971 39.15 / 0.5);
-        background: oklch(0.6688 0.1971 39.15 / 0.05);
-        box-shadow:
-            0 0 30px oklch(0.6688 0.1971 39.15 / 0.15),
-            inset 0 0 20px oklch(0.6688 0.1971 39.15 / 0.05);
-    }
-    .row-highlight.blue {
-        border-color: oklch(0.7113 0.1044 226.48 / 0.5);
-        background: oklch(0.7113 0.1044 226.48 / 0.05);
-        box-shadow:
-            0 0 30px oklch(0.7113 0.1044 226.48 / 0.15),
-            inset 0 0 20px oklch(0.7113 0.1044 226.48 / 0.05);
-    }
-    @keyframes pulse {
-        0%,
-        100% {
-            opacity: 1;
-        }
-        50% {
-            opacity: 0.4;
-        }
-    }
+	.board-wrapper {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.board-wrapper.non-interactive {
+		pointer-events: none;
+	}
+	.board {
+		position: relative;
+		display: grid;
+		grid-template-columns: repeat(var(--cols), var(--cell-size));
+		grid-template-rows: repeat(var(--rows), var(--cell-size));
+		gap: calc(var(--gap) * var(--scale, 1));
+	}
+	.board.responsive {
+		grid-template-columns: repeat(var(--cols), 1fr);
+		grid-template-rows: auto;
+		width: 100%;
+		gap: 2px;
+	}
+	.board.responsive .cell {
+		width: 100%;
+		height: auto;
+		aspect-ratio: 1;
+	}
+	.cell {
+		width: var(--cell-size);
+		height: var(--cell-size);
+		position: relative;
+		padding: 0;
+		border: none;
+		border-radius: 6px;
+		background: none;
+		cursor: default;
+	}
+	.cell.interactive {
+		cursor: pointer;
+	}
+	.cell.visual-disabled {
+		background-color: rgba(255, 0, 0, 0.1);
+	}
+	.cell.visual-disabled:not(.lake)::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(
+			to top right,
+			transparent calc(50% - 1px),
+			rgba(255, 255, 255, 0.2) 50%,
+			transparent calc(50% + 1px)
+		);
+		border-radius: 6px;
+		pointer-events: none;
+		z-index: 1;
+	}
+	.cell.valid-move::after {
+		content: '';
+		position: absolute;
+		inset: 3px;
+		border: 2px solid oklch(0.75 0.18 145);
+		border-radius: 4px;
+		pointer-events: none;
+		animation: pulse 1.5s ease-in-out infinite;
+	}
+	.row-highlight {
+		position: absolute;
+		left: 6px;
+		right: 6px;
+		margin-top: 6px;
+		border: 2px solid white;
+		border-radius: 10px;
+		pointer-events: none;
+		z-index: 5;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		opacity: 0;
+		animation: fade-in 0.3s forwards;
+	}
+	@keyframes fade-in {
+		from {
+			opacity: 0;
+			transform: scale(0.98);
+		}
+		to {
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
+	.row-highlight.red {
+		border-color: oklch(0.6688 0.1971 39.15 / 0.5);
+		background: oklch(0.6688 0.1971 39.15 / 0.05);
+		box-shadow:
+			0 0 30px oklch(0.6688 0.1971 39.15 / 0.15),
+			inset 0 0 20px oklch(0.6688 0.1971 39.15 / 0.05);
+	}
+	.row-highlight.blue {
+		border-color: oklch(0.7113 0.1044 226.48 / 0.5);
+		background: oklch(0.7113 0.1044 226.48 / 0.05);
+		box-shadow:
+			0 0 30px oklch(0.7113 0.1044 226.48 / 0.15),
+			inset 0 0 20px oklch(0.7113 0.1044 226.48 / 0.05);
+	}
+	@keyframes pulse {
+		0%,
+		100% {
+			opacity: 1;
+		}
+		50% {
+			opacity: 0.4;
+		}
+	}
 </style>
