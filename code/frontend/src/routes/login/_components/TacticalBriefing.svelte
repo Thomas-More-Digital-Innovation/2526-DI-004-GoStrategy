@@ -4,10 +4,6 @@
 	import Commander from './Commander.svelte';
 
 	let { isBlueCommander = $bindable(true) } = $props();
-
-	function switchCommander() {
-		isBlueCommander = !isBlueCommander;
-	}
 </script>
 
 <div

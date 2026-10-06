@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Piece as PieceType } from '$lib/types/game';
-	import { PIECE_INVENTORY } from '$lib/types/board-setup';
+	import { PIECE_INVENTORY, type PieceInfo } from '$lib/types/board-setup';
 
 	interface Props {
 		piece: PieceType | null;
@@ -48,7 +48,7 @@
 
 		if (!piece.rank) return null;
 
-		let inventoryItem: any = PIECE_INVENTORY[piece.rank];
+		let inventoryItem: PieceInfo | undefined = PIECE_INVENTORY[piece.rank];
 		if (!inventoryItem) {
 			inventoryItem = Object.values(PIECE_INVENTORY).find((item) => item.rank === piece.rank);
 		}

@@ -2,6 +2,7 @@ import type { Position } from '$lib/types/game';
 
 const WS_BASE = import.meta.env.VITE_WS_BASE || 'ws://localhost:8080';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type MessageHandler = (data: any) => void;
 
 export class GameSocket {

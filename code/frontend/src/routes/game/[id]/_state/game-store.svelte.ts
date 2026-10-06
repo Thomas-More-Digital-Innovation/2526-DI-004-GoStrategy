@@ -143,8 +143,8 @@ export class GameStore {
 				from: { x: number; y: number };
 				to: { x: number; y: number };
 			}>;
-			fullHistory: any[];
-			initialState: any[][];
+			fullHistory: HistoricalMove[];
+			initialState: (PieceData | null)[][];
 		},
 		gameId: string = '',
 		viewerId: number = -1

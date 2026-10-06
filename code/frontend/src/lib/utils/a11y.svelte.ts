@@ -1,4 +1,4 @@
-import type { Piece } from '$lib/types/game';
+import type { HistoricalMove, Piece } from '$lib/types/game';
 
 export const lakePositions = [
 	{ x: 2, y: 4 },
@@ -165,7 +165,7 @@ export function handleBoardKeyDown(
 	}
 }
 
-export function announceMove(move: any, viewerId: number): string {
+export function announceMove(move: HistoricalMove, viewerId: number): string {
 	if (!move) return '';
 	const colFrom = String.fromCharCode(65 + move.fromX);
 	const rowFrom = move.fromY + 1;
@@ -175,7 +175,7 @@ export function announceMove(move: any, viewerId: number): string {
 	const playerStr = move.playerId === viewerId ? 'You' : move.playerId === 0 ? 'Blue' : 'Red';
 	let msg = `${playerStr} moved from ${colFrom}${rowFrom} to ${colTo}${rowTo}.`;
 
-	if (move.result === 'combat' || move.attacker) {
+	if (move.result !== 'move' || move.attacker) {
 		const attackerName = getFriendlyPieceName(move.attacker?.rank || move.attacker?.type);
 		const defenderName = getFriendlyPieceName(move.defender?.rank || move.defender?.type);
 		const attackerOwner =
@@ -185,11 +185,11 @@ export function announceMove(move: any, viewerId: number): string {
 
 		msg += ` Combat! ${attackerOwner} ${attackerName} attacked ${defenderOwner} ${defenderName}.`;
 
-		if (move.attackerWon && move.defenderWon) {
+		if (move.result === 'tie') {
 			msg += ' Both pieces were defeated!';
-		} else if (move.attackerWon) {
+		} else if (move.result === 'win' || move.result === 'capture') {
 			msg += ` ${attackerOwner} ${attackerName} won and defeated the ${defenderName}!`;
-		} else if (move.defenderWon) {
+		} else if (move.result === 'loss') {
 			msg += ` ${defenderOwner} ${defenderName} won and defeated the ${attackerName}!`;
 		}
 	}

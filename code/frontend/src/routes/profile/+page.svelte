@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { authStore } from '$lib/state/auth.svelte';
 	import { stats } from '$lib/api/client';
 	import Card from '$lib/components/ui/Card.svelte';
@@ -15,12 +16,12 @@
 	onMount(async () => {
 		await authStore.check();
 		if (!authStore.user) {
-			goto('/login');
+			goto(resolve('/login'));
 			return;
 		}
 		try {
 			userStats = await stats.getMine();
-		} catch (e: any) {
+		} catch (e) {
 			toastStore.handleApiMessage(e, 'Failed to load stats');
 		}
 	});
@@ -38,7 +39,7 @@
 
 	async function handleLogout() {
 		await authStore.logout();
-		goto('/login');
+		goto(resolve('/login'));
 	}
 
 	function handleChangePassword() {

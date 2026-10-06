@@ -1,5 +1,3 @@
-import type { Position } from './types/game';
-
 export interface PieceData {
 	type: string;
 	rank: string;

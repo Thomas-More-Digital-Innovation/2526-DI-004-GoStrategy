@@ -24,7 +24,7 @@
 <Card class="w-full lg:w-80 h-fit sticky top-6">
 	<h3 class="font-bold text-white mb-4">Inventory</h3>
 	<div class="grid grid-cols-2 gap-2">
-		{#each Object.entries(PIECE_INVENTORY) as [rank, info]}
+		{#each Object.entries(PIECE_INVENTORY) as [rank, info] (rank)}
 			{@const count = remainingCounts[rank] ?? 0}
 			<button
 				class="inventory-item flex items-center gap-2 p-2 rounded-xl border transition-all"

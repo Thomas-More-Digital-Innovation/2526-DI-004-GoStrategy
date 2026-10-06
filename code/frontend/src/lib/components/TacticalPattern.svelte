@@ -54,6 +54,7 @@
 <div
 	class="absolute inset-0 pointer-events-none select-none overflow-hidden z-0 {className}"
 	style:opacity={opacity / 100}
+	style:color
 >
 	<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
 		<defs>

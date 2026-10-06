@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { authStore } from '$lib/state/auth.svelte';
 	import { toastStore } from '$lib/state/toast.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
@@ -49,8 +50,8 @@
 			} else {
 				await authStore.register(username, password);
 			}
-			goto('/');
-		} catch (e: any) {
+			goto(resolve('/'));
+		} catch (e) {
 			toastStore.handleApiMessage(e, 'Authentication failed');
 		} finally {
 			loading = false;

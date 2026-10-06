@@ -58,6 +58,7 @@
 		stroke-linecap="round"
 		stroke-linejoin="round"
 	>
+		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 		{@html current.icon}
 	</svg>
 	<p class="text-sm font-medium leading-tight">{message}</p>

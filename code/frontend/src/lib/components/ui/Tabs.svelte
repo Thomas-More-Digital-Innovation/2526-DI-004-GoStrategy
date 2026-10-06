@@ -35,7 +35,7 @@
 	<div
 		class="flex items-center gap-2 p-1.5 rounded-xl bg-surface-elevated/30 border border-white/10 w-fit backdrop-blur-md"
 	>
-		{#each tabs as tab}
+		{#each tabs as tab (tab.id)}
 			<button
 				type="button"
 				class="px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all duration-200 cursor-pointer {active ===

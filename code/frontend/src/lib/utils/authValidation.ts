@@ -14,7 +14,7 @@ export const PASSWORD_RULES = {
 	requireUppercase: true,
 	requireLowercase: true,
 	requireNumber: true,
-	forbiddenPattern: /[^a-zA-Z0-9!@#$%^&*()_+=\-\. ]/
+	forbiddenPattern: /[^a-zA-Z0-9!@#$%^&*()_+=\-. ]/
 };
 
 export interface PasswordChecks {

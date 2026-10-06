@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PIECE_INVENTORY, type PieceInfo } from '$lib/types/board-setup';
+	import { PIECE_INVENTORY } from '$lib/types/board-setup';
 	import type { Piece as PieceType, Position } from '$lib/types/game';
 	import { decodeSetup, encodeSetup } from '$lib/utils/board-binary';
 	import Board from '../game/Board.svelte';

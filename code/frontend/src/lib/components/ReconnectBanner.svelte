@@ -1,10 +1,18 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { authStore } from '$lib/state/auth.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import { games as gamesApi } from '$lib/api/client';
 	import { toastStore } from '$lib/state/toast.svelte';
 	import { AlertTriangle } from '@lucide/svelte';
+
+	interface ReconnectableResponse {
+		hasGame?: boolean;
+		gameId?: string;
+		gameType?: string;
+		seatIndex?: number;
+	}
 
 	let reconnectableGame = $state<{
 		gameId: string;
@@ -21,7 +29,7 @@
 
 		gamesApi
 			.getReconnectable()
-			.then((res: any) => {
+			.then((res: ReconnectableResponse) => {
 				if (res.hasGame && res.gameId && res.gameType) {
 					reconnectableGame = {
 						gameId: res.gameId,
@@ -65,10 +73,12 @@
 
 		gamesApi
 			.getReconnectable()
-			.then((res: any) => {
+			.then((res: ReconnectableResponse) => {
 				if (reconnectableGame != null && res.hasGame && res.gameId === reconnectableGame?.gameId) {
 					goto(
-						`/game/${reconnectableGame.gameId}?mode=${reconnectableGame.gameType}&seat=${reconnectableGame.seatIndex}`
+						resolve(
+							`/game/${reconnectableGame.gameId}?mode=${reconnectableGame.gameType}&seat=${reconnectableGame.seatIndex}`
+						)
 					);
 				} else {
 					toastStore.warning('Game session has ended or is no longer available.');
@@ -76,7 +86,7 @@
 					isReconnecting = false;
 				}
 			})
-			.catch((e) => {
+			.catch(() => {
 				toastStore.error('Failed to verify active game session.');
 				isReconnecting = false;
 			});

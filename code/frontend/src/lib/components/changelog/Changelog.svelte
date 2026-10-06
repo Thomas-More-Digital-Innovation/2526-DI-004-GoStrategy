@@ -1,17 +1,17 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	let changelogRaw = '';
-	let loading = true;
-	let error = '';
+	let changelogRaw = $state('');
+	let loading = $state(true);
+	let error = $state('');
 
 	onMount(async () => {
 		try {
 			const response = await fetch('/CHANGELOG.md');
 			if (!response.ok) throw new Error('Failed to load changelog');
 			changelogRaw = await response.text();
-		} catch (e: any) {
-			error = e.message;
+		} catch (e) {
+			error = e instanceof Error ? e.message : 'Failed to load changelog';
 		} finally {
 			loading = false;
 		}
@@ -47,7 +47,7 @@
 				'<li class="ml-2 mb-2 flex gap-3 text-white/80"><span class="text-white/20">•</span><span><strong class="text-white">$1</strong>$2</span></li>'
 			)
 			.replace(
-				/^\- (.*$)/gim,
+				/^- (.*$)/gim,
 				'<li class="ml-2 mb-2 flex gap-3 text-white/80"><span class="text-white/20">•</span><span>$1</span></li>'
 			)
 			.replace(/\*\*(.*)\*\*/gim, '<strong class="text-white">$1</strong>')
@@ -58,7 +58,7 @@
 			.join('\n');
 	}
 
-	$: html = parseMarkdown(changelogRaw);
+	const html = $derived(parseMarkdown(changelogRaw));
 </script>
 
 <div class="changelog-content">
@@ -71,6 +71,7 @@
 			<p>Error loading changelog: {error}</p>
 		</div>
 	{:else}
+		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 		{@html html}
 	{/if}
 </div>

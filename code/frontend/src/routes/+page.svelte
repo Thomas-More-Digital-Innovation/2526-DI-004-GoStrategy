@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { authStore } from '$lib/state/auth.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import Alert from '$lib/components/ui/Alert.svelte';
@@ -17,7 +18,7 @@
 			error = 'Coming Soon';
 			return;
 		}
-		goto(`/select-ai?mode=${selectedMode.mode}`);
+		goto(resolve(`/select-ai?mode=${selectedMode.mode}`));
 	}
 </script>
 
@@ -33,7 +34,7 @@
 				Welcome back, <span class="text-brand-accent font-semibold">{authStore.user.username}</span
 				>.
 			{:else}
-				<a href="/login" class="text-brand-primary hover:underline">Sign in</a> to start playing.
+				<a href={resolve('/login')} class="text-brand-primary hover:underline">Sign in</a> to start playing.
 			{/if}
 		</p>
 	</header>
@@ -47,7 +48,7 @@
 	{#if selectedMode}
 		<!-- Game Mode Selection -->
 		<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-			{#each allGamemodes as gamemode}
+			{#each allGamemodes as gamemode (gamemode.mode)}
 				<button
 					class="text-left cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed rounded-2xl p-6 border-2 transition-all duration-200 {selectedMode.mode ===
 					gamemode.mode
@@ -73,7 +74,7 @@
 			class="w-full"
 			onclick={() => {
 				if (!authStore.user) {
-					goto('/login');
+					goto(resolve('/login'));
 				} else {
 					startFlow();
 				}

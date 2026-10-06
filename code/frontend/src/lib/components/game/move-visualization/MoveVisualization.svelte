@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { HistoricalMove, Position } from '$lib/types/game';
+	import type { HistoricalMove } from '$lib/types/game';
 
 	import { BOARD_CONFIG } from '$lib/data/board.data';
 	import MoveArrow from './MoveArrow.svelte';

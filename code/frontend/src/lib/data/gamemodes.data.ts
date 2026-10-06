@@ -36,7 +36,7 @@ export const gamemodes = {
 	human_vs_human,
 	unknown,
 	fromString: (modeStr: string): GameMode => {
-		return (gamemodes as any)[modeStr] || gamemodes.unknown;
+		return (gamemodes as unknown as Record<string, GameMode>)[modeStr] || gamemodes.unknown;
 	}
 } as const;
 

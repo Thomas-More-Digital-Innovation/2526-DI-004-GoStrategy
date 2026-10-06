@@ -45,7 +45,7 @@
 			setTimeout(() => {
 				if (isOpen) handleClose();
 			}, 1500);
-		} catch (e: any) {
+		} catch (e) {
 			toastStore.handleApiMessage(e, 'Failed to change password');
 		} finally {
 			loading = false;

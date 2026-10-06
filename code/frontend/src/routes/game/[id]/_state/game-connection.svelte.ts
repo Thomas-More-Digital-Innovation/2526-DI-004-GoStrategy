@@ -14,7 +14,7 @@ export class GameConnectionManager {
 		try {
 			await this.socket.connect(gameId, seatIndex);
 			this.connected = true;
-		} catch (e: any) {
+		} catch (e) {
 			await serverStore.check();
 			if (serverStore.isOnline) {
 				toastStore.error('Game session not found or cleaned up.');

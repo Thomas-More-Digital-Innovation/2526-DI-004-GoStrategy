@@ -23,7 +23,7 @@
 				</tr>
 			</thead>
 			<tbody class="divide-y divide-white/5">
-				{#each dossiers as ai}
+				{#each dossiers as ai (ai.id)}
 					<tr class="hover:bg-white/5 transition-colors">
 						<td class="py-3 px-4 font-bold text-white flex items-center gap-3">
 							<img

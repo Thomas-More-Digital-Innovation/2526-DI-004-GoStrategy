@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { HistoricalMove, Move } from '$lib/types/game';
+	import type { HistoricalMove } from '$lib/types/game';
 	import { fade } from 'svelte/transition';
 
 	interface Props {

@@ -12,6 +12,7 @@
 		strength?: number;
 	}
 
+	// eslint-disable-next-line no-useless-assignment
 	let { password, isValid = $bindable(false), strength = $bindable(0) }: Props = $props();
 
 	const checks = $derived(validatePasswordInput(password));
@@ -43,7 +44,7 @@
 		Password Requirements
 	</div>
 	<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-2 text-xs font-semibold">
-		{#each criteria as item}
+		{#each criteria as item (item.label)}
 			<div
 				class="flex items-center gap-2 transition-colors duration-200 {item.passed
 					? 'text-emerald-400'

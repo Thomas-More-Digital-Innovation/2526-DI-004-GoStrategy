@@ -2,6 +2,7 @@
 	import type { AIDossier } from '$lib/types/ai';
 	import Button from '$lib/components/ui/Button.svelte';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 
 	let { dossier }: { dossier: AIDossier } = $props();
 
@@ -33,7 +34,8 @@
 
 		<div class="sm:shrink-0">
 			<Button
-				onclick={() => goto(`/select-ai?mode=human_vs_ai&ai=${encodeURIComponent(dossier.name)}`)}
+				onclick={() =>
+					goto(resolve(`/select-ai?mode=human_vs_ai&ai=${encodeURIComponent(dossier.name)}`))}
 				variant="primary"
 				size="sm"
 			>
@@ -52,7 +54,7 @@
 				<span>Strengths</span>
 			</div>
 			<ul class="space-y-1 text-white/80">
-				{#each dossier.strengths as strength}
+				{#each dossier.strengths as strength (strength)}
 					<li class="flex items-start gap-2">
 						<span class="text-emerald-400/80 shrink-0">•</span>
 						<span>{strength}</span>
@@ -69,7 +71,7 @@
 				<span>Limitations</span>
 			</div>
 			<ul class="space-y-1 text-white/80">
-				{#each dossier.weaknesses as weakness}
+				{#each dossier.weaknesses as weakness (weakness)}
 					<li class="flex items-start gap-2">
 						<span class="text-brand-secondary/80 shrink-0">•</span>
 						<span>{weakness}</span>

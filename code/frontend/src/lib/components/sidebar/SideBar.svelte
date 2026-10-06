@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { resolve } from '$app/paths';
 	import { onMount } from 'svelte';
 	import { authStore } from '$lib/state/auth.svelte';
 	import LoggedOut from './_components/LoggedOut.svelte';
@@ -10,10 +11,10 @@
 	import Connecting from './_components/Connecting.svelte';
 
 	const navItems = [
-		{ name: 'Command Center', href: '/' },
-		{ name: 'Meet our AI', href: '/meet-our-ai' },
-		{ name: 'Profile', href: '/profile' },
-		{ name: 'Board Setups', href: '/board-setups' }
+		{ name: 'Command Center', href: resolve('/') },
+		{ name: 'Meet our AI', href: resolve('/meet-our-ai') },
+		{ name: 'Profile', href: resolve('/profile') },
+		{ name: 'Board Setups', href: resolve('/board-setups') }
 	];
 
 	onMount(async () => {
@@ -32,7 +33,7 @@
 	</div>
 
 	<nav class="flex-1 px-4 space-y-1 relative z-10">
-		{#each navItems as item}
+		{#each navItems as item (item.name)}
 			<a
 				href={item.href}
 				class="flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 group {item.href ===

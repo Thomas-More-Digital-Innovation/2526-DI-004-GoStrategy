@@ -24,7 +24,7 @@ class ServerState {
 		try {
 			const response = await monitoring.health();
 			this.#isOnline = response.status === 'ok';
-		} catch (error) {
+		} catch {
 			this.#isOnline = false;
 		} finally {
 			this.#lastChecked = new Date();

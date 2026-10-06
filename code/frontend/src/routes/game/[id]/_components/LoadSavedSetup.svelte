@@ -38,7 +38,7 @@
 	class={ownerId === 1 ? 'border-brand-primary/40' : 'border-brand-secondary/40'}
 >
 	<div class="flex justify-center flex-wrap gap-6 py-2">
-		{#each savedSetups as setup}
+		{#each savedSetups as setup (setup.id)}
 			<BoardSetupCard
 				{setup}
 				{ownerId}

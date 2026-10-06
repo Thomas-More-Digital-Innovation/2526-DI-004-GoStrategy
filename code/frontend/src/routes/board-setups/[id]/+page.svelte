@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import SetupEditor from '$lib/components/setup/SetupEditor.svelte';
 	import BoardSetupMetaForm from '$lib/components/setup/BoardSetupMetaForm.svelte';
 	import Loading from '$lib/components/ui/Loading.svelte';
@@ -32,8 +33,8 @@
 				loadError = 'Setup not found';
 				toastStore.error('Setup not found');
 			}
-		} catch (e: any) {
-			loadError = e.message || 'Failed to load setup';
+		} catch (e) {
+			loadError = e instanceof Error ? e.message : 'Failed to load setup';
 			toastStore.handleApiMessage(e, 'Failed to load setup');
 		} finally {
 			loading = false;
@@ -49,8 +50,8 @@
 				setup_data: setupData,
 				is_default: isDefault
 			});
-			goto('/board-setups');
-		} catch (e: any) {
+			goto(resolve('/board-setups'));
+		} catch (e) {
 			toastStore.handleApiMessage(e, 'Failed to update setup');
 			saving = false;
 		}
@@ -78,7 +79,7 @@
 	{:else if loadError && !setup}
 		<Card class="text-center py-12">
 			<p class="text-brand-secondary">{loadError}</p>
-			<Button variant="ghost" class="mt-4" onclick={() => goto('/board-setups')}
+			<Button variant="ghost" class="mt-4" onclick={() => goto(resolve('/board-setups'))}
 				>Back to List</Button
 			>
 		</Card>
@@ -95,7 +96,7 @@
 			<SetupEditor
 				initialSetup={setup.setup_data}
 				onSave={handleSave}
-				onCancel={() => goto('/board-setups')}
+				onCancel={() => goto(resolve('/board-setups'))}
 			/>
 		{/if}
 	{/if}

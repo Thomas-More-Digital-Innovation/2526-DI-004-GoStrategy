@@ -31,7 +31,7 @@
 		{#snippet children(current)}
 			{#if current === 'dossiers'}
 				<div class="space-y-4">
-					{#each aiDossiers as dossier}
+					{#each aiDossiers as dossier (dossier.id)}
 						<AIDossierCard {dossier} />
 					{/each}
 				</div>

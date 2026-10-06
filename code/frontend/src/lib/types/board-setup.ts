@@ -7,11 +7,11 @@ const redIcons = import.meta.glob('$lib/assets/pieces/red/*.webp', {
 	import: 'default'
 });
 
-const getIcon = (icons: Record<string, any>, name: string) => {
+const getIcon = (icons: Record<string, unknown>, name: string) => {
 	const key = Object.keys(icons).find((k) =>
 		k.toLowerCase().endsWith(`/${name.toLowerCase()}.webp`)
 	);
-	return (key ? icons[key] : '') as string;
+	return (key ? (icons[key] as string) : '') as string;
 };
 
 export interface BoardSetup {

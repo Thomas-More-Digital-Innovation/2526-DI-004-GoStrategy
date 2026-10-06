@@ -1,6 +1,10 @@
-import type { GameInfo, GameMode, User, UserStats } from '$lib/types/game';
+import type { GameInfo, User, UserStats } from '$lib/types/game';
 import type { BoardSetup } from '$lib/types/board-setup';
 import { parseApiMessage } from '$lib/utils/api';
+
+interface ApiError extends Error {
+	type?: string;
+}
 
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8080';
 
@@ -33,14 +37,14 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 			await auth.refresh();
 			return request<T>(path, options);
 		} catch (err) {
-			throw new Error('Session expired');
+			throw new Error('Session expired', { cause: err });
 		}
 	}
 
 	if (!response.ok) {
 		const text = await response.text();
 		const { message, type } = parseApiMessage(text);
-		const error = new Error(message) as any;
+		const error = new Error(message) as ApiError;
 		error.type = type;
 		throw error;
 	}
@@ -69,14 +73,14 @@ async function requestVoid(path: string, options?: RequestInit): Promise<void> {
 			await auth.refresh();
 			return requestVoid(path, options);
 		} catch (err) {
-			throw new Error('Session expired');
+			throw new Error('Session expired', { cause: err });
 		}
 	}
 
 	if (!response.ok) {
 		const text = await response.text();
 		const { message, type } = parseApiMessage(text);
-		const error = new Error(message) as any;
+		const error = new Error(message) as ApiError;
 		error.type = type;
 		throw error;
 	}

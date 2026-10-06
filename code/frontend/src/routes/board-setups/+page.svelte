@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { authStore } from '$lib/state/auth.svelte';
 	import { boardSetups } from '$lib/api/client';
 	import Card from '$lib/components/ui/Card.svelte';
@@ -17,7 +18,7 @@
 	onMount(async () => {
 		await authStore.check();
 		if (!authStore.user) {
-			goto('/login');
+			goto(resolve('/login'));
 			return;
 		}
 		await loadSetups();
@@ -28,8 +29,8 @@
 		try {
 			const result = await boardSetups.list();
 			setups = result ?? [];
-		} catch (e: any) {
-			error = e.message || 'Failed to load setups';
+		} catch (e) {
+			error = e instanceof Error ? e.message : 'Failed to load setups';
 		} finally {
 			loading = false;
 		}
@@ -40,8 +41,8 @@
 		try {
 			await boardSetups.delete(id);
 			await loadSetups();
-		} catch (e: any) {
-			error = 'Failed to delete: ' + e.message;
+		} catch (e) {
+			error = 'Failed to delete: ' + (e instanceof Error ? e.message : 'Unknown error');
 		}
 	}
 </script>
@@ -61,7 +62,7 @@
 		<Button
 			variant="primary"
 			disabled={setups.length >= MAX_BOARD_SETUPS}
-			onclick={() => goto('/board-setups/new')}
+			onclick={() => goto(resolve('/board-setups/new'))}
 		>
 			+ Create New
 		</Button>
@@ -79,7 +80,7 @@
 		</Card>
 	{:else}
 		<div class="flex flex-wrap gap-6">
-			{#each setups as setup}
+			{#each setups as setup (setup.id)}
 				<BoardSetupCard {setup} ownerId={1}>
 					{#snippet actions()}
 						<div class="flex gap-2">
@@ -87,7 +88,7 @@
 								variant="outline"
 								size="sm"
 								class="flex-1"
-								onclick={() => goto(`/board-setups/${setup.id}`)}
+								onclick={() => goto(resolve(`/board-setups/${setup.id}`))}
 							>
 								Edit
 							</Button>

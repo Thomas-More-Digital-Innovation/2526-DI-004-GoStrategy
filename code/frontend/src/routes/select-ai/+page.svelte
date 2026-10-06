@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { games } from '$lib/api/client';
 	import { AIs } from '$lib/data/AI.data';
 	import Button from '$lib/components/ui/Button.svelte';
@@ -38,9 +39,9 @@
 		error = '';
 		try {
 			const info = await games.create(gameMode.mode, ai1, ai2);
-			goto(`/game/${info.gameId}?mode=${gameMode.mode}`);
-		} catch (e: any) {
-			error = e.message || 'Failed to create game';
+			goto(resolve(`/game/${info.gameId}?mode=${gameMode.mode}`));
+		} catch (e) {
+			error = e instanceof Error ? e.message : 'Failed to create game';
 			creating = false;
 		}
 	}
@@ -63,7 +64,7 @@
 			step = 'ai1';
 			ai1 = '';
 		} else {
-			goto('/');
+			goto(resolve('/'));
 		}
 	}
 </script>
@@ -106,7 +107,7 @@
 	{/if}
 
 	<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-		{#each AIs as ai}
+		{#each AIs as ai (ai.id)}
 			<button
 				class="text-left p-6 rounded-2xl border-2 transition-all duration-300 flex items-center gap-6 group relative overflow-hidden {ai1 ===
 					ai.id || ai2 === ai.id

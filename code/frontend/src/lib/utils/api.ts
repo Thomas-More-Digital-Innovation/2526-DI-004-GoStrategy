@@ -2,20 +2,21 @@
  * Parses an API-formatted message.
  * Supports both JSON strings and objects with keys like 'error', 'warning', etc.
  */
-export function parseApiMessage(data: any): { message: string; type: string } {
+export function parseApiMessage(data: unknown): { message: string; type: string } {
 	if (!data) return { message: '', type: 'error' };
 
 	// If it's already an object (e.g. from a websocket or already parsed JSON)
 	if (typeof data === 'object' && !Array.isArray(data)) {
-		const key = Object.keys(data)[0];
-		const message = data[key];
+		const dataObj = data as Record<string, unknown>;
+		const key = Object.keys(dataObj)[0];
+		const message = dataObj[key];
 		if (typeof message === 'string') {
 			return { message, type: key };
 		}
 
 		// If the object doesn't match our expected format, just stringify it
 		// but avoid returning empty JSON objects as messages
-		const stringified = JSON.stringify(data);
+		const stringified = JSON.stringify(dataObj);
 		return {
 			message: stringified === '{}' ? '' : stringified,
 			type: 'error'

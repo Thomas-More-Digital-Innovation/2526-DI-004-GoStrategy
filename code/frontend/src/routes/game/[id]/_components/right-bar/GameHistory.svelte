@@ -86,7 +86,7 @@
 		bind:this={scrollContainer}
 		class="custom-scrollbar flex-1 overflow-y-auto space-y-1 min-h-0 pr-1"
 	>
-		{#each Array(totalMoves) as _, index}
+		{#each { length: totalMoves }, index (index)}
 			<button
 				class="w-full text-left px-3 py-1.5 rounded-lg text-xs transition-all {index ===
 				currentMoveIndex

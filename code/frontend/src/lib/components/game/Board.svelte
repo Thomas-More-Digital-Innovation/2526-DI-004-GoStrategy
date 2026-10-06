@@ -139,9 +139,9 @@
 			role="grid"
 			aria-label="Stratego Game Board"
 		>
-			{#each Array(rows) as _, y}
+			{#each { length: rows }, y (y)}
 				<div role="row" style="display: contents;">
-					{#each Array(cols) as _, x}
+					{#each { length: cols }, x (x)}
 						{@const piece = displayBoard[y]?.[x]}
 						<button
 							id="cell-{x}-{y}"
