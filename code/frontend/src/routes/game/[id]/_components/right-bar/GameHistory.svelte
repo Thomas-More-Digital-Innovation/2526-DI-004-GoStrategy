@@ -94,13 +94,7 @@
                 currentMoveIndex
                     ? 'bg-brand-primary/20 text-brand-primary font-semibold'
                     : 'text-white/40 hover:bg-white/5 hover:text-white/70'}"
-                onclick={() => {
-                    if (index === totalMoves - 1 && !session.store.isGameOver) {
-                        session.handleExitReplay();
-                    } else {
-                        session.handleGoToMove(index);
-                    }
-                }}
+                onclick={() => session.handleGoToMove(index)}
             >
                 Move {index + 1}
             </button>

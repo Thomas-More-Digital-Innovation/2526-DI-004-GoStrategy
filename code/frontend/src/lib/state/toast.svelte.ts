@@ -13,6 +13,9 @@ class ToastStore {
     toasts = $state<Toast[]>([]);
 
     add(message: string, type: ToastType = 'info', duration: number = 3000) {
+        if (this.toasts.some(t => t.message === message)) {
+            return '';
+        }
         const id = Math.random().toString(36).substring(2, 9);
         const toast: Toast = { id, message, type, duration };
         this.toasts = [...this.toasts, toast];

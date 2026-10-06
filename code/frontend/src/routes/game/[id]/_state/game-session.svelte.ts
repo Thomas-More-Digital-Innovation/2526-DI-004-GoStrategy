@@ -52,21 +52,13 @@ export class GameSessionController {
     );
 
     disabledRows = $derived(
-        getDisabledRows(
-            this.isSetupPhase,
-            this.store.gameMode,
-            this.setupSelectedPlayer,
-        ),
+        getDisabledRows(this.isSetupPhase, this.store.gameMode, this.setupSelectedPlayer),
     );
 
     visualDisabledRows = $derived(this.isSetupPhase ? [4, 5] : []);
 
     highlightedRows = $derived(
-        getHighlightedRows(
-            this.isSetupPhase,
-            this.store.gameMode,
-            this.setupSelectedPlayer,
-        ),
+        getHighlightedRows(this.isSetupPhase, this.store.gameMode, this.setupSelectedPlayer),
     );
 
     highlightColor = $derived(
@@ -98,9 +90,7 @@ export class GameSessionController {
     setupHandlers() {
         const socket = this.connection.socket;
         socket.on("gameState", (data) => this.store.updateGameState(data));
-        socket.on("boardState", (data) =>
-            this.store.updateBoardState(data, this.viewerId),
-        );
+        socket.on("boardState", (data) => this.store.updateBoardState(data, this.viewerId));
         socket.on("moveHistory", (data) =>
             this.store.loadMoveHistory(data, this.gameId, this.viewerId),
         );
@@ -168,6 +158,11 @@ export class GameSessionController {
                 this.setupSwapPos1,
                 this.connection.socket,
             );
+            return;
+        }
+
+        if (this.store.isPaused) {
+            toastStore.warning("Game is paused. Click Resume to continue.", 2500);
             return;
         }
 
@@ -248,17 +243,33 @@ export class GameSessionController {
     }
 
     handleNextMove() {
+        if (
+            this.store.currentHistoryIndex === this.store.history.length - 2 &&
+            !this.store.isGameOver
+        ) {
+            this.handleExitReplay(false);
+            return;
+        }
         if (!this.store.isPaused) this.connection.socket.sendPause();
         this.store.nextMove();
     }
 
     handleGoToMove(index: number) {
+        if (
+            index === this.store.history.length - 1 &&
+            !this.store.isGameOver
+        ) {
+            this.handleExitReplay(false);
+            return;
+        }
         if (!this.store.isPaused) this.connection.socket.sendPause();
         this.store.goToMove(index);
     }
 
-    handleExitReplay() {
-        this.connection.socket.sendUnpause();
+    handleExitReplay(unpause: boolean = false) {
+        if (unpause) {
+            this.connection.socket.sendUnpause();
+        }
         this.store.exitReplay();
     }
 
