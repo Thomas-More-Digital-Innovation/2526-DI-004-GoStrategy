@@ -50,6 +50,18 @@ func GetUserBoardSetups(ctx context.Context, userID int) ([]models.BoardSetup, e
 	return setups, nil
 }
 
+// CountUserBoardSetups returns the total active setups owned by a user
+func CountUserBoardSetups(ctx context.Context, userID int) (int64, error) {
+	var count int64
+	err := WithRLS(ctx, func(tx *gorm.DB) error {
+		return tx.Model(&models.BoardSetup{}).Where("user_id = ?", userID).Count(&count).Error
+	})
+	if err != nil {
+		return 0, fmt.Errorf("failed to count user board setups: %w", err)
+	}
+	return count, nil
+}
+
 // UpdateBoardSetup updates an existing board setup and verifying ownership
 func UpdateBoardSetup(ctx context.Context, setupID, userID int, name, description, setupData string, isDefault bool) error {
 	updates := map[string]any{
