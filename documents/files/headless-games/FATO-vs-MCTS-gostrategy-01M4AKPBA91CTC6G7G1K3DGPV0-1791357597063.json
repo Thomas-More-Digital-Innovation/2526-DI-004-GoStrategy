@@ -1,0 +1,6619 @@
+{
+  "gameId": "01M4AKPBA91CTC6G7G1K3DGPV0",
+  "initialState": [
+    [
+      {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 1
+      },
+      {
+        "type": "Flag",
+        "rank": "0",
+        "ownerId": 1
+      },
+      {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 1
+      },
+      {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      }
+    ],
+    [
+      {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 1
+      },
+      {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      }
+    ],
+    [
+      {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 1
+      },
+      {
+        "type": "General",
+        "rank": "9",
+        "ownerId": 1
+      },
+      {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      {
+        "type": "Spy",
+        "rank": "1",
+        "ownerId": 1
+      },
+      {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 1
+      },
+      {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 1
+      },
+      {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 1
+      }
+    ],
+    [
+      {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 1
+      },
+      {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      {
+        "type": "Marshal",
+        "rank": "M",
+        "ownerId": 1
+      },
+      {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      }
+    ],
+    [
+      {
+        "type": "",
+        "rank": "",
+        "ownerId": -1
+      },
+      {
+        "type": "",
+        "rank": "",
+        "ownerId": -1
+      },
+      {
+        "type": "",
+        "rank": "",
+        "ownerId": -1
+      },
+      {
+        "type": "",
+        "rank": "",
+        "ownerId": -1
+      },
+      {
+        "type": "",
+        "rank": "",
+        "ownerId": -1
+      },
+      {
+        "type": "",
+        "rank": "",
+        "ownerId": -1
+      },
+      {
+        "type": "",
+        "rank": "",
+        "ownerId": -1
+      },
+      {
+        "type": "",
+        "rank": "",
+        "ownerId": -1
+      },
+      {
+        "type": "",
+        "rank": "",
+        "ownerId": -1
+      },
+      {
+        "type": "",
+        "rank": "",
+        "ownerId": -1
+      }
+    ],
+    [
+      {
+        "type": "",
+        "rank": "",
+        "ownerId": -1
+      },
+      {
+        "type": "",
+        "rank": "",
+        "ownerId": -1
+      },
+      {
+        "type": "",
+        "rank": "",
+        "ownerId": -1
+      },
+      {
+        "type": "",
+        "rank": "",
+        "ownerId": -1
+      },
+      {
+        "type": "",
+        "rank": "",
+        "ownerId": -1
+      },
+      {
+        "type": "",
+        "rank": "",
+        "ownerId": -1
+      },
+      {
+        "type": "",
+        "rank": "",
+        "ownerId": -1
+      },
+      {
+        "type": "",
+        "rank": "",
+        "ownerId": -1
+      },
+      {
+        "type": "",
+        "rank": "",
+        "ownerId": -1
+      },
+      {
+        "type": "",
+        "rank": "",
+        "ownerId": -1
+      }
+    ],
+    [
+      {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 0
+      },
+      {
+        "type": "Marshal",
+        "rank": "M",
+        "ownerId": 0
+      },
+      {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 0
+      },
+      {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 0
+      },
+      {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 0
+      },
+      {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 0
+      },
+      {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 0
+      }
+    ],
+    [
+      {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 0
+      },
+      {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 0
+      },
+      {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 0
+      },
+      {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 0
+      },
+      {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 0
+      },
+      {
+        "type": "Spy",
+        "rank": "1",
+        "ownerId": 0
+      },
+      {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 0
+      },
+      {
+        "type": "General",
+        "rank": "9",
+        "ownerId": 0
+      },
+      {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 0
+      }
+    ],
+    [
+      {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 0
+      },
+      {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      }
+    ],
+    [
+      {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 0
+      },
+      {
+        "type": "Flag",
+        "rank": "0",
+        "ownerId": 0
+      },
+      {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 0
+      },
+      {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      }
+    ]
+  ],
+  "moves": [
+    {
+      "moveIndex": 0,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 6,
+      "toX": 0,
+      "toY": 3,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "tie"
+    },
+    {
+      "moveIndex": 1,
+      "playerId": 1,
+      "fromX": 5,
+      "fromY": 3,
+      "toX": 5,
+      "toY": 5,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 2,
+      "playerId": 0,
+      "fromX": 4,
+      "fromY": 6,
+      "toX": 4,
+      "toY": 3,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "tie"
+    },
+    {
+      "moveIndex": 3,
+      "playerId": 1,
+      "fromX": 1,
+      "fromY": 3,
+      "toX": 1,
+      "toY": 4,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 4,
+      "playerId": 0,
+      "fromX": 9,
+      "fromY": 6,
+      "toX": 9,
+      "toY": 3,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "tie"
+    },
+    {
+      "moveIndex": 5,
+      "playerId": 1,
+      "fromX": 5,
+      "fromY": 5,
+      "toX": 5,
+      "toY": 3,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 6,
+      "playerId": 0,
+      "fromX": 8,
+      "fromY": 6,
+      "toX": 8,
+      "toY": 3,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Marshal",
+        "rank": "M",
+        "ownerId": 1
+      },
+      "result": "loss"
+    },
+    {
+      "moveIndex": 7,
+      "playerId": 1,
+      "fromX": 1,
+      "fromY": 2,
+      "toX": 1,
+      "toY": 3,
+      "attacker": {
+        "type": "General",
+        "rank": "9",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 8,
+      "playerId": 0,
+      "fromX": 5,
+      "fromY": 6,
+      "toX": 5,
+      "toY": 3,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "tie"
+    },
+    {
+      "moveIndex": 9,
+      "playerId": 1,
+      "fromX": 9,
+      "fromY": 2,
+      "toX": 9,
+      "toY": 3,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 10,
+      "playerId": 0,
+      "fromX": 6,
+      "fromY": 6,
+      "toX": 5,
+      "toY": 6,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 11,
+      "playerId": 1,
+      "fromX": 1,
+      "fromY": 3,
+      "toX": 1,
+      "toY": 2,
+      "attacker": {
+        "type": "General",
+        "rank": "9",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 12,
+      "playerId": 0,
+      "fromX": 8,
+      "fromY": 7,
+      "toX": 8,
+      "toY": 6,
+      "attacker": {
+        "type": "General",
+        "rank": "9",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 13,
+      "playerId": 1,
+      "fromX": 9,
+      "fromY": 3,
+      "toX": 9,
+      "toY": 2,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 14,
+      "playerId": 0,
+      "fromX": 7,
+      "fromY": 6,
+      "toX": 6,
+      "toY": 6,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 15,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 3,
+      "toX": 8,
+      "toY": 4,
+      "attacker": {
+        "type": "Marshal",
+        "rank": "M",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 16,
+      "playerId": 0,
+      "fromX": 7,
+      "fromY": 7,
+      "toX": 7,
+      "toY": 6,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 17,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 4,
+      "toX": 8,
+      "toY": 5,
+      "attacker": {
+        "type": "Marshal",
+        "rank": "M",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 18,
+      "playerId": 0,
+      "fromX": 8,
+      "fromY": 6,
+      "toX": 8,
+      "toY": 5,
+      "attacker": {
+        "type": "General",
+        "rank": "9",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Marshal",
+        "rank": "M",
+        "ownerId": 1
+      },
+      "result": "loss"
+    },
+    {
+      "moveIndex": 19,
+      "playerId": 1,
+      "fromX": 1,
+      "fromY": 2,
+      "toX": 1,
+      "toY": 3,
+      "attacker": {
+        "type": "General",
+        "rank": "9",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 20,
+      "playerId": 0,
+      "fromX": 3,
+      "fromY": 6,
+      "toX": 4,
+      "toY": 6,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 21,
+      "playerId": 1,
+      "fromX": 2,
+      "fromY": 2,
+      "toX": 1,
+      "toY": 2,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 22,
+      "playerId": 0,
+      "fromX": 2,
+      "fromY": 6,
+      "toX": 3,
+      "toY": 6,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 23,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 3,
+      "toX": 8,
+      "toY": 3,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 24,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 6,
+      "toX": 1,
+      "toY": 5,
+      "attacker": {
+        "type": "Marshal",
+        "rank": "M",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 25,
+      "playerId": 1,
+      "fromX": 1,
+      "fromY": 4,
+      "toX": 0,
+      "toY": 4,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 26,
+      "playerId": 0,
+      "fromX": 5,
+      "fromY": 6,
+      "toX": 5,
+      "toY": 5,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 27,
+      "playerId": 1,
+      "fromX": 3,
+      "fromY": 2,
+      "toX": 2,
+      "toY": 2,
+      "attacker": {
+        "type": "Spy",
+        "rank": "1",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 28,
+      "playerId": 0,
+      "fromX": 4,
+      "fromY": 6,
+      "toX": 4,
+      "toY": 5,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 29,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 5,
+      "toX": 9,
+      "toY": 5,
+      "attacker": {
+        "type": "Marshal",
+        "rank": "M",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 30,
+      "playerId": 0,
+      "fromX": 6,
+      "fromY": 7,
+      "toX": 7,
+      "toY": 7,
+      "attacker": {
+        "type": "Spy",
+        "rank": "1",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 31,
+      "playerId": 1,
+      "fromX": 9,
+      "fromY": 5,
+      "toX": 9,
+      "toY": 6,
+      "attacker": {
+        "type": "Marshal",
+        "rank": "M",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 32,
+      "playerId": 0,
+      "fromX": 7,
+      "fromY": 6,
+      "toX": 9,
+      "toY": 6,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Marshal",
+        "rank": "M",
+        "ownerId": 1
+      },
+      "result": "loss"
+    },
+    {
+      "moveIndex": 33,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 3,
+      "toX": 7,
+      "toY": 3,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 34,
+      "playerId": 0,
+      "fromX": 6,
+      "fromY": 8,
+      "toX": 6,
+      "toY": 7,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 35,
+      "playerId": 1,
+      "fromX": 9,
+      "fromY": 2,
+      "toX": 9,
+      "toY": 3,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 36,
+      "playerId": 0,
+      "fromX": 4,
+      "fromY": 5,
+      "toX": 4,
+      "toY": 4,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 37,
+      "playerId": 1,
+      "fromX": 0,
+      "fromY": 4,
+      "toX": 0,
+      "toY": 3,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 38,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 5,
+      "toX": 1,
+      "toY": 4,
+      "attacker": {
+        "type": "Marshal",
+        "rank": "M",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 39,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 3,
+      "toX": 8,
+      "toY": 3,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 40,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 4,
+      "toX": 1,
+      "toY": 3,
+      "attacker": {
+        "type": "Marshal",
+        "rank": "M",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "General",
+        "rank": "9",
+        "ownerId": 1
+      },
+      "result": "win"
+    },
+    {
+      "moveIndex": 41,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 3,
+      "toX": 8,
+      "toY": 4,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 42,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 3,
+      "toX": 2,
+      "toY": 3,
+      "attacker": {
+        "type": "Marshal",
+        "rank": "M",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "win"
+    },
+    {
+      "moveIndex": 43,
+      "playerId": 1,
+      "fromX": 1,
+      "fromY": 2,
+      "toX": 1,
+      "toY": 6,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 44,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 7,
+      "toX": 1,
+      "toY": 6,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "win"
+    },
+    {
+      "moveIndex": 45,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 4,
+      "toX": 8,
+      "toY": 5,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 46,
+      "playerId": 0,
+      "fromX": 2,
+      "fromY": 3,
+      "toX": 3,
+      "toY": 3,
+      "attacker": {
+        "type": "Marshal",
+        "rank": "M",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 1
+      },
+      "result": "win"
+    },
+    {
+      "moveIndex": 47,
+      "playerId": 1,
+      "fromX": 3,
+      "fromY": 1,
+      "toX": 3,
+      "toY": 2,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 48,
+      "playerId": 0,
+      "fromX": 3,
+      "fromY": 3,
+      "toX": 3,
+      "toY": 2,
+      "attacker": {
+        "type": "Marshal",
+        "rank": "M",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      "result": "win"
+    },
+    {
+      "moveIndex": 49,
+      "playerId": 1,
+      "fromX": 4,
+      "fromY": 1,
+      "toX": 3,
+      "toY": 1,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 50,
+      "playerId": 0,
+      "fromX": 3,
+      "fromY": 2,
+      "toX": 3,
+      "toY": 1,
+      "attacker": {
+        "type": "Marshal",
+        "rank": "M",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      "result": "win"
+    },
+    {
+      "moveIndex": 51,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 5,
+      "toX": 8,
+      "toY": 6,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 52,
+      "playerId": 0,
+      "fromX": 3,
+      "fromY": 1,
+      "toX": 2,
+      "toY": 1,
+      "attacker": {
+        "type": "Marshal",
+        "rank": "M",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 1
+      },
+      "result": "loss"
+    },
+    {
+      "moveIndex": 53,
+      "playerId": 1,
+      "fromX": 1,
+      "fromY": 1,
+      "toX": 1,
+      "toY": 2,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 54,
+      "playerId": 0,
+      "fromX": 5,
+      "fromY": 8,
+      "toX": 6,
+      "toY": 8,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 55,
+      "playerId": 1,
+      "fromX": 6,
+      "fromY": 3,
+      "toX": 5,
+      "toY": 3,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 56,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 7,
+      "toX": 0,
+      "toY": 6,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 57,
+      "playerId": 1,
+      "fromX": 2,
+      "fromY": 2,
+      "toX": 3,
+      "toY": 2,
+      "attacker": {
+        "type": "Spy",
+        "rank": "1",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 58,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 8,
+      "toX": 1,
+      "toY": 7,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 59,
+      "playerId": 1,
+      "fromX": 4,
+      "fromY": 0,
+      "toX": 4,
+      "toY": 1,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 60,
+      "playerId": 0,
+      "fromX": 6,
+      "fromY": 8,
+      "toX": 5,
+      "toY": 8,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 61,
+      "playerId": 1,
+      "fromX": 0,
+      "fromY": 3,
+      "toX": 3,
+      "toY": 3,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 62,
+      "playerId": 0,
+      "fromX": 4,
+      "fromY": 4,
+      "toX": 4,
+      "toY": 3,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 63,
+      "playerId": 1,
+      "fromX": 5,
+      "fromY": 3,
+      "toX": 4,
+      "toY": 3,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "defender": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "tie"
+    },
+    {
+      "moveIndex": 64,
+      "playerId": 0,
+      "fromX": 3,
+      "fromY": 6,
+      "toX": 2,
+      "toY": 6,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 65,
+      "playerId": 1,
+      "fromX": 4,
+      "fromY": 1,
+      "toX": 3,
+      "toY": 1,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 66,
+      "playerId": 0,
+      "fromX": 6,
+      "fromY": 7,
+      "toX": 6,
+      "toY": 8,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 67,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 2,
+      "toX": 8,
+      "toY": 3,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 68,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 7,
+      "toX": 0,
+      "toY": 7,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 69,
+      "playerId": 1,
+      "fromX": 0,
+      "fromY": 1,
+      "toX": 1,
+      "toY": 1,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 70,
+      "playerId": 0,
+      "fromX": 7,
+      "fromY": 7,
+      "toX": 7,
+      "toY": 6,
+      "attacker": {
+        "type": "Spy",
+        "rank": "1",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 71,
+      "playerId": 1,
+      "fromX": 3,
+      "fromY": 3,
+      "toX": 2,
+      "toY": 3,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 72,
+      "playerId": 0,
+      "fromX": 7,
+      "fromY": 6,
+      "toX": 8,
+      "toY": 6,
+      "attacker": {
+        "type": "Spy",
+        "rank": "1",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "loss"
+    },
+    {
+      "moveIndex": 73,
+      "playerId": 1,
+      "fromX": 5,
+      "fromY": 0,
+      "toX": 4,
+      "toY": 0,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 74,
+      "playerId": 0,
+      "fromX": 6,
+      "fromY": 6,
+      "toX": 5,
+      "toY": 6,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 75,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 1,
+      "toX": 8,
+      "toY": 2,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 76,
+      "playerId": 0,
+      "fromX": 5,
+      "fromY": 5,
+      "toX": 5,
+      "toY": 4,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 77,
+      "playerId": 1,
+      "fromX": 2,
+      "fromY": 3,
+      "toX": 4,
+      "toY": 3,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 78,
+      "playerId": 0,
+      "fromX": 8,
+      "fromY": 8,
+      "toX": 8,
+      "toY": 7,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 79,
+      "playerId": 1,
+      "fromX": 4,
+      "fromY": 0,
+      "toX": 4,
+      "toY": 1,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 80,
+      "playerId": 0,
+      "fromX": 8,
+      "fromY": 7,
+      "toX": 8,
+      "toY": 6,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "tie"
+    },
+    {
+      "moveIndex": 81,
+      "playerId": 1,
+      "fromX": 6,
+      "fromY": 2,
+      "toX": 6,
+      "toY": 3,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 82,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 8,
+      "toX": 1,
+      "toY": 8,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 83,
+      "playerId": 1,
+      "fromX": 1,
+      "fromY": 1,
+      "toX": 0,
+      "toY": 1,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 84,
+      "playerId": 0,
+      "fromX": 2,
+      "fromY": 6,
+      "toX": 3,
+      "toY": 6,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 85,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 0,
+      "toX": 8,
+      "toY": 1,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 86,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 9,
+      "toX": 0,
+      "toY": 8,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 87,
+      "playerId": 1,
+      "fromX": 6,
+      "fromY": 0,
+      "toX": 5,
+      "toY": 0,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 88,
+      "playerId": 0,
+      "fromX": 5,
+      "fromY": 4,
+      "toX": 5,
+      "toY": 3,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 89,
+      "playerId": 1,
+      "fromX": 9,
+      "fromY": 3,
+      "toX": 9,
+      "toY": 4,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 90,
+      "playerId": 0,
+      "fromX": 5,
+      "fromY": 3,
+      "toX": 4,
+      "toY": 3,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "win"
+    },
+    {
+      "moveIndex": 91,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 2,
+      "toX": 7,
+      "toY": 3,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 92,
+      "playerId": 0,
+      "fromX": 4,
+      "fromY": 3,
+      "toX": 4,
+      "toY": 2,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 1
+      },
+      "result": "loss"
+    },
+    {
+      "moveIndex": 93,
+      "playerId": 1,
+      "fromX": 6,
+      "fromY": 3,
+      "toX": 6,
+      "toY": 2,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 94,
+      "playerId": 0,
+      "fromX": 5,
+      "fromY": 6,
+      "toX": 5,
+      "toY": 5,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 95,
+      "playerId": 1,
+      "fromX": 9,
+      "fromY": 0,
+      "toX": 8,
+      "toY": 0,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 96,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 6,
+      "toX": 0,
+      "toY": 5,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 97,
+      "playerId": 1,
+      "fromX": 1,
+      "fromY": 2,
+      "toX": 1,
+      "toY": 1,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 98,
+      "playerId": 0,
+      "fromX": 5,
+      "fromY": 5,
+      "toX": 5,
+      "toY": 4,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 99,
+      "playerId": 1,
+      "fromX": 5,
+      "fromY": 0,
+      "toX": 4,
+      "toY": 0,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 100,
+      "playerId": 0,
+      "fromX": 2,
+      "fromY": 7,
+      "toX": 2,
+      "toY": 6,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 101,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 3,
+      "toX": 7,
+      "toY": 2,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 102,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 9,
+      "toX": 0,
+      "toY": 9,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 103,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 3,
+      "toX": 8,
+      "toY": 4,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 104,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 7,
+      "toX": 0,
+      "toY": 6,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 105,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 2,
+      "toX": 8,
+      "toY": 3,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 106,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 9,
+      "toX": 1,
+      "toY": 9,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 107,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 2,
+      "toX": 7,
+      "toY": 3,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 108,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 9,
+      "toX": 0,
+      "toY": 9,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 109,
+      "playerId": 1,
+      "fromX": 9,
+      "fromY": 1,
+      "toX": 9,
+      "toY": 0,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 110,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 8,
+      "toX": 1,
+      "toY": 7,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 111,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 3,
+      "toX": 3,
+      "toY": 3,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 112,
+      "playerId": 0,
+      "fromX": 3,
+      "fromY": 7,
+      "toX": 2,
+      "toY": 7,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 113,
+      "playerId": 1,
+      "fromX": 6,
+      "fromY": 1,
+      "toX": 6,
+      "toY": 0,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 114,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 9,
+      "toX": 1,
+      "toY": 9,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 115,
+      "playerId": 1,
+      "fromX": 3,
+      "fromY": 3,
+      "toX": 7,
+      "toY": 3,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 116,
+      "playerId": 0,
+      "fromX": 9,
+      "fromY": 8,
+      "toX": 8,
+      "toY": 8,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 117,
+      "playerId": 1,
+      "fromX": 6,
+      "fromY": 2,
+      "toX": 7,
+      "toY": 2,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 118,
+      "playerId": 0,
+      "fromX": 6,
+      "fromY": 8,
+      "toX": 6,
+      "toY": 7,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 119,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 3,
+      "toX": 4,
+      "toY": 3,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 120,
+      "playerId": 0,
+      "fromX": 9,
+      "fromY": 9,
+      "toX": 9,
+      "toY": 8,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 121,
+      "playerId": 1,
+      "fromX": 5,
+      "fromY": 1,
+      "toX": 6,
+      "toY": 1,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 122,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 6,
+      "toX": 0,
+      "toY": 7,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 123,
+      "playerId": 1,
+      "fromX": 3,
+      "fromY": 2,
+      "toX": 3,
+      "toY": 3,
+      "attacker": {
+        "type": "Spy",
+        "rank": "1",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 124,
+      "playerId": 0,
+      "fromX": 3,
+      "fromY": 8,
+      "toX": 3,
+      "toY": 7,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 125,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 2,
+      "toX": 6,
+      "toY": 2,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 126,
+      "playerId": 0,
+      "fromX": 4,
+      "fromY": 8,
+      "toX": 3,
+      "toY": 8,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 127,
+      "playerId": 1,
+      "fromX": 3,
+      "fromY": 1,
+      "toX": 3,
+      "toY": 2,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 128,
+      "playerId": 0,
+      "fromX": 6,
+      "fromY": 7,
+      "toX": 6,
+      "toY": 6,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 129,
+      "playerId": 1,
+      "fromX": 3,
+      "fromY": 3,
+      "toX": 2,
+      "toY": 3,
+      "attacker": {
+        "type": "Spy",
+        "rank": "1",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 130,
+      "playerId": 0,
+      "fromX": 3,
+      "fromY": 8,
+      "toX": 4,
+      "toY": 8,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 131,
+      "playerId": 1,
+      "fromX": 3,
+      "fromY": 2,
+      "toX": 3,
+      "toY": 3,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 132,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 8,
+      "toX": 1,
+      "toY": 8,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 133,
+      "playerId": 1,
+      "fromX": 4,
+      "fromY": 1,
+      "toX": 3,
+      "toY": 1,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 134,
+      "playerId": 0,
+      "fromX": 9,
+      "fromY": 8,
+      "toX": 9,
+      "toY": 9,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 135,
+      "playerId": 1,
+      "fromX": 9,
+      "fromY": 4,
+      "toX": 9,
+      "toY": 3,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 136,
+      "playerId": 0,
+      "fromX": 5,
+      "fromY": 8,
+      "toX": 6,
+      "toY": 8,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 137,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 1,
+      "toX": 8,
+      "toY": 2,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 138,
+      "playerId": 0,
+      "fromX": 3,
+      "fromY": 7,
+      "toX": 3,
+      "toY": 8,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 139,
+      "playerId": 1,
+      "fromX": 6,
+      "fromY": 2,
+      "toX": 7,
+      "toY": 2,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 140,
+      "playerId": 0,
+      "fromX": 5,
+      "fromY": 4,
+      "toX": 5,
+      "toY": 3,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 141,
+      "playerId": 1,
+      "fromX": 6,
+      "fromY": 1,
+      "toX": 6,
+      "toY": 2,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 142,
+      "playerId": 0,
+      "fromX": 5,
+      "fromY": 3,
+      "toX": 4,
+      "toY": 3,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "win"
+    },
+    {
+      "moveIndex": 143,
+      "playerId": 1,
+      "fromX": 9,
+      "fromY": 0,
+      "toX": 9,
+      "toY": 1,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 144,
+      "playerId": 0,
+      "fromX": 4,
+      "fromY": 3,
+      "toX": 4,
+      "toY": 2,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 1
+      },
+      "result": "loss"
+    },
+    {
+      "moveIndex": 145,
+      "playerId": 1,
+      "fromX": 3,
+      "fromY": 3,
+      "toX": 4,
+      "toY": 3,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 146,
+      "playerId": 0,
+      "fromX": 5,
+      "fromY": 9,
+      "toX": 5,
+      "toY": 8,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 147,
+      "playerId": 1,
+      "fromX": 9,
+      "fromY": 3,
+      "toX": 9,
+      "toY": 2,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 148,
+      "playerId": 0,
+      "fromX": 8,
+      "fromY": 8,
+      "toX": 8,
+      "toY": 7,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 149,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 1,
+      "toX": 8,
+      "toY": 1,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 150,
+      "playerId": 0,
+      "fromX": 9,
+      "fromY": 9,
+      "toX": 9,
+      "toY": 8,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 151,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 1,
+      "toX": 7,
+      "toY": 1,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 152,
+      "playerId": 0,
+      "fromX": 4,
+      "fromY": 9,
+      "toX": 5,
+      "toY": 9,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 153,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 3,
+      "toX": 7,
+      "toY": 3,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 154,
+      "playerId": 0,
+      "fromX": 3,
+      "fromY": 6,
+      "toX": 4,
+      "toY": 6,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 155,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 0,
+      "toX": 9,
+      "toY": 0,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 156,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 9,
+      "toX": 0,
+      "toY": 9,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 157,
+      "playerId": 1,
+      "fromX": 4,
+      "fromY": 3,
+      "toX": 4,
+      "toY": 4,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 158,
+      "playerId": 0,
+      "fromX": 6,
+      "fromY": 6,
+      "toX": 5,
+      "toY": 6,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 159,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 1,
+      "toX": 6,
+      "toY": 1,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 160,
+      "playerId": 0,
+      "fromX": 2,
+      "fromY": 9,
+      "toX": 1,
+      "toY": 9,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 161,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 4,
+      "toX": 8,
+      "toY": 5,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 162,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 6,
+      "toX": 1,
+      "toY": 5,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 163,
+      "playerId": 1,
+      "fromX": 1,
+      "fromY": 1,
+      "toX": 1,
+      "toY": 2,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 164,
+      "playerId": 0,
+      "fromX": 4,
+      "fromY": 8,
+      "toX": 4,
+      "toY": 9,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 165,
+      "playerId": 1,
+      "fromX": 3,
+      "fromY": 1,
+      "toX": 3,
+      "toY": 2,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 166,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 5,
+      "toX": 1,
+      "toY": 4,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 167,
+      "playerId": 1,
+      "fromX": 2,
+      "fromY": 3,
+      "toX": 3,
+      "toY": 3,
+      "attacker": {
+        "type": "Spy",
+        "rank": "1",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 168,
+      "playerId": 0,
+      "fromX": 3,
+      "fromY": 8,
+      "toX": 3,
+      "toY": 7,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 169,
+      "playerId": 1,
+      "fromX": 4,
+      "fromY": 4,
+      "toX": 4,
+      "toY": 5,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 170,
+      "playerId": 0,
+      "fromX": 4,
+      "fromY": 6,
+      "toX": 4,
+      "toY": 5,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "loss"
+    },
+    {
+      "moveIndex": 171,
+      "playerId": 1,
+      "fromX": 4,
+      "fromY": 5,
+      "toX": 4,
+      "toY": 6,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 172,
+      "playerId": 0,
+      "fromX": 5,
+      "fromY": 6,
+      "toX": 4,
+      "toY": 6,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "win"
+    },
+    {
+      "moveIndex": 173,
+      "playerId": 1,
+      "fromX": 6,
+      "fromY": 1,
+      "toX": 5,
+      "toY": 1,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 174,
+      "playerId": 0,
+      "fromX": 6,
+      "fromY": 8,
+      "toX": 6,
+      "toY": 7,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 175,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 5,
+      "toX": 8,
+      "toY": 6,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 176,
+      "playerId": 0,
+      "fromX": 8,
+      "fromY": 7,
+      "toX": 8,
+      "toY": 6,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "loss"
+    },
+    {
+      "moveIndex": 177,
+      "playerId": 1,
+      "fromX": 9,
+      "fromY": 0,
+      "toX": 8,
+      "toY": 0,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 178,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 9,
+      "toX": 0,
+      "toY": 8,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 179,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 3,
+      "toX": 6,
+      "toY": 3,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 180,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 9,
+      "toX": 0,
+      "toY": 9,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 181,
+      "playerId": 1,
+      "fromX": 6,
+      "fromY": 0,
+      "toX": 6,
+      "toY": 1,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 182,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 7,
+      "toX": 0,
+      "toY": 6,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 183,
+      "playerId": 1,
+      "fromX": 6,
+      "fromY": 3,
+      "toX": 5,
+      "toY": 3,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 184,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 8,
+      "toX": 1,
+      "toY": 9,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 185,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 6,
+      "toX": 7,
+      "toY": 6,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 186,
+      "playerId": 0,
+      "fromX": 6,
+      "fromY": 7,
+      "toX": 6,
+      "toY": 6,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 187,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 6,
+      "toX": 7,
+      "toY": 7,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 188,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 5,
+      "toX": 0,
+      "toY": 4,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 189,
+      "playerId": 1,
+      "fromX": 6,
+      "fromY": 1,
+      "toX": 7,
+      "toY": 1,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 190,
+      "playerId": 0,
+      "fromX": 5,
+      "fromY": 8,
+      "toX": 4,
+      "toY": 8,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 191,
+      "playerId": 1,
+      "fromX": 1,
+      "fromY": 2,
+      "toX": 1,
+      "toY": 1,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 192,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 4,
+      "toX": 0,
+      "toY": 3,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 193,
+      "playerId": 1,
+      "fromX": 9,
+      "fromY": 2,
+      "toX": 9,
+      "toY": 3,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 194,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 3,
+      "toX": 0,
+      "toY": 2,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 1
+      },
+      "result": "loss"
+    },
+    {
+      "moveIndex": 195,
+      "playerId": 1,
+      "fromX": 3,
+      "fromY": 2,
+      "toX": 3,
+      "toY": 1,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 196,
+      "playerId": 0,
+      "fromX": 2,
+      "fromY": 8,
+      "toX": 1,
+      "toY": 8,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 197,
+      "playerId": 1,
+      "fromX": 4,
+      "fromY": 0,
+      "toX": 4,
+      "toY": 1,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 198,
+      "playerId": 0,
+      "fromX": 3,
+      "fromY": 7,
+      "toX": 3,
+      "toY": 6,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 199,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 2,
+      "toX": 9,
+      "toY": 2,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 200,
+      "playerId": 0,
+      "fromX": 5,
+      "fromY": 9,
+      "toX": 5,
+      "toY": 8,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 201,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 2,
+      "toX": 8,
+      "toY": 2,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 202,
+      "playerId": 0,
+      "fromX": 3,
+      "fromY": 9,
+      "toX": 3,
+      "toY": 8,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 203,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 1,
+      "toX": 8,
+      "toY": 1,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 204,
+      "playerId": 0,
+      "fromX": 6,
+      "fromY": 6,
+      "toX": 5,
+      "toY": 6,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 205,
+      "playerId": 1,
+      "fromX": 6,
+      "fromY": 2,
+      "toX": 7,
+      "toY": 2,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 206,
+      "playerId": 0,
+      "fromX": 5,
+      "fromY": 8,
+      "toX": 6,
+      "toY": 8,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 207,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 0,
+      "toX": 6,
+      "toY": 0,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 208,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 6,
+      "toX": 0,
+      "toY": 5,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 209,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 7,
+      "toX": 6,
+      "toY": 7,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 210,
+      "playerId": 0,
+      "fromX": 6,
+      "fromY": 8,
+      "toX": 6,
+      "toY": 7,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "loss"
+    },
+    {
+      "moveIndex": 211,
+      "playerId": 1,
+      "fromX": 6,
+      "fromY": 7,
+      "toX": 7,
+      "toY": 7,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 212,
+      "playerId": 0,
+      "fromX": 4,
+      "fromY": 9,
+      "toX": 3,
+      "toY": 9,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 213,
+      "playerId": 1,
+      "fromX": 1,
+      "fromY": 1,
+      "toX": 1,
+      "toY": 2,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 214,
+      "playerId": 0,
+      "fromX": 2,
+      "fromY": 7,
+      "toX": 3,
+      "toY": 7,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 215,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 0,
+      "toX": 7,
+      "toY": 0,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 216,
+      "playerId": 0,
+      "fromX": 9,
+      "fromY": 8,
+      "toX": 8,
+      "toY": 8,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 217,
+      "playerId": 1,
+      "fromX": 9,
+      "fromY": 1,
+      "toX": 9,
+      "toY": 0,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 218,
+      "playerId": 0,
+      "fromX": 8,
+      "fromY": 8,
+      "toX": 8,
+      "toY": 7,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 219,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 0,
+      "toX": 7,
+      "toY": 1,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 220,
+      "playerId": 0,
+      "fromX": 8,
+      "fromY": 7,
+      "toX": 7,
+      "toY": 7,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "loss"
+    },
+    {
+      "moveIndex": 221,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 2,
+      "toX": 8,
+      "toY": 3,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 222,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 5,
+      "toX": 0,
+      "toY": 4,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 223,
+      "playerId": 1,
+      "fromX": 9,
+      "fromY": 2,
+      "toX": 8,
+      "toY": 2,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 224,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 8,
+      "toX": 0,
+      "toY": 7,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 225,
+      "playerId": 1,
+      "fromX": 9,
+      "fromY": 3,
+      "toX": 9,
+      "toY": 2,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 226,
+      "playerId": 0,
+      "fromX": 4,
+      "fromY": 8,
+      "toX": 5,
+      "toY": 8,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 227,
+      "playerId": 1,
+      "fromX": 3,
+      "fromY": 1,
+      "toX": 3,
+      "toY": 2,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 228,
+      "playerId": 0,
+      "fromX": 2,
+      "fromY": 6,
+      "toX": 1,
+      "toY": 6,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 229,
+      "playerId": 1,
+      "fromX": 1,
+      "fromY": 2,
+      "toX": 2,
+      "toY": 2,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 230,
+      "playerId": 0,
+      "fromX": 3,
+      "fromY": 8,
+      "toX": 2,
+      "toY": 8,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 231,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 1,
+      "toX": 7,
+      "toY": 0,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 232,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 4,
+      "toX": 0,
+      "toY": 3,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 233,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 3,
+      "toX": 8,
+      "toY": 4,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 234,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 3,
+      "toX": 0,
+      "toY": 2,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 1
+      },
+      "result": "loss"
+    },
+    {
+      "moveIndex": 235,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 2,
+      "toX": 7,
+      "toY": 3,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 236,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 8,
+      "toX": 0,
+      "toY": 8,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 237,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 2,
+      "toX": 8,
+      "toY": 3,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 238,
+      "playerId": 0,
+      "fromX": 3,
+      "fromY": 7,
+      "toX": 2,
+      "toY": 7,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 239,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 1,
+      "toX": 7,
+      "toY": 1,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 240,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 4,
+      "toX": 1,
+      "toY": 3,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 241,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 3,
+      "toX": 6,
+      "toY": 3,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 242,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 7,
+      "toX": 0,
+      "toY": 6,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 243,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 3,
+      "toX": 9,
+      "toY": 3,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 244,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 6,
+      "toX": 0,
+      "toY": 5,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 245,
+      "playerId": 1,
+      "fromX": 9,
+      "fromY": 2,
+      "toX": 8,
+      "toY": 2,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 246,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 7,
+      "toX": 0,
+      "toY": 7,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 247,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 0,
+      "toX": 8,
+      "toY": 0,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 248,
+      "playerId": 0,
+      "fromX": 5,
+      "fromY": 6,
+      "toX": 5,
+      "toY": 5,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 249,
+      "playerId": 1,
+      "fromX": 2,
+      "fromY": 2,
+      "toX": 1,
+      "toY": 2,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 250,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 3,
+      "toX": 1,
+      "toY": 2,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "win"
+    },
+    {
+      "moveIndex": 251,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 2,
+      "toX": 7,
+      "toY": 2,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 252,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 2,
+      "toX": 0,
+      "toY": 2,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 1
+      },
+      "result": "loss"
+    },
+    {
+      "moveIndex": 253,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 0,
+      "toX": 7,
+      "toY": 0,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 254,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 6,
+      "toX": 1,
+      "toY": 0,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 1
+      },
+      "result": "loss"
+    },
+    {
+      "moveIndex": 255,
+      "playerId": 1,
+      "fromX": 9,
+      "fromY": 0,
+      "toX": 8,
+      "toY": 0,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 256,
+      "playerId": 0,
+      "fromX": 3,
+      "fromY": 9,
+      "toX": 3,
+      "toY": 8,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 257,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 7,
+      "toX": 6,
+      "toY": 7,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 258,
+      "playerId": 0,
+      "fromX": 2,
+      "fromY": 7,
+      "toX": 2,
+      "toY": 6,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 259,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 0,
+      "toX": 8,
+      "toY": 1,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 260,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 5,
+      "toX": 0,
+      "toY": 4,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 261,
+      "playerId": 1,
+      "fromX": 6,
+      "fromY": 3,
+      "toX": 6,
+      "toY": 2,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 262,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 9,
+      "toX": 1,
+      "toY": 8,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 263,
+      "playerId": 1,
+      "fromX": 9,
+      "fromY": 3,
+      "toX": 8,
+      "toY": 3,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 264,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 4,
+      "toX": 0,
+      "toY": 3,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 265,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 1,
+      "toX": 9,
+      "toY": 1,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 266,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 3,
+      "toX": 0,
+      "toY": 2,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 1
+      },
+      "result": "loss"
+    },
+    {
+      "moveIndex": 267,
+      "playerId": 1,
+      "fromX": 3,
+      "fromY": 3,
+      "toX": 2,
+      "toY": 3,
+      "attacker": {
+        "type": "Spy",
+        "rank": "1",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 268,
+      "playerId": 0,
+      "fromX": 2,
+      "fromY": 6,
+      "toX": 1,
+      "toY": 6,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 269,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 2,
+      "toX": 7,
+      "toY": 3,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 270,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 6,
+      "toX": 1,
+      "toY": 0,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 1
+      },
+      "result": "loss"
+    },
+    {
+      "moveIndex": 271,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 3,
+      "toX": 9,
+      "toY": 3,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 272,
+      "playerId": 0,
+      "fromX": 3,
+      "fromY": 8,
+      "toX": 3,
+      "toY": 7,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 273,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 1,
+      "toX": 6,
+      "toY": 1,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 274,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 7,
+      "toX": 0,
+      "toY": 6,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 275,
+      "playerId": 1,
+      "fromX": 5,
+      "fromY": 3,
+      "toX": 5,
+      "toY": 4,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 276,
+      "playerId": 0,
+      "fromX": 5,
+      "fromY": 5,
+      "toX": 5,
+      "toY": 4,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "loss"
+    },
+    {
+      "moveIndex": 277,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 4,
+      "toX": 8,
+      "toY": 0,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 278,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 8,
+      "toX": 1,
+      "toY": 7,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 279,
+      "playerId": 1,
+      "fromX": 5,
+      "fromY": 1,
+      "toX": 5,
+      "toY": 0,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 280,
+      "playerId": 0,
+      "fromX": 4,
+      "fromY": 6,
+      "toX": 4,
+      "toY": 5,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 281,
+      "playerId": 1,
+      "fromX": 2,
+      "fromY": 3,
+      "toX": 2,
+      "toY": 2,
+      "attacker": {
+        "type": "Spy",
+        "rank": "1",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 282,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 7,
+      "toX": 1,
+      "toY": 6,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 283,
+      "playerId": 1,
+      "fromX": 9,
+      "fromY": 3,
+      "toX": 9,
+      "toY": 2,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 284,
+      "playerId": 0,
+      "fromX": 3,
+      "fromY": 7,
+      "toX": 2,
+      "toY": 7,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 285,
+      "playerId": 1,
+      "fromX": 0,
+      "fromY": 1,
+      "toX": 1,
+      "toY": 1,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 286,
+      "playerId": 0,
+      "fromX": 4,
+      "fromY": 5,
+      "toX": 4,
+      "toY": 4,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 287,
+      "playerId": 1,
+      "fromX": 2,
+      "fromY": 2,
+      "toX": 2,
+      "toY": 3,
+      "attacker": {
+        "type": "Spy",
+        "rank": "1",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 288,
+      "playerId": 0,
+      "fromX": 4,
+      "fromY": 4,
+      "toX": 5,
+      "toY": 4,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "loss"
+    },
+    {
+      "moveIndex": 289,
+      "playerId": 1,
+      "fromX": 6,
+      "fromY": 7,
+      "toX": 7,
+      "toY": 7,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 290,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 9,
+      "toX": 1,
+      "toY": 9,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 291,
+      "playerId": 1,
+      "fromX": 5,
+      "fromY": 0,
+      "toX": 5,
+      "toY": 1,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 292,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 6,
+      "toX": 1,
+      "toY": 5,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 293,
+      "playerId": 1,
+      "fromX": 3,
+      "fromY": 2,
+      "toX": 3,
+      "toY": 1,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 294,
+      "playerId": 0,
+      "fromX": 5,
+      "fromY": 8,
+      "toX": 4,
+      "toY": 8,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 295,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 0,
+      "toX": 8,
+      "toY": 4,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 296,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 5,
+      "toX": 1,
+      "toY": 4,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 297,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 4,
+      "toX": 8,
+      "toY": 5,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 298,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 8,
+      "toX": 0,
+      "toY": 7,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 299,
+      "playerId": 1,
+      "fromX": 0,
+      "fromY": 0,
+      "toX": 0,
+      "toY": 1,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 300,
+      "playerId": 0,
+      "fromX": 2,
+      "fromY": 8,
+      "toX": 1,
+      "toY": 8,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 301,
+      "playerId": 1,
+      "fromX": 4,
+      "fromY": 1,
+      "toX": 4,
+      "toY": 0,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 302,
+      "playerId": 0,
+      "fromX": 4,
+      "fromY": 8,
+      "toX": 3,
+      "toY": 8,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 303,
+      "playerId": 1,
+      "fromX": 3,
+      "fromY": 1,
+      "toX": 4,
+      "toY": 1,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 304,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 7,
+      "toX": 1,
+      "toY": 7,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 305,
+      "playerId": 1,
+      "fromX": 4,
+      "fromY": 0,
+      "toX": 5,
+      "toY": 0,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 306,
+      "playerId": 0,
+      "fromX": 3,
+      "fromY": 6,
+      "toX": 2,
+      "toY": 6,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 307,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 5,
+      "toX": 8,
+      "toY": 2,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 308,
+      "playerId": 0,
+      "fromX": 2,
+      "fromY": 6,
+      "toX": 1,
+      "toY": 6,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 309,
+      "playerId": 1,
+      "fromX": 5,
+      "fromY": 4,
+      "toX": 5,
+      "toY": 3,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 310,
+      "playerId": 0,
+      "fromX": 2,
+      "fromY": 7,
+      "toX": 2,
+      "toY": 6,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 311,
+      "playerId": 1,
+      "fromX": 6,
+      "fromY": 2,
+      "toX": 7,
+      "toY": 2,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 312,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 6,
+      "toX": 0,
+      "toY": 5,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 313,
+      "playerId": 1,
+      "fromX": 9,
+      "fromY": 1,
+      "toX": 9,
+      "toY": 0,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 314,
+      "playerId": 0,
+      "fromX": 2,
+      "fromY": 6,
+      "toX": 3,
+      "toY": 6,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 315,
+      "playerId": 1,
+      "fromX": 5,
+      "fromY": 3,
+      "toX": 5,
+      "toY": 4,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 316,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 6,
+      "toX": 1,
+      "toY": 5,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 317,
+      "playerId": 1,
+      "fromX": 0,
+      "fromY": 1,
+      "toX": 0,
+      "toY": 0,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 318,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 4,
+      "toX": 1,
+      "toY": 3,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 319,
+      "playerId": 1,
+      "fromX": 5,
+      "fromY": 0,
+      "toX": 4,
+      "toY": 0,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 320,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 3,
+      "toX": 2,
+      "toY": 3,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Spy",
+        "rank": "1",
+        "ownerId": 1
+      },
+      "result": "win"
+    },
+    {
+      "moveIndex": 321,
+      "playerId": 1,
+      "fromX": 9,
+      "fromY": 2,
+      "toX": 9,
+      "toY": 1,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 322,
+      "playerId": 0,
+      "fromX": 3,
+      "fromY": 8,
+      "toX": 3,
+      "toY": 7,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 323,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 2,
+      "toX": 8,
+      "toY": 5,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 324,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 8,
+      "toX": 0,
+      "toY": 8,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 325,
+      "playerId": 1,
+      "fromX": 5,
+      "fromY": 4,
+      "toX": 5,
+      "toY": 3,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 326,
+      "playerId": 0,
+      "fromX": 2,
+      "fromY": 3,
+      "toX": 2,
+      "toY": 2,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 327,
+      "playerId": 1,
+      "fromX": 4,
+      "fromY": 1,
+      "toX": 3,
+      "toY": 1,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 328,
+      "playerId": 0,
+      "fromX": 2,
+      "fromY": 2,
+      "toX": 2,
+      "toY": 1,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 1
+      },
+      "result": "loss"
+    },
+    {
+      "moveIndex": 329,
+      "playerId": 1,
+      "fromX": 1,
+      "fromY": 1,
+      "toX": 0,
+      "toY": 1,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 330,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 5,
+      "toX": 0,
+      "toY": 4,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 331,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 5,
+      "toX": 8,
+      "toY": 4,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 332,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 4,
+      "toX": 0,
+      "toY": 3,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 333,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 4,
+      "toX": 8,
+      "toY": 3,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 334,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 3,
+      "toX": 0,
+      "toY": 2,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 1
+      },
+      "result": "loss"
+    },
+    {
+      "moveIndex": 335,
+      "playerId": 1,
+      "fromX": 5,
+      "fromY": 1,
+      "toX": 5,
+      "toY": 0,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 336,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 7,
+      "toX": 1,
+      "toY": 6,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 337,
+      "playerId": 1,
+      "fromX": 5,
+      "fromY": 3,
+      "toX": 6,
+      "toY": 3,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 338,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 6,
+      "toX": 0,
+      "toY": 6,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 339,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 3,
+      "toX": 8,
+      "toY": 5,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 340,
+      "playerId": 0,
+      "fromX": 3,
+      "fromY": 7,
+      "toX": 2,
+      "toY": 7,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 341,
+      "playerId": 1,
+      "fromX": 6,
+      "fromY": 3,
+      "toX": 6,
+      "toY": 2,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 342,
+      "playerId": 0,
+      "fromX": 2,
+      "fromY": 7,
+      "toX": 2,
+      "toY": 6,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 343,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 7,
+      "toX": 6,
+      "toY": 7,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 344,
+      "playerId": 0,
+      "fromX": 3,
+      "fromY": 6,
+      "toX": 4,
+      "toY": 6,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 345,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 5,
+      "toX": 8,
+      "toY": 2,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 346,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 8,
+      "toX": 0,
+      "toY": 7,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 347,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 2,
+      "toX": 7,
+      "toY": 1,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 348,
+      "playerId": 0,
+      "fromX": 4,
+      "fromY": 6,
+      "toX": 4,
+      "toY": 5,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 349,
+      "playerId": 1,
+      "fromX": 9,
+      "fromY": 0,
+      "toX": 8,
+      "toY": 0,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 350,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 9,
+      "toX": 1,
+      "toY": 8,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 351,
+      "playerId": 1,
+      "fromX": 6,
+      "fromY": 1,
+      "toX": 5,
+      "toY": 1,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 352,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 5,
+      "toX": 1,
+      "toY": 4,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 353,
+      "playerId": 1,
+      "fromX": 9,
+      "fromY": 1,
+      "toX": 8,
+      "toY": 1,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 354,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 8,
+      "toX": 1,
+      "toY": 7,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 355,
+      "playerId": 1,
+      "fromX": 4,
+      "fromY": 0,
+      "toX": 4,
+      "toY": 1,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 356,
+      "playerId": 0,
+      "fromX": 4,
+      "fromY": 5,
+      "toX": 4,
+      "toY": 4,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 357,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 0,
+      "toX": 9,
+      "toY": 0,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 358,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 6,
+      "toX": 0,
+      "toY": 5,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 359,
+      "playerId": 1,
+      "fromX": 0,
+      "fromY": 1,
+      "toX": 1,
+      "toY": 1,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 360,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 4,
+      "toX": 1,
+      "toY": 3,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 361,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 3,
+      "toX": 6,
+      "toY": 3,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 362,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 5,
+      "toX": 0,
+      "toY": 4,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 363,
+      "playerId": 1,
+      "fromX": 1,
+      "fromY": 1,
+      "toX": 0,
+      "toY": 1,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 364,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 4,
+      "toX": 0,
+      "toY": 3,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 365,
+      "playerId": 1,
+      "fromX": 0,
+      "fromY": 1,
+      "toX": 1,
+      "toY": 1,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 366,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 3,
+      "toX": 0,
+      "toY": 2,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 1
+      },
+      "result": "win"
+    },
+    {
+      "moveIndex": 367,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 1,
+      "toX": 9,
+      "toY": 1,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 368,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 7,
+      "toX": 0,
+      "toY": 6,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 369,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 2,
+      "toX": 8,
+      "toY": 3,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 370,
+      "playerId": 0,
+      "fromX": 2,
+      "fromY": 6,
+      "toX": 1,
+      "toY": 6,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 371,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 1,
+      "toX": 8,
+      "toY": 1,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 372,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 6,
+      "toX": 0,
+      "toY": 5,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 373,
+      "playerId": 1,
+      "fromX": 6,
+      "fromY": 2,
+      "toX": 6,
+      "toY": 1,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 374,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 2,
+      "toX": 0,
+      "toY": 1,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 375,
+      "playerId": 1,
+      "fromX": 1,
+      "fromY": 1,
+      "toX": 0,
+      "toY": 1,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "defender": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "win"
+    },
+    {
+      "moveIndex": 376,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 5,
+      "toX": 0,
+      "toY": 4,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 377,
+      "playerId": 1,
+      "fromX": 0,
+      "fromY": 1,
+      "toX": 0,
+      "toY": 2,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 378,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 3,
+      "toX": 1,
+      "toY": 2,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 379,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 3,
+      "toX": 8,
+      "toY": 8,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 380,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 7,
+      "toX": 0,
+      "toY": 7,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 381,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 8,
+      "toX": 8,
+      "toY": 5,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 382,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 7,
+      "toX": 0,
+      "toY": 6,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 383,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 0,
+      "toX": 8,
+      "toY": 0,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 384,
+      "playerId": 0,
+      "fromX": 4,
+      "fromY": 4,
+      "toX": 4,
+      "toY": 3,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 385,
+      "playerId": 1,
+      "fromX": 6,
+      "fromY": 3,
+      "toX": 7,
+      "toY": 3,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 386,
+      "playerId": 0,
+      "fromX": 4,
+      "fromY": 3,
+      "toX": 4,
+      "toY": 2,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 1
+      },
+      "result": "loss"
+    },
+    {
+      "moveIndex": 387,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 5,
+      "toX": 8,
+      "toY": 2,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 388,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 2,
+      "toX": 1,
+      "toY": 1,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 389,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 1,
+      "toX": 7,
+      "toY": 1,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 390,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 1,
+      "toX": 2,
+      "toY": 1,
+      "attacker": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 1
+      },
+      "result": "win"
+    },
+    {
+      "moveIndex": 391,
+      "playerId": 1,
+      "fromX": 3,
+      "fromY": 1,
+      "toX": 2,
+      "toY": 1,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "defender": {
+        "type": "Miner",
+        "rank": "3",
+        "ownerId": 0
+      },
+      "result": "win"
+    },
+    {
+      "moveIndex": 392,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 4,
+      "toX": 0,
+      "toY": 3,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 393,
+      "playerId": 1,
+      "fromX": 6,
+      "fromY": 1,
+      "toX": 6,
+      "toY": 2,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 394,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 3,
+      "toX": 0,
+      "toY": 2,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "tie"
+    },
+    {
+      "moveIndex": 395,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 2,
+      "toX": 8,
+      "toY": 3,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 396,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 6,
+      "toX": 1,
+      "toY": 5,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 397,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 3,
+      "toX": 8,
+      "toY": 5,
+      "attacker": {
+        "type": "Scout",
+        "rank": "2",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 398,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 5,
+      "toX": 1,
+      "toY": 4,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 399,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 3,
+      "toX": 8,
+      "toY": 3,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 400,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 6,
+      "toX": 0,
+      "toY": 5,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 401,
+      "playerId": 1,
+      "fromX": 7,
+      "fromY": 1,
+      "toX": 6,
+      "toY": 1,
+      "attacker": {
+        "type": "Captain",
+        "rank": "6",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 402,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 5,
+      "toX": 0,
+      "toY": 4,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 403,
+      "playerId": 1,
+      "fromX": 6,
+      "fromY": 7,
+      "toX": 6,
+      "toY": 8,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 404,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 4,
+      "toX": 0,
+      "toY": 3,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 405,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 3,
+      "toX": 8,
+      "toY": 4,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 406,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 3,
+      "toX": 0,
+      "toY": 2,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 407,
+      "playerId": 1,
+      "fromX": 0,
+      "fromY": 0,
+      "toX": 0,
+      "toY": 1,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 408,
+      "playerId": 0,
+      "fromX": 0,
+      "fromY": 2,
+      "toX": 0,
+      "toY": 1,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 1
+      },
+      "result": "tie"
+    },
+    {
+      "moveIndex": 409,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 4,
+      "toX": 8,
+      "toY": 3,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 410,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 4,
+      "toX": 1,
+      "toY": 3,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 411,
+      "playerId": 1,
+      "fromX": 6,
+      "fromY": 8,
+      "toX": 5,
+      "toY": 8,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 412,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 3,
+      "toX": 1,
+      "toY": 2,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 413,
+      "playerId": 1,
+      "fromX": 2,
+      "fromY": 1,
+      "toX": 1,
+      "toY": 1,
+      "attacker": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 414,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 2,
+      "toX": 1,
+      "toY": 1,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Sergeant",
+        "rank": "4",
+        "ownerId": 1
+      },
+      "result": "win"
+    },
+    {
+      "moveIndex": 415,
+      "playerId": 1,
+      "fromX": 8,
+      "fromY": 3,
+      "toX": 9,
+      "toY": 3,
+      "attacker": {
+        "type": "Colonel",
+        "rank": "8",
+        "ownerId": 1
+      },
+      "result": "move"
+    },
+    {
+      "moveIndex": 416,
+      "playerId": 0,
+      "fromX": 1,
+      "fromY": 1,
+      "toX": 1,
+      "toY": 0,
+      "attacker": {
+        "type": "Lieutenant",
+        "rank": "5",
+        "ownerId": 0
+      },
+      "defender": {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 1
+      },
+      "result": "loss"
+    },
+    {
+      "moveIndex": 417,
+      "playerId": 1,
+      "fromX": 5,
+      "fromY": 8,
+      "toX": 5,
+      "toY": 7,
+      "attacker": {
+        "type": "Major",
+        "rank": "7",
+        "ownerId": 1
+      },
+      "defender": {
+        "type": "Bomb",
+        "rank": "B",
+        "ownerId": 0
+      },
+      "result": "loss"
+    }
+  ]
+}
