@@ -10,6 +10,7 @@
 	import type { BoardSetup } from '$lib/types/board-setup';
 	import { MAX_BOARD_SETUPS } from '$lib/types/board-setup';
 	import BoardSetupCard from '$lib/components/setup/BoardSetupCard.svelte';
+	import { exportSetupAsJson } from '$lib/utils/board-binary';
 
 	let setups = $state<BoardSetup[]>([]);
 	let error = $state('');
@@ -45,6 +46,14 @@
 			error = 'Failed to delete: ' + (e instanceof Error ? e.message : 'Unknown error');
 		}
 	}
+
+	async function handleExportAll() {
+		try {
+			await boardSetups.exportAllZip();
+		} catch (e) {
+			error = 'Failed to export setups: ' + (e instanceof Error ? e.message : 'Unknown error');
+		}
+	}
 </script>
 
 <svelte:head>
@@ -59,13 +68,18 @@
 				{setups.length}/{MAX_BOARD_SETUPS} setups saved
 			</p>
 		</div>
-		<Button
-			variant="primary"
-			disabled={setups.length >= MAX_BOARD_SETUPS}
-			onclick={() => goto(resolve('/board-setups/new'))}
-		>
-			+ Create New
-		</Button>
+		<div class="flex items-center gap-3">
+			{#if setups.length > 0}
+				<Button variant="outline" onclick={handleExportAll}>Export All (ZIP)</Button>
+			{/if}
+			<Button
+				variant="primary"
+				disabled={setups.length >= MAX_BOARD_SETUPS}
+				onclick={() => goto(resolve('/board-setups/new'))}
+			>
+				+ Create New
+			</Button>
+		</div>
 	</div>
 
 	{#if error}
@@ -91,6 +105,9 @@
 								onclick={() => goto(resolve(`/board-setups/${setup.id}`))}
 							>
 								Edit
+							</Button>
+							<Button variant="outline" size="sm" onclick={() => exportSetupAsJson(setup)}>
+								Export
 							</Button>
 							<Button variant="ghost" size="sm" onclick={() => deleteSetup(setup.id)}>
 								Delete

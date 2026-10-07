@@ -1,5 +1,5 @@
 import type { GameInfo, User, UserStats } from '$lib/types/game';
-import type { BoardSetup } from '$lib/types/board-setup';
+import type { BoardSetup, ExportedBoardSetup } from '$lib/types/board-setup';
 import { parseApiMessage } from '$lib/utils/api';
 
 interface ApiError extends Error {
@@ -164,8 +164,33 @@ export const boardSetups = {
 			body: JSON.stringify(data)
 		}),
 
-	delete: (id: number) => requestVoid(`/board-setups/${id}`, { method: 'DELETE' })
+	delete: (id: number) => requestVoid(`/board-setups/${id}`, { method: 'DELETE' }),
+
+	export: (id: number) => request<ExportedBoardSetup>(`/board-setups/${id}/export`),
+
+	exportAllZip: () => downloadBlob('/board-setups/export', 'board_setups.zip')
 };
+
+async function downloadBlob(path: string, filename: string): Promise<void> {
+	const response = await fetch(`${API_BASE}${path}`, {
+		credentials: 'include',
+		headers: {
+			'X-XSRF-TOKEN': getCookie('XSRF-TOKEN')
+		}
+	});
+	if (!response.ok) {
+		throw new Error('Failed to download file');
+	}
+	const blob = await response.blob();
+	const url = URL.createObjectURL(blob);
+	const a = document.createElement('a');
+	a.href = url;
+	a.download = filename;
+	document.body.appendChild(a);
+	a.click();
+	document.body.removeChild(a);
+	URL.revokeObjectURL(url);
+}
 
 // Monitoring
 export const monitoring = {

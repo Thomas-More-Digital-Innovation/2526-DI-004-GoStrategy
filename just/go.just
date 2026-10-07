@@ -54,3 +54,7 @@ asyncapi:
 
 # update Swagger and AsyncAPI documentation
 docs: swagger asyncapi
+
+# run simulation with custom args
+simulation *args:
+    go run ./cmd/simulation {{args}}

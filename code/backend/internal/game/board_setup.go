@@ -24,34 +24,39 @@ const (
 var (
 	// char -> 4-bit id. Keep this stable across versions.
 	charToID = map[byte]byte{
-		'0': 0,  // Flag
-		'B': 1,  // Bomb
-		'1': 2,  // Spy
-		'2': 3,  // Scout
-		'3': 4,  // Miner
-		'4': 5,  // Sergeant
-		'5': 6,  // Lieutenant
-		'6': 7,  // Captain
-		'7': 8,  // Major
-		'8': 9,  // Colonel
-		'9': 10, // General
-		'M': 11, // Marshal
-		'.': 15, // empty (optional)
+		'0': 0, 'F': 0,
+		'B': 1,
+		'1': 2, 'S': 2,
+		'2': 3,
+		'3': 4,
+		'4': 5,
+		'5': 6,
+		'6': 7,
+		'7': 8,
+		'8': 9,
+		'9': 10,
+		'M': 11,
+		'.': 15,
 	}
 	// reverse lookup for unpacking
-	idToChar = func() [16]byte {
-		var a [16]byte
-		for k, v := range charToID {
-			a[v] = k
-		}
-		// ensure unused ids are set to '?' for visibility
-		for i := 0; i < 16; i++ {
-			if a[i] == 0 {
-				a[i] = '?'
-			}
-		}
-		return a
-	}()
+	idToChar = [16]byte{
+		0:  '0',
+		1:  'B',
+		2:  '1',
+		3:  '2',
+		4:  '3',
+		5:  '4',
+		6:  '5',
+		7:  '6',
+		8:  '7',
+		9:  '8',
+		10: '9',
+		11: 'M',
+		12: '?',
+		13: '?',
+		14: '?',
+		15: '.',
+	}
 )
 
 // EncodeBoardSetup accepts either:
@@ -108,7 +113,7 @@ func DecodeBoardSetup(encoded string) ([]string, error) {
 		return nil, fmt.Errorf("decoded length must be %d bytes, got %d", PlayerSetupCells/2, len(b))
 	}
 	cells := make([]byte, PlayerSetupCells)
-	for i := 0; i < len(b); i++ {
+	for i := range b {
 		hi := (b[i] >> 4) & 0x0F
 		lo := b[i] & 0x0F
 		cells[i*2] = idToChar[hi]
@@ -116,7 +121,7 @@ func DecodeBoardSetup(encoded string) ([]string, error) {
 	}
 	// split into rows
 	rows := make([]string, PlayerSetupRows)
-	for r := 0; r < PlayerSetupRows; r++ {
+	for r := range PlayerSetupRows {
 		rows[r] = string(cells[r*PlayerSetupCols : (r+1)*PlayerSetupCols])
 	}
 	return rows, nil

@@ -11,6 +11,7 @@
 	import Button from '$lib/components/ui/Button.svelte';
 	import { toastStore } from '$lib/state/toast.svelte';
 	import type { BoardSetup } from '$lib/types/board-setup';
+	import { exportSetupAsJson } from '$lib/utils/board-binary';
 
 	let id = $derived(Number(page.params.id));
 	let setup = $state<BoardSetup | null>(null);
@@ -68,6 +69,16 @@
 			<h1 class="text-3xl font-black text-white uppercase tracking-tighter">Edit Setup</h1>
 			<p class="text-white/40">Adjust your formation for upcoming battles.</p>
 		</div>
+		{#if setup}
+			<Button
+				variant="outline"
+				disabled={saving}
+				onclick={() =>
+					setup && exportSetupAsJson({ name, description, setup_data: setup.setup_data })}
+			>
+				Export JSON
+			</Button>
+		{/if}
 	</div>
 
 	{#if loading}

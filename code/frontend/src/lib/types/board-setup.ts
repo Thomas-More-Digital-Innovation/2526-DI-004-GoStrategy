@@ -123,3 +123,16 @@ export const MAX_BOARD_SETUPS = 10;
 export const BOARD_ROWS = 4;
 export const BOARD_COLS = 10;
 export const BOARD_CELLS = BOARD_ROWS * BOARD_COLS;
+
+export interface ExportedBoardSetup {
+	name: string;
+	description?: string;
+	setup_data: string;
+	rows: string[];
+}
+
+export interface ExportedBoardSetupCollection {
+	version: string;
+	exported_at: string;
+	setups: ExportedBoardSetup[];
+}

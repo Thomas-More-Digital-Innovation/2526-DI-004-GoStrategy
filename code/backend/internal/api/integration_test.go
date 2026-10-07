@@ -223,6 +223,15 @@ func TestIntegration_BoardSetups(t *testing.T) {
 
 		require.Len(t, setups, 1)
 		assert.Equal(t, "My Setup", setups[0].Name)
+
+		reqExport, _ := http.NewRequest("GET", ts.URL+"/board-setups/export", nil)
+		for _, c := range cookies {
+			reqExport.AddCookie(c)
+		}
+		respExport, err := client.Do(reqExport)
+		require.NoError(t, err)
+		assert.Equal(t, http.StatusOK, respExport.StatusCode)
+		_ = respExport.Body.Close()
 	})
 
 	t.Run("Board Setup Ownership", func(t *testing.T) {

@@ -13,7 +13,7 @@ This document outlines the planned improvements and future directions for the Go
 - [x] **MCTS**: Create a Monte Carlo Tree Search-based evaluation engine.
 - [x] **AI In Game**: Add the new AIs to the game as available opponents.
 - [x] **AI Info**: Add an info page about each AIs algorithm, strengths and weaknesses, and how they work.
-- [ ] **Export Tools**: Add ability to export board setups as JSON for external AI training/testing.
+- [x] **Export Tools**: Add ability to export board setups as JSON for external AI training/testing.
 
 
 ## v0.4.1 - Replays

@@ -1,6 +1,7 @@
 package handlers_test
 
 import (
+	"archive/zip"
 	"bytes"
 	"context"
 	"digital-innovation/gostrategy/internal/db"
@@ -110,6 +111,43 @@ func TestBoardSetupHandlers(t *testing.T) {
 		c.Set("user", user)
 		h.UpdateBoardSetupHandler(c)
 		assert.Equal(t, http.StatusOK, w.Code)
+	})
+
+	t.Run("ExportSingle", func(t *testing.T) {
+		w := httptest.NewRecorder()
+		c, _ := gin.CreateTestContext(w)
+		c.Request, _ = http.NewRequest("GET", fmt.Sprintf("/board-setups/%d/export", createdSetup.ID), nil)
+		c.Params = []gin.Param{{Key: "id", Value: fmt.Sprintf("%d", createdSetup.ID)}}
+		c.Set("user", user)
+		h.ExportBoardSetupHandler(c)
+		assert.Equal(t, http.StatusOK, w.Code)
+	})
+
+	t.Run("ExportAll", func(t *testing.T) {
+		// Create a colliding setup to test name deduplication
+		ctx := db.WithUserID(context.Background(), user.ID)
+		_, err := db.CreateBoardSetup(ctx, user.ID, "Updated Name", "Duplicate name", "test-data-2", false)
+		require.NoError(t, err)
+
+		w := httptest.NewRecorder()
+		c, _ := gin.CreateTestContext(w)
+		c.Request, _ = http.NewRequest("GET", "/board-setups/export", nil)
+		c.Set("user", user)
+		h.ExportAllBoardSetupsHandler(c)
+		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, "application/zip", w.Header().Get("Content-Type"))
+
+		// Verify zip archive structure and unique entry names
+		zipReader, err := zip.NewReader(bytes.NewReader(w.Body.Bytes()), int64(w.Body.Len()))
+		require.NoError(t, err)
+		assert.GreaterOrEqual(t, len(zipReader.File), 2)
+
+		seenFiles := make(map[string]bool)
+		for _, f := range zipReader.File {
+			assert.False(t, seenFiles[f.Name], "duplicate file in zip: "+f.Name)
+			seenFiles[f.Name] = true
+			assert.NotEmpty(t, f.Name)
+		}
 	})
 
 	t.Run("Delete", func(t *testing.T) {

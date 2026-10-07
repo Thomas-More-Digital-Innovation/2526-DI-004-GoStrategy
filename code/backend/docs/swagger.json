@@ -18,6 +18,100 @@
     "host": "localhost:8080",
     "basePath": "/",
     "paths": {
+        "/board-setups/export": {
+            "get": {
+                "description": "Export all saved board setups as a ZIP archive containing individual JSON files",
+                "produces": [
+                    "application/zip"
+                ],
+                "tags": [
+                    "board-setups"
+                ],
+                "summary": "Export all board setups",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "file"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/board-setups/{id}/export": {
+            "get": {
+                "description": "Export a board setup configuration in JSON format for external AI training/testing",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "board-setups"
+                ],
+                "summary": "Export board setup",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Board Setup ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/game.ExportedBoardSetup"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Board setup not found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/csrf": {
             "get": {
                 "description": "Retrieve a CSRF token for subsequent state-changing requests",
@@ -1131,6 +1225,26 @@
         }
     },
     "definitions": {
+        "game.ExportedBoardSetup": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "rows": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "setup_data": {
+                    "type": "string"
+                }
+            }
+        },
         "models.BoardSetup": {
             "type": "object",
             "properties": {

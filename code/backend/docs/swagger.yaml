@@ -1,5 +1,18 @@
 basePath: /
 definitions:
+  game.ExportedBoardSetup:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      rows:
+        items:
+          type: string
+        type: array
+      setup_data:
+        type: string
+    type: object
   models.BoardSetup:
     properties:
       created_at:
@@ -164,6 +177,70 @@ info:
   title: GoStrategy API
   version: 0.1.1
 paths:
+  /board-setups/{id}/export:
+    get:
+      description: Export a board setup configuration in JSON format for external
+        AI training/testing
+      parameters:
+      - description: Board Setup ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/game.ExportedBoardSetup'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Board setup not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Export board setup
+      tags:
+      - board-setups
+  /board-setups/export:
+    get:
+      description: Export all saved board setups as a ZIP archive containing individual
+        JSON files
+      produces:
+      - application/zip
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Export all board setups
+      tags:
+      - board-setups
   /csrf:
     get:
       description: Retrieve a CSRF token for subsequent state-changing requests

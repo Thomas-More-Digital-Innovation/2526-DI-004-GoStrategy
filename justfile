@@ -8,3 +8,7 @@ default:
 # start full-stack environment with Docker Compose
 dev:
     docker compose up --build
+
+# run AI engine simulation
+simulation *args:
+    just go simulation {{args}}

@@ -32,6 +32,30 @@ func TestSimulationRun(t *testing.T) {
 		assert.NoError(t, err)
 	})
 
+	t.Run("with board setup file", func(t *testing.T) {
+		os.Args = []string{"cmd", "-ai=fato:fato", "-matches=1", "-format=none", "-logging=false", "-setup=../../internal/ai/board-setups.json"}
+		flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
+
+		err := run()
+		assert.NoError(t, err)
+	})
+
+	t.Run("with split setup files", func(t *testing.T) {
+		os.Args = []string{"cmd", "-ai=fato:fato", "-matches=1", "-format=none", "-logging=false", "-setup1=../../internal/ai/board-setups.json", "-setup2=../../internal/ai/board-setups.json"}
+		flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
+
+		err := run()
+		assert.NoError(t, err)
+	})
+
+	t.Run("with non-existent setup file", func(t *testing.T) {
+		os.Args = []string{"cmd", "-ai=fato:fato", "-matches=1", "-format=none", "-logging=false", "-setup=nonexistent.json"}
+		flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
+
+		err := run()
+		assert.Error(t, err)
+	})
+
 	t.Run("main function execution", func(_ *testing.T) {
 		os.Args = []string{"cmd", "-ai=fato:fato", "-matches=1", "-format=none", "-logging=false"}
 		flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
