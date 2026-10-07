@@ -54,6 +54,7 @@ func (aiObj *AI) MakeMove(board *game.Board) game.Move {
 		}
 	}
 
+	allMoves = aiObj.FilterTwoSquareMoves(allMoves)
 	if len(allMoves) == 0 {
 		return game.Move{}
 	}

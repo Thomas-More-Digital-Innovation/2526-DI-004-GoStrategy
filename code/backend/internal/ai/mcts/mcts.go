@@ -40,6 +40,7 @@ func NewAIWithParams(player *game.Player, hasMemory bool, params *ai.Parameters)
 func (aiObj *AI) MakeMove(board *game.Board) game.Move {
 	opponent := ai.GetOpponent(board, aiObj.GetPlayer().GetID())
 	moves := ai.GetMoves(board, aiObj.GetPlayer())
+	moves = aiObj.FilterTwoSquareMoves(moves)
 	if len(moves) == 0 {
 		return game.Move{}
 	}

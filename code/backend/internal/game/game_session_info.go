@@ -115,7 +115,11 @@ func (gs *Session) GetAvailableMoves(playerID int, pos Position) ([]Move, error)
 		return nil, errors.New("you can only request moves for your own pieces")
 	}
 
-	return gs.game.Board.ListMoves(pos)
+	moves, err := gs.game.Board.ListMoves(pos)
+	if err != nil {
+		return nil, err
+	}
+	return gs.game.FilterTwoSquareMoves(playerID, moves), nil
 }
 
 // IsHeadless returns whether the game is running in headless simulation mode

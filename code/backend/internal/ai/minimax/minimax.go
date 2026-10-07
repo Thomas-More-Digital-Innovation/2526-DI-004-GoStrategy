@@ -58,6 +58,7 @@ func (aiObj *AI) MakeMove(board *game.Board) game.Move {
 	detBoard := ai.DeterminizeBoard(board, aiObj.GetPlayer(), aiObj.GetMemory())
 	opponent := ai.GetOpponent(detBoard, aiObj.GetPlayer().GetID())
 	moves := ai.GetMoves(detBoard, aiObj.GetPlayer())
+	moves = aiObj.FilterTwoSquareMoves(moves)
 	if len(moves) == 0 {
 		return game.Move{}
 	}
