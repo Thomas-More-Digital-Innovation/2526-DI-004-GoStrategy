@@ -14,6 +14,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestBoardSetupHandlers(t *testing.T) {
@@ -39,6 +40,42 @@ func TestBoardSetupHandlers(t *testing.T) {
 
 		err := json.Unmarshal(w.Body.Bytes(), &createdSetup)
 		assert.NoError(t, err)
+	})
+
+	t.Run("CreateLimitEnforced", func(t *testing.T) {
+		limitUser, _ := db.CreateUser(context.Background(), "limit_user", "StrongPassword1", "")
+		ctx := db.WithUserID(context.Background(), limitUser.ID)
+		for i := 1; i <= 10; i++ {
+			_, err := db.CreateBoardSetup(ctx, limitUser.ID, fmt.Sprintf("Setup %d", i), "desc", "dummy-data", false)
+			require.NoError(t, err)
+		}
+
+		w := httptest.NewRecorder()
+		c, _ := gin.CreateTestContext(w)
+		eleventhReq := models.BoardSetup{
+			Name:        "11th Setup",
+			Description: "Should be rejected",
+			SetupData:   "dummy-data",
+		}
+		jsonBody, _ := json.Marshal(eleventhReq)
+		c.Request, _ = http.NewRequest("POST", "/users/me/board-setups", bytes.NewBuffer(jsonBody))
+		c.Request.Header.Set("Content-Type", "application/json")
+		c.Set("user", limitUser)
+		h.CreateBoardSetupHandler(c)
+		assert.Equal(t, http.StatusBadRequest, w.Code)
+		assert.Contains(t, w.Body.String(), "Maximum number of board setups reached (10)")
+	})
+
+	t.Run("CreateCountError", func(t *testing.T) {
+		w := httptest.NewRecorder()
+		c, _ := gin.CreateTestContext(w)
+		cancelCtx, cancel := context.WithCancel(context.Background())
+		cancel()
+		c.Request, _ = http.NewRequestWithContext(cancelCtx, "POST", "/users/me/board-setups", nil)
+		c.Set("user", user)
+		h.CreateBoardSetupHandler(c)
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+		assert.Contains(t, w.Body.String(), "Failed to check board setup limit")
 	})
 
 	t.Run("List", func(t *testing.T) {
