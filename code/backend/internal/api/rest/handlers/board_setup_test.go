@@ -66,6 +66,18 @@ func TestBoardSetupHandlers(t *testing.T) {
 		assert.Contains(t, w.Body.String(), "Maximum number of board setups reached (10)")
 	})
 
+	t.Run("CreateCountError", func(t *testing.T) {
+		w := httptest.NewRecorder()
+		c, _ := gin.CreateTestContext(w)
+		cancelCtx, cancel := context.WithCancel(context.Background())
+		cancel()
+		c.Request, _ = http.NewRequestWithContext(cancelCtx, "POST", "/users/me/board-setups", nil)
+		c.Set("user", user)
+		h.CreateBoardSetupHandler(c)
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+		assert.Contains(t, w.Body.String(), "Failed to check board setup limit")
+	})
+
 	t.Run("List", func(t *testing.T) {
 		w := httptest.NewRecorder()
 		c, _ := gin.CreateTestContext(w)

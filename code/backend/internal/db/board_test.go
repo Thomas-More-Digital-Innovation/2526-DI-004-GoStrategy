@@ -82,5 +82,11 @@ func TestBoardSetupLogic(t *testing.T) {
 		count, err = CountUserBoardSetups(uCtx, u.ID)
 		assert.NoError(t, err)
 		assert.Equal(t, int64(1), count)
+
+		// Context error triggers error return branch
+		cancelCtx, cancel := context.WithCancel(uCtx)
+		cancel()
+		_, err = CountUserBoardSetups(cancelCtx, u.ID)
+		assert.Error(t, err)
 	})
 }
