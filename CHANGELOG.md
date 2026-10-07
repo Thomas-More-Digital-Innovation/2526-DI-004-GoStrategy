@@ -2,6 +2,45 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] - 07-10-2026
+
+### Added
+- **AI Opponents**: Introduced Heuristic, Minimax, and Monte Carlo Tree Search (MCTS) engine implementations available for games and simulation benchmarking.
+- **Board Setup Export**: Added export functionality for custom board setups to JSON and binary formats for analysis and external training.
+- **Connection Status**: Added real-time WebSocket connection state indicator to the profile card in the sidebar.
+- **Game Matchup Display**: Added matchup overview to the game info card displaying opponent and AI details.
+- **Testing & Quality Tooling**: Integrated ESLint, Prettier, Vitest, and Playwright alongside Lefthook pre-commit hooks for comprehensive code quality and test automation.
+
+### Changed
+- **Frontend Architecture**: Overhauled frontend architecture into a feature-first structure, colocating route-specific components, state machines, and controllers within `routes/game/[id]`.
+- **Game Identifiers**: Migrated custom game identifiers to standardized ULID generation across backend models and routes.
+- **Iconography**: Replaced raw emoji icons across the user interface with Lucide SVG icons.
+- **Visual Refinements**: Centered and refined the game board layout, incorporated the GoStrategy logo into the game view, and removed question mark placeholders on empty tiles.
+- **CI/CD Workflows**: Corrected workflow permissions in CD and CodeQL pipelines and removed auto-commits from the backend CI pipeline.
+- **Dependency Management**: Synchronized Bun and PNPM lockfiles, bumped pipeline tool versions, and updated core package dependencies.
+
+### Fixed
+- **Setup Mode Exit**: Fixed issue where navigating back to the menu during the board setup phase failed to terminate the active game session.
+- **Board Alignment**: Resolved CSS layout issue causing the game board to render off-center on wide viewports.
+- **Setup Validation**: Enforced backend piece count and board boundary validations on custom board setup submissions.
+
+### Security
+- **Vulnerability Audits**: Resolved automated audit security vulnerabilities across backend and frontend dependencies.
+
+## [0.3.2] - 03-06-2026
+
+### Added
+- **Game Duration Tracking**: Recorded explicit `started_at` and `ended_at` timestamps for game sessions to track match durations.
+
+### Changed
+- **Codebase Architecture & DRY**: Consolidated packages into `internal/`, eliminated duplicate logic, and standardized unit tests using `stretchr/testify/assert`.
+- **API Documentation**: Aligned OpenAPI/Swagger specifications with restructured API routes and schema contracts.
+- **CI & Formatting**: Hardened backend CI workflows and integrated automated formatting checks.
+
+### Fixed
+- **AI Match Stats**: Fixed stat resolution to ensure AI vs AI matches do not inadvertently award player win/loss records.
+- **Log-Identified Edge Cases**: Resolved runtime edge cases and error handling regressions uncovered during log analysis.
+
 ## [0.3.1] - 28-05-2026
 
 ### Added

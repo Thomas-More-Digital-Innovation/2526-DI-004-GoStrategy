@@ -4,19 +4,7 @@ This document outlines the planned improvements and future directions for the Go
 
 ---
 
-## v0.4.0 - AI & Intelligence
-*Focus: Moving beyond random moves and providing tools for AI experimentation.*
-
-### AI Improvements
-- [x] **Heuristics**: Create a basic heuristic-based evaluation engine.
-- [x] **Minimax**: Create a minimax-based evaluation engine.
-- [x] **MCTS**: Create a Monte Carlo Tree Search-based evaluation engine.
-- [x] **AI In Game**: Add the new AIs to the game as available opponents.
-- [x] **AI Info**: Add an info page about each AIs algorithm, strengths and weaknesses, and how they work.
-- [x] **Export Tools**: Add ability to export board setups as JSON for external AI training/testing.
-
-
-## v0.4.1 - Replays
+## v0.5.0 - Replays
 *Focus: Storing and viewing past games.*
 
 ### Replay System
@@ -26,7 +14,7 @@ This document outlines the planned improvements and future directions for the Go
 
 ---
 
-## v0.5.0 - Social & PvP
+## v0.6.0 - Social & PvP
 *Focus: Connecting players and building a competitive community.*
 
 ### Social Features
@@ -37,7 +25,7 @@ This document outlines the planned improvements and future directions for the Go
 
 ---
 
-## v0.6.0 - Mobile & PWA
+## v0.7.0 - Mobile & PWA
 *Focus: Making GoStrategy available everywhere.*
 
 ### Mobile Experience
