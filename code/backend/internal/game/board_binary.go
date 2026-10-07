@@ -33,18 +33,26 @@ const (
 )
 
 var rankToPieceID = map[byte]byte{
-	'0': PieceIDFlag, 'B': PieceIDBomb, '1': PieceIDSpy, '2': PieceIDScout,
-	'3': PieceIDMiner, '4': PieceIDSergeant, '5': PieceIDLieutenant, '6': PieceIDCaptain,
-	'7': PieceIDMajor, '8': PieceIDColonel, '9': PieceIDGeneral, 'M': PieceIDMarshal,
+	'0': PieceIDFlag, 'F': PieceIDFlag, 'B': PieceIDBomb, '1': PieceIDSpy, 'S': PieceIDSpy,
+	'2': PieceIDScout, '3': PieceIDMiner, '4': PieceIDSergeant, '5': PieceIDLieutenant,
+	'6': PieceIDCaptain, '7': PieceIDMajor, '8': PieceIDColonel, '9': PieceIDGeneral,
+	'M': PieceIDMarshal,
 }
 
-var pieceIDToRank = func() [32]byte {
-	var a [32]byte
-	for k, v := range rankToPieceID {
-		a[v] = k
-	}
-	return a
-}()
+var pieceIDToRank = [32]byte{
+	PieceIDFlag:       '0',
+	PieceIDBomb:       'B',
+	PieceIDSpy:        '1',
+	PieceIDScout:      '2',
+	PieceIDMiner:      '3',
+	PieceIDSergeant:   '4',
+	PieceIDLieutenant: '5',
+	PieceIDCaptain:    '6',
+	PieceIDMajor:      '7',
+	PieceIDColonel:    '8',
+	PieceIDGeneral:    '9',
+	PieceIDMarshal:    'M',
+}
 
 var idToPieceType = map[byte]*models.PieceType{
 	PieceIDFlag: &models.Flag, PieceIDBomb: &models.Bomb, PieceIDSpy: &models.Spy,

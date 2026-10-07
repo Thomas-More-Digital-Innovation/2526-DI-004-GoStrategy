@@ -14,7 +14,15 @@ func runAIvsAI(ai1, ai2 string, matches int, logging bool) models.AiGameSummary 
 	return runAIvsAIWithOptions(ai1, ai2, matches, logging, nil, nil)
 }
 
+func runAIvsAISetup(ai1, ai2 string, matches int, logging bool, setup1, setup2 []string) models.AiGameSummary {
+	return runAIvsAIWithOptionsAndSetups(ai1, ai2, matches, logging, nil, nil, setup1, setup2)
+}
+
 func runAIvsAIWithOptions(ai1, ai2 string, matches int, logging bool, opts1, opts2 map[string]any) models.AiGameSummary {
+	return runAIvsAIWithOptionsAndSetups(ai1, ai2, matches, logging, opts1, opts2, nil, nil)
+}
+
+func runAIvsAIWithOptionsAndSetups(ai1, ai2 string, matches int, logging bool, opts1, opts2 map[string]any, setup1, setup2 []string) models.AiGameSummary {
 	draws := 0
 
 	flagCaptures := 0
@@ -44,12 +52,22 @@ func runAIvsAIWithOptions(ai1, ai2 string, matches int, logging bool, opts1, opt
 
 		var g *game.Game
 		if i%2 == 0 {
-			g = game.QuickStart(controllerAlice, controllerBob)
+			p1Pieces := createPlayerPieces(&playerAlice, setup1, false)
+			p2Pieces := createPlayerPieces(&playerBob, setup2, true)
+			g = game.NewGame(controllerAlice, controllerBob)
+			if err := game.SetupGame(g, p1Pieces, p2Pieces); err != nil {
+				panic(err)
+			}
 			if logging {
 				fmt.Printf("Game %3d (Alice starts): ", i+1)
 			}
 		} else {
-			g = game.QuickStart(controllerBob, controllerAlice)
+			p1Pieces := createPlayerPieces(&playerBob, setup2, false)
+			p2Pieces := createPlayerPieces(&playerAlice, setup1, true)
+			g = game.NewGame(controllerBob, controllerAlice)
+			if err := game.SetupGame(g, p1Pieces, p2Pieces); err != nil {
+				panic(err)
+			}
 			if logging {
 				fmt.Printf("Game %3d (Bob starts):   ", i+1)
 			}
@@ -187,4 +205,19 @@ func TrainAI(aiType string, opponentType string, generations int, matchesPerGen 
 	}
 
 	return nil
+}
+
+func createPlayerPieces(player *game.Player, setup []string, flipped bool) []*game.Piece {
+	if setup == nil {
+		return game.RandomSetup(player)
+	}
+	targetSetup := setup
+	if flipped {
+		targetSetup = game.FlipSetupRows(setup)
+	}
+	pieces, err := game.ParseSetup(player, []byte(game.RowsToSetupData(targetSetup)))
+	if err != nil {
+		panic(fmt.Sprintf("failed to parse setup for player %s: %v", player.GetName(), err))
+	}
+	return pieces
 }

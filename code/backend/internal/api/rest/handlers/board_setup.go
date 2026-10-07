@@ -98,7 +98,11 @@ func (h *Handler) UpdateBoardSetupHandler(c *gin.Context) {
 		return
 	}
 
-	id, _ := core.ParseID(c, "id")
+	id, err := core.ParseID(c, "id")
+	if err != nil || id <= 0 {
+		core.SendError(c, "Invalid board setup ID", http.StatusBadRequest)
+		return
+	}
 	var req models.BoardSetup
 	if err := c.ShouldBindJSON(&req); err != nil {
 		core.SendError(c, "Invalid request body", http.StatusBadRequest)
@@ -137,7 +141,11 @@ func (h *Handler) DeleteBoardSetupHandler(c *gin.Context) {
 		return
 	}
 
-	id, _ := core.ParseID(c, "id")
+	id, err := core.ParseID(c, "id")
+	if err != nil || id <= 0 {
+		core.SendError(c, "Invalid board setup ID", http.StatusBadRequest)
+		return
+	}
 	if err := db.DeleteBoardSetup(c.Request.Context(), int(id), user.ID); err != nil {
 		core.SendError(c, "Failed to delete board setup", http.StatusInternalServerError)
 		return
@@ -162,7 +170,11 @@ func (h *Handler) GetBoardSetupHandler(c *gin.Context) {
 		return
 	}
 
-	id, _ := core.ParseID(c, "id")
+	id, err := core.ParseID(c, "id")
+	if err != nil || id <= 0 {
+		core.SendError(c, "Invalid board setup ID", http.StatusBadRequest)
+		return
+	}
 	setup, err := db.GetBoardSetup(c.Request.Context(), int(id), user.ID)
 	if err != nil {
 		core.SendError(c, "Board setup not found", http.StatusNotFound)

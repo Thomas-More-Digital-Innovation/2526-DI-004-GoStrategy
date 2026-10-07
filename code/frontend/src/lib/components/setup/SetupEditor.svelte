@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { PIECE_INVENTORY } from '$lib/types/board-setup';
 	import type { Piece as PieceType, Position } from '$lib/types/game';
-	import { decodeSetup, encodeSetup } from '$lib/utils/board-binary';
+	import { decodeSetup, encodeSetup, exportSetupAsJson } from '$lib/utils/board-binary';
 	import Board from '../game/Board.svelte';
 	import Button from '../ui/Button.svelte';
 	import SetupInventory from './SetupInventory.svelte';
@@ -190,6 +190,14 @@
 		onSave(encodeSetup(rows));
 	}
 
+	function handleExport() {
+		const rows = grid.map((row) => row.join(''));
+		exportSetupAsJson({
+			name: 'custom_setup',
+			setup_data: encodeSetup(rows)
+		});
+	}
+
 	const isComplete = $derived(Object.values(remainingCounts).every((count) => count === 0));
 </script>
 
@@ -220,7 +228,10 @@
 		</div>
 
 		<div class="flex justify-between gap-3">
-			<Button variant="outline" onclick={handleRandomize}>Randomize</Button>
+			<div class="flex gap-2">
+				<Button variant="outline" onclick={handleRandomize}>Randomize</Button>
+				<Button variant="outline" onclick={handleExport} disabled={!isComplete}>Export JSON</Button>
+			</div>
 
 			<div class="flex gap-3">
 				<Button variant="ghost" onclick={onCancel}>Cancel</Button>

@@ -101,3 +101,46 @@ export function decodeBoard(encoded: string): (Piece | null)[][] {
 	}
 	return board;
 }
+
+export function formatBoardSetupForExport(setup: {
+	name: string;
+	description?: string;
+	setup_data: string;
+}) {
+	return {
+		name: setup.name,
+		description: setup.description || '',
+		setup_data: setup.setup_data,
+		rows: decodeSetup(setup.setup_data)
+	};
+}
+
+export function downloadJsonFile(filename: string, data: unknown): void {
+	const json = JSON.stringify(data, null, 2);
+	const blob = new Blob([json], { type: 'application/json' });
+	const url = URL.createObjectURL(blob);
+	const a = document.createElement('a');
+	a.href = url;
+	a.download = filename;
+	document.body.appendChild(a);
+	a.click();
+	document.body.removeChild(a);
+	URL.revokeObjectURL(url);
+}
+
+export function sanitizeFilename(name: string): string {
+	const cleaned = name
+		.toLowerCase()
+		.trim()
+		.replace(/[^a-z0-9_-]/g, '_');
+	return cleaned || 'board_setup';
+}
+
+export function exportSetupAsJson(setup: {
+	name: string;
+	description?: string;
+	setup_data: string;
+}): void {
+	const exported = formatBoardSetupForExport(setup);
+	downloadJsonFile(`${sanitizeFilename(setup.name)}.json`, exported);
+}

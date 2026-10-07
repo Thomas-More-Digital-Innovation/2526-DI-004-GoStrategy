@@ -7,7 +7,12 @@ import (
 
 // RunAIvsAI runs a tournament between two AI types and prints the results
 func RunAIvsAI(ai1, ai2 string, matches int, format string, logging bool) {
-	summary := runAIvsAI(ai1, ai2, matches, logging)
+	RunAIvsAIWithSetups(ai1, ai2, matches, format, logging, nil, nil)
+}
+
+// RunAIvsAIWithSetups runs a tournament between two AI types with custom board setups and prints the results
+func RunAIvsAIWithSetups(ai1, ai2 string, matches int, format string, logging bool, setup1, setup2 []string) {
+	summary := runAIvsAISetup(ai1, ai2, matches, logging, setup1, setup2)
 
 	switch format {
 	case "md":
@@ -15,7 +20,6 @@ func RunAIvsAI(ai1, ai2 string, matches int, format string, logging bool) {
 	default:
 		printDefaultSummary(summary, matches)
 	}
-
 }
 
 func printMarkdownSummary(summary models.AiGameSummary, matches int) {

@@ -110,7 +110,9 @@ func (s *GameServer) SetupRoutes() {
 	setups.Use(middleware.UserRateLimitMiddleware(actionLimiter))
 	{
 		setups.GET("", h.GetUserBoardSetupsHandler)
+		setups.GET("/export", h.ExportAllBoardSetupsHandler)
 		setups.GET("/:id", h.GetBoardSetupHandler)
+		setups.GET("/:id/export", h.ExportBoardSetupHandler)
 		setups.POST("", h.CreateBoardSetupHandler)
 		setups.PUT("/:id", h.UpdateBoardSetupHandler)
 		setups.DELETE("/:id", h.DeleteBoardSetupHandler)
