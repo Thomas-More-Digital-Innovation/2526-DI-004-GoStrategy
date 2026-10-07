@@ -75,7 +75,7 @@ func (gr *Runner) SubmitHumanMove(move Move) error {
 		return fmt.Errorf("move player does not match current player")
 	}
 
-	if !gr.game.Board.IsValidMove(&move) {
+	if !gr.game.Board.IsValidMove(&move) || gr.game.IsTwoSquareViolation(gr.game.CurrentPlayer.GetID(), move) {
 		if gr.locker != nil {
 			gr.locker.Unlock()
 		}

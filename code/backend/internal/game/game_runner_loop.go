@@ -241,7 +241,7 @@ func (gr *Runner) executeTurn(ignorePause bool) bool {
 		return false
 	}
 
-	if !gr.game.Board.IsValidMove(&move) {
+	if !gr.game.Board.IsValidMove(&move) || gr.game.IsTwoSquareViolation(gr.game.CurrentPlayer.GetID(), move) {
 		opponent := gr.getOpponent(gr.game.CurrentPlayer)
 		gr.game.SetWinner(opponent, WinCauseNoMovablePieces)
 		if gr.locker != nil {

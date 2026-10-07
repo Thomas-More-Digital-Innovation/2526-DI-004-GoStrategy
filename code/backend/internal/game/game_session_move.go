@@ -47,6 +47,7 @@ func (gs *Session) SubmitMove(playerID int, move Move) error {
 	if err != nil {
 		return err
 	}
+	validMoves = gs.game.FilterTwoSquareMoves(playerID, validMoves)
 
 	isLegal := false
 	for _, m := range validMoves {

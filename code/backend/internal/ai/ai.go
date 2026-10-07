@@ -14,8 +14,9 @@ type AI interface {
 
 // BaseAI provides common functionality for all AI types
 type BaseAI struct {
-	player *game.Player
-	memory *Memory
+	player      *game.Player
+	memory      *Memory
+	recentMoves []game.Move
 }
 
 // NewBaseAI creates a new BaseAI instance
@@ -25,8 +26,9 @@ func NewBaseAI(player *game.Player, hasMemory bool) *BaseAI {
 		memory = NewMemory()
 	}
 	return &BaseAI{
-		player: player,
-		memory: memory,
+		player:      player,
+		memory:      memory,
+		recentMoves: make([]game.Move, 0, 16),
 	}
 }
 
@@ -80,4 +82,33 @@ func (ai *BaseAI) ObserveCombat(attackerPos, defenderPos game.Position, attacker
 	}
 
 	ai.memory.UpdateFromCombat(attackerPos, defenderPos, attackerPiece, defenderPiece, round)
+}
+
+// RecordOwnMove records a move made by this AI to enforce Two-Square repetition limits.
+func (ai *BaseAI) RecordOwnMove(move game.Move) {
+	ai.recentMoves = append(ai.recentMoves, move)
+}
+
+// GetRecentMoves returns moves executed by this AI.
+func (ai *BaseAI) GetRecentMoves() []game.Move {
+	return ai.recentMoves
+}
+
+// FilterTwoSquareMoves removes candidate moves that violate the Two-Square Rule.
+func (ai *BaseAI) FilterTwoSquareMoves(moves []game.Move) []game.Move {
+	if len(moves) == 0 || len(ai.recentMoves) == 0 {
+		return moves
+	}
+
+	playerID := ai.player.GetID()
+	filtered := make([]game.Move, 0, len(moves))
+	for _, m := range moves {
+		if !game.IsTwoSquareViolation(ai.recentMoves, playerID, m) {
+			filtered = append(filtered, m)
+		}
+	}
+	if len(filtered) == 0 {
+		return moves
+	}
+	return filtered
 }

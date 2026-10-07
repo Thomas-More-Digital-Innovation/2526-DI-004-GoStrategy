@@ -104,7 +104,12 @@ func (g *Game) MakeMove(move *Move, piece *Piece) []*Piece {
 	// Notify all observers (AI)
 	round := g.GetRound()
 	for _, ctrl := range g.PlayerControllers {
-		if ctrl.GetPlayer() == move.GetPlayer() {
+		if ctrl.GetPlayer().GetID() == move.GetPlayer().GetID() {
+			if recorder, ok := ctrl.(interface {
+				RecordOwnMove(Move)
+			}); ok {
+				recorder.RecordOwnMove(*move)
+			}
 			continue
 		}
 

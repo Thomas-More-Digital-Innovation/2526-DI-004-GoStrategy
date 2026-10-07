@@ -100,6 +100,7 @@ func (ai *AI) findAttackMove(board *game.Board) (game.Move, bool) {
 		if err != nil {
 			continue
 		}
+		moves = ai.FilterTwoSquareMoves(moves)
 
 		for _, move := range moves {
 			target := board.GetPieceAt(move.GetTo())
@@ -244,6 +245,7 @@ func (ai *AI) findExplorationMove(board *game.Board) (game.Move, bool) {
 		if err != nil {
 			continue
 		}
+		moves = ai.FilterTwoSquareMoves(moves)
 
 		var bestMove *game.Move
 		bestDist := 100

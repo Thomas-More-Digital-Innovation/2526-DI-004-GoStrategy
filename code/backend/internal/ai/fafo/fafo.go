@@ -55,6 +55,11 @@ func (ai *AI) FindRandomMove(board *game.Board) game.Move {
 			continue
 		}
 
+		moves = ai.FilterTwoSquareMoves(moves)
+		if len(moves) == 0 {
+			continue
+		}
+
 		// #nosec G404 - weak random is sufficient for AI move selection
 		chosen := moves[rand.IntN(len(moves))]
 		return game.NewMove(chosen.GetFrom(), chosen.GetTo(), ai.GetPlayer())
