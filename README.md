@@ -86,12 +86,15 @@ From the `code/backend` directory:
 cd code/backend
 go run cmd/simulation/main.go --ai={ai1}:{ai2} --format md --logging=false --matches {n}
 ```
-Herby you can replace {ai1} and {ai2} with any AI type available in the codebase.
-Replace n with the amount of matches you want to run.
 
-Example:
+Supported AI identifiers for `{ai1}` and `{ai2}` include `fafo`, `fato`, `heuristic`, `minimax`, and `mcts`. Optional flags include `--setup` to load predetermined piece setups:
+
 ```bash
-go run cmd/simulation/main.go --ai=fafo:fato --format md --logging=false --matches 100
+# Run 100 matches between MCTS and FATO
+go run cmd/simulation/main.go --ai=mcts:fato --format md --matches 100
+
+# Run matches with a specific board configuration
+go run cmd/simulation/main.go --ai=mcts:minimax --matches 10 --setup ../../documents/files/board_setups/best_setup_ever.json
 ```
 
 ## Architecture & Performance
@@ -99,13 +102,22 @@ go run cmd/simulation/main.go --ai=fafo:fato --format md --logging=false --match
 ### High-Performance Concurrency
 The backend uses an event-driven architecture with Go channels to manage game states. This ensures minimal mutex contention and high throughput for concurrent matches.
 
-## AI Experimentation
+## AI Architecture & Agents
 
-One of the core goals is the development of a comprehensive AI test suite. Current supported AI types:
-- **FAFO**: Random move generator.
-- **FATO**: Random move generator with basic memory to avoid loops.
+GoStrategy includes an AI experimentation suite with multiple agent implementations tailored for imperfect-information gameplay, benchmark tournaments, and parameter optimization:
 
-Planned additions include Heuristic-based evaluation, MiniMax, and Monte Carlo Tree Search (MCTS). Detailed results of AI matches can be found in the [AI Data folder](documents/files/ai-data/).
+| Agent Identifier | Strategy / Algorithm | Description | Key Parameters |
+| :--- | :--- | :--- | :--- |
+| `fafo` | Pure Random | Baseline agent selecting uniform random legal moves without state tracking or evaluation. | — |
+| `fato` | Rule-based Heuristic | Greedy tactical agent with piece memory, loop evasion, and aggression-scaled attack thresholds. | `aggression` |
+| `heuristic` | Static Evaluation Engine | Evaluates board states using strategic piece values, forward territory exploration, combat risk, and aggression weightings. | `aggression`, feature weights |
+| `minimax` | Adversarial Tree Search | Minimax with alpha-beta pruning over determinized hidden-information boards, evaluated via the static evaluation engine. | `depth`, `aggression`, feature weights |
+| `mcts` | Monte Carlo Tree Search | Information-Set MCTS using root-level determinization sampling, concurrent UCB1 tree selection across multi-worker goroutines, and fast rollout simulations. | `iterations`, `total_rollouts`, `exploration_constant`, `aggression` |
+
+Detailed match histories and benchmark analytics are archived in the [AI Data folder](documents/files/ai-data/).
+
+> [!NOTE]
+> The AI's are still in development, and are not yet optimized to their full potential. 
 
 ## Documentation
 - [Changelog](CHANGELOG.md) - Project history and versioning.
