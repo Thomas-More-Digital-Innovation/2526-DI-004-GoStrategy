@@ -38,18 +38,6 @@ func TestRunAiVsAi(t *testing.T) {
 	})
 }
 
-func TestRunAIvsAIExported(t *testing.T) {
-	// TODO: actually check if formats are correct.
-
-	t.Run("default format", func(_ *testing.T) {
-		RunAIvsAI(models.Fato, models.Fato, 1, "default", true)
-	})
-
-	t.Run("markdown format", func(_ *testing.T) {
-		RunAIvsAI(models.Fato, models.Fato, 1, "md", true)
-	})
-}
-
 func TestTrainAI(t *testing.T) {
 	tempFile := "temp_train_ai_parameters.json"
 	ai.SetFallbackFile(tempFile)

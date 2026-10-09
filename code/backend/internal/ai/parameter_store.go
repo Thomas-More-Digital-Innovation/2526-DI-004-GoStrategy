@@ -81,6 +81,7 @@ func GetDefault(aiType string, name string) *Parameters {
 	case models.Mcts:
 		defaults.Aggression = 0.5
 		defaults.Config["iterations"] = 100.0
+		defaults.Config["total_rollouts"] = 500.0
 		defaults.Config["exploration_constant"] = 1.414
 	}
 
