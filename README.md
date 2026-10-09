@@ -1,6 +1,6 @@
 # GoStrategy
 
-[![Go Version](https://img.shields.io/badge/Go-1.25+-00ADD8?style=flat&logo=go&logoColor=white)](https://go.dev/)
+[![Go Version](https://img.shields.io/badge/Go-1.26+-00ADD8?style=flat&logo=go&logoColor=white)](https://go.dev/)
 [![SvelteKit Version](https://img.shields.io/badge/SvelteKit-5-FF3E00?style=flat&logo=svelte&logoColor=white)](https://kit.svelte.dev/)
 [![Project Version](https://img.shields.io/github/v/release/Thomas-More-Digital-Innovation/2526-DI-004-GoStrategy?color=blue&style=flat)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat)](LICENSE)
@@ -36,7 +36,7 @@ This project aims to provide a robust platform for playing GoStrategy while serv
 ### Prerequisites
 - Docker and Docker Compose
 - Bun (for local frontend development)
-- Go 1.25+ (for local backend development)
+- Go 1.26+ (for local backend development)
 - [just](https://github.com/casey/just) command runner
 - [lefthook](https://github.com/evilmartians/lefthook) Git hooks manager
 
