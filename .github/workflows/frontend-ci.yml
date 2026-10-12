@@ -176,11 +176,8 @@ jobs:
         working-directory: code/frontend
         run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
 
-      - name: Download Build Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: frontend-build
-          path: code/frontend/build
+      - name: Prepare Static Changelog
+        run: mkdir -p code/frontend/static && rm -f code/frontend/static/CHANGELOG.md && cp CHANGELOG.md code/frontend/static/CHANGELOG.md
 
       - name: Run Playwright against ${{ matrix.browser }}
         working-directory: code/frontend
