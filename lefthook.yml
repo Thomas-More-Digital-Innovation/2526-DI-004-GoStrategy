@@ -1,22 +1,38 @@
 pre-commit:
-  commands:
-    fmt:
-      glob: "*.go"
-      run: gofmt -w -s {staged_files}
-      stage_fixed: true
-    lint:
-      glob: "*.go"
-      run: just go lint
-    web-fmt:
-      root: "code/frontend"
-      glob: "*.{js,ts,svelte,json,css,html}"
-      run: pnpm prettier --write {staged_files}
-      stage_fixed: true
-    web-lint:
-      root: "code/frontend"
+  parallel: true
+  jobs:
+    - name: gitleaks
+      tags:
+        - security
+      run: gitleaks protect --verbose --staged
+
+    - name: frontend
+      tags:
+        - frontend
+      root: code/frontend
       glob: "*.{js,ts,svelte}"
-      run: pnpm eslint {staged_files}
-    web-check:
-      root: "code/frontend"
-      glob: "*.{js,ts,svelte}"
-      run: pnpm check
+      group:
+        parallel: false
+        jobs:
+          - name: format
+            glob: "*.{js,ts,svelte,json,css,html}"
+            run: pnpm prettier --write {staged_files}
+            stage_fixed: true
+          - name: lint
+            run: pnpm eslint {staged_files}
+          - name: check
+            run: pnpm check
+
+    - name: backend
+      tags:
+        - backend
+      root: code/backend
+      glob: "*.go"
+      group:
+        parallel: false
+        jobs:
+          - name: fmt
+            run: gofmt -w -s {staged_files}
+            stage_fixed: true
+          - name: lint
+            run: just go lint
