@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.1] - 12-10-2026
+
+### Added
+- **Two Square Rule**: Added game logic enforcing the two square rule common in stratego games.
+
+### Changed
+- **Improve MCTS Speed**: Improved the MCTS Speed by removing slow patterns.
+
+### Security
+- **Vulnerability Audits**: Resolved automated audit security vulnerabilities across backend dependencies.
+
 ## [0.4.0] - 07-10-2026
 
 ### Added
