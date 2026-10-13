@@ -1,5 +1,9 @@
 name: CD
 
+permissions:
+  contents: read
+  packages: write
+
 on:
   push:
     tags:
@@ -11,36 +15,24 @@ on:
         required: false
         default: ""
 
-permissions:
-  contents: read
-  packages: write
+concurrency:
+  group: cd-production
+  cancel-in-progress: true
 
 jobs:
   deploy:
+    name: Deploy Production
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Lowercase repo name and sanitize tag
+      - name: Sanitize tag
         id: prep
         env:
           RAW_INPUT_TAG: ${{ github.event.inputs.tag }}
         run: |
-          echo "repo_lower=${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
           if [ -n "$RAW_INPUT_TAG" ]; then
             TAG="${RAW_INPUT_TAG//\//-}"
           elif [ "${{ github.ref_type }}" = "tag" ]; then
@@ -50,74 +42,30 @@ jobs:
           fi
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
 
-      - name: Build and push Backend
-        uses: docker/build-push-action@v5
+      - name: Build & Deploy to Production VM
+        uses: ./.github/actions/deploy
         with:
-          context: ./code/backend
-          push: true
-          tags: |
-            ghcr.io/${{ steps.prep.outputs.repo_lower }}/backend:${{ steps.prep.outputs.tag }},
-            ghcr.io/${{ steps.prep.outputs.repo_lower }}/backend:latest
-
-      - name: Prepare Static Changelog
-        run:
-          mkdir -p code/frontend/static && rm -f code/frontend/static/CHANGELOG.md &&
-          cp CHANGELOG.md code/frontend/static/CHANGELOG.md
-
-      - name: Build and push Frontend
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./code/frontend/Dockerfile
-          push: true
-          tags: |
-            ghcr.io/${{ steps.prep.outputs.repo_lower }}/frontend:${{ steps.prep.outputs.tag }},
-            ghcr.io/${{ steps.prep.outputs.repo_lower }}/frontend:latest
-          build-args: |
-            VITE_API_BASE=${{ vars.VITE_API_BASE }}
-            VITE_WS_BASE=${{ vars.VITE_WS_BASE }}
-
-      - name: Connect to Tailscale
-        uses: tailscale/github-action@v3
-        with:
-          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
-          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
-          tags: tag:ci
-
-      - name: Copy deployment files
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ vars.SSH_HOST }}
-          username: ${{ vars.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          passphrase: ${{ secrets.SSH_PASSPHRASE }}
-          source: "docker-compose.prod.yml"
-          target: ${{ vars.DEPLOY_PATH }}
-
-      - name: Deploy to VM
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ vars.SSH_HOST }}
-          username: ${{ vars.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          passphrase: ${{ secrets.SSH_PASSPHRASE }}
-          script: |
-            mkdir -p ${{ vars.DEPLOY_PATH }}
-            cd ${{ vars.DEPLOY_PATH }}
-            echo "APP_ENV=${{ vars.APP_ENV }}" > .env
-            echo "ALLOWED_ORIGINS=${{ vars.ALLOWED_ORIGINS }}" >> .env
-            echo "REPO_LOWER=${{ steps.prep.outputs.repo_lower }}" >> .env
-            echo "BACKEND_PORT=${{ vars.BACKEND_PORT }}" >> .env
-            echo "FRONTEND_PORT=${{ vars.FRONTEND_PORT }}" >> .env
-            echo "VITE_API_BASE=${{ vars.VITE_API_BASE }}" >> .env
-            echo "VITE_WS_BASE=${{ vars.VITE_WS_BASE }}" >> .env
-            echo "DB_USER=${{ vars.DB_USER }}" >> .env
-            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-            echo "DB_NAME=${{ vars.DB_NAME }}" >> .env
-            echo "DB_HOST=${{ vars.DB_HOST }}" >> .env
-            echo "DB_PORT=${{ vars.DB_PORT }}" >> .env
-            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
-            echo "TELEMETRY_ALLOWED_IPS=${{ vars.TELEMETRY_ALLOWED_IPS }}" >> .env
-            # Pull and restart
-            docker compose -f docker-compose.prod.yml pull
-            docker compose -f docker-compose.prod.yml up -d
+          tag: ${{ steps.prep.outputs.tag }}
+          push-latest: "true"
+          image-tag: ${{ steps.prep.outputs.tag }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          app-env: ${{ vars.APP_ENV }}
+          allowed-origins: ${{ vars.ALLOWED_ORIGINS }}
+          backend-port: ${{ vars.BACKEND_PORT }}
+          frontend-port: ${{ vars.FRONTEND_PORT }}
+          vite-api-base: ${{ vars.VITE_API_BASE }}
+          vite-ws-base: ${{ vars.VITE_WS_BASE }}
+          db-user: ${{ vars.DB_USER }}
+          db-password: ${{ secrets.DB_PASSWORD }}
+          db-name: ${{ vars.DB_NAME }}
+          db-host: ${{ vars.DB_HOST }}
+          db-port: ${{ vars.DB_PORT }}
+          jwt-secret: ${{ secrets.JWT_SECRET }}
+          telemetry-allowed-ips: ${{ vars.TELEMETRY_ALLOWED_IPS }}
+          ssh-host: ${{ vars.SSH_HOST }}
+          ssh-user: ${{ vars.SSH_USER }}
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          deploy-path: ${{ vars.DEPLOY_PATH }}
+          ts-oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          ts-oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}

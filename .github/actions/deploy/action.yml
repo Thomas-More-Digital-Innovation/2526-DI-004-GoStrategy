@@ -1,0 +1,183 @@
+name: "Deploy Application"
+description: "Builds, packages, and deploys GoStrategy Docker containers to VM over Tailscale and SSH"
+
+inputs:
+  tag:
+    description: "Target container image tag (e.g. latest, staging, v0.3.2)"
+    required: true
+  push-latest:
+    description: "Whether to tag and push :latest image"
+    required: false
+    default: "false"
+  additional-tag:
+    description: "Optional secondary image tag (e.g. git short SHA)"
+    required: false
+    default: ""
+  image-tag:
+    description: "IMAGE_TAG value to write to .env for docker compose"
+    required: false
+    default: ""
+  github-token:
+    description: "GitHub token for GHCR authentication"
+    required: false
+    default: ${{ github.token }}
+  app-env:
+    description: "APP_ENV variable"
+    required: true
+  allowed-origins:
+    description: "ALLOWED_ORIGINS variable"
+    required: true
+  backend-port:
+    description: "BACKEND_PORT variable"
+    required: true
+  frontend-port:
+    description: "FRONTEND_PORT variable"
+    required: true
+  vite-api-base:
+    description: "VITE_API_BASE variable"
+    required: true
+  vite-ws-base:
+    description: "VITE_WS_BASE variable"
+    required: true
+  db-user:
+    description: "DB_USER variable"
+    required: true
+  db-password:
+    description: "DB_PASSWORD secret"
+    required: true
+  db-name:
+    description: "DB_NAME variable"
+    required: true
+  db-host:
+    description: "DB_HOST variable"
+    required: true
+  db-port:
+    description: "DB_PORT variable"
+    required: true
+  jwt-secret:
+    description: "JWT_SECRET secret"
+    required: true
+  telemetry-allowed-ips:
+    description: "TELEMETRY_ALLOWED_IPS variable"
+    required: true
+  ssh-host:
+    description: "SSH target host"
+    required: true
+  ssh-user:
+    description: "SSH user"
+    required: true
+  ssh-private-key:
+    description: "SSH private key secret"
+    required: true
+  ssh-passphrase:
+    description: "SSH key passphrase secret"
+    required: false
+    default: ""
+  deploy-path:
+    description: "Remote deployment path"
+    required: true
+  ts-oauth-client-id:
+    description: "Tailscale OAuth Client ID secret"
+    required: true
+  ts-oauth-secret:
+    description: "Tailscale OAuth Secret"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ inputs.github-token }}
+
+    - name: Lowercase repo name
+      id: prep
+      shell: bash
+      run: |
+        echo "repo_lower=${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
+
+    - name: Build and push Backend
+      uses: docker/build-push-action@v5
+      with:
+        context: ./code/backend
+        push: true
+        tags: |
+          ghcr.io/${{ steps.prep.outputs.repo_lower }}/backend:${{ inputs.tag }}
+          ${{ inputs.push-latest == 'true' && format('ghcr.io/{0}/backend:latest', steps.prep.outputs.repo_lower) || '' }}
+          ${{ inputs.additional-tag != '' && format('ghcr.io/{0}/backend:{1}', steps.prep.outputs.repo_lower, inputs.additional-tag) || '' }}
+
+    - name: Prepare Static Changelog
+      shell: bash
+      run: |
+        mkdir -p code/frontend/static && rm -f code/frontend/static/CHANGELOG.md
+        cp CHANGELOG.md code/frontend/static/CHANGELOG.md
+
+    - name: Build and push Frontend
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./code/frontend/Dockerfile
+        push: true
+        tags: |
+          ghcr.io/${{ steps.prep.outputs.repo_lower }}/frontend:${{ inputs.tag }}
+          ${{ inputs.push-latest == 'true' && format('ghcr.io/{0}/frontend:latest', steps.prep.outputs.repo_lower) || '' }}
+          ${{ inputs.additional-tag != '' && format('ghcr.io/{0}/frontend:{1}', steps.prep.outputs.repo_lower, inputs.additional-tag) || '' }}
+        build-args: |
+          VITE_API_BASE=${{ inputs.vite-api-base }}
+          VITE_WS_BASE=${{ inputs.vite-ws-base }}
+
+    - name: Connect to Tailscale
+      uses: tailscale/github-action@v3
+      with:
+        oauth-client-id: ${{ inputs.ts-oauth-client-id }}
+        oauth-secret: ${{ inputs.ts-oauth-secret }}
+        tags: tag:ci
+
+    - name: Copy deployment files
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ inputs.ssh-host }}
+        username: ${{ inputs.ssh-user }}
+        key: ${{ inputs.ssh-private-key }}
+        passphrase: ${{ inputs.ssh-passphrase }}
+        source: "docker-compose.prod.yml"
+        target: ${{ inputs.deploy-path }}
+
+    - name: Deploy to VM
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ inputs.ssh-host }}
+        username: ${{ inputs.ssh-user }}
+        key: ${{ inputs.ssh-private-key }}
+        passphrase: ${{ inputs.ssh-passphrase }}
+        script: |
+          mkdir -p ${{ inputs.deploy-path }}
+          cd ${{ inputs.deploy-path }}
+          install -m 600 /dev/null .env
+          echo "APP_ENV=${{ inputs.app-env }}" > .env
+          echo "ALLOWED_ORIGINS=${{ inputs.allowed-origins }}" >> .env
+          echo "REPO_LOWER=${{ steps.prep.outputs.repo_lower }}" >> .env
+          echo "IMAGE_TAG=${{ inputs.image-tag || inputs.tag }}" >> .env
+          echo "BACKEND_PORT=${{ inputs.backend-port }}" >> .env
+          echo "FRONTEND_PORT=${{ inputs.frontend-port }}" >> .env
+          echo "VITE_API_BASE=${{ inputs.vite-api-base }}" >> .env
+          echo "VITE_WS_BASE=${{ inputs.vite-ws-base }}" >> .env
+          echo "DB_USER=${{ inputs.db-user }}" >> .env
+          echo "DB_PASSWORD=${{ inputs.db-password }}" >> .env
+          echo "DB_NAME=${{ inputs.db-name }}" >> .env
+          echo "DB_HOST=${{ inputs.db-host }}" >> .env
+          echo "DB_PORT=${{ inputs.db-port }}" >> .env
+          echo "JWT_SECRET=${{ inputs.jwt-secret }}" >> .env
+          echo "TELEMETRY_ALLOWED_IPS=${{ inputs.telemetry-allowed-ips }}" >> .env
+          chmod 600 .env
+          docker compose -f docker-compose.prod.yml pull
+          docker compose -f docker-compose.prod.yml up -d
