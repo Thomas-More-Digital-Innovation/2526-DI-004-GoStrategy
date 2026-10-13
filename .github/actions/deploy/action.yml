@@ -165,7 +165,6 @@ runs:
         JWT_SECRET: ${{ inputs.jwt-secret }}
         TELEMETRY_ALLOWED_IPS: ${{ inputs.telemetry-allowed-ips }}
       run: |
-        install -m 600 /dev/null .env
         cat <<EOF > .env
         APP_ENV=${APP_ENV}
         ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
@@ -183,7 +182,6 @@ runs:
         JWT_SECRET=${JWT_SECRET}
         TELEMETRY_ALLOWED_IPS=${TELEMETRY_ALLOWED_IPS}
         EOF
-        chmod 600 .env
 
     - name: Copy deployment files
       uses: appleboy/scp-action@v0.1.7
