@@ -1,0 +1,64 @@
+name: CD Staging
+
+permissions:
+  contents: read
+  packages: write
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - ".gitignore"
+      - ".github/workflows/codeql.yml"
+      - ".github/workflows/security-audit.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: cd-staging
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy Staging
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get short SHA
+        id: prep
+        run: |
+          echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Build & Deploy to Staging VM
+        uses: ./.github/actions/deploy
+        with:
+          tag: "staging"
+          additional-tag: ${{ steps.prep.outputs.sha_short }}
+          push-latest: "false"
+          image-tag: "staging"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          app-env: ${{ vars.APP_ENV }}
+          allowed-origins: ${{ vars.ALLOWED_ORIGINS }}
+          backend-port: ${{ vars.BACKEND_PORT }}
+          frontend-port: ${{ vars.FRONTEND_PORT }}
+          vite-api-base: ${{ vars.VITE_API_BASE }}
+          vite-ws-base: ${{ vars.VITE_WS_BASE }}
+          db-user: ${{ vars.DB_USER }}
+          db-password: ${{ secrets.DB_PASSWORD }}
+          db-name: ${{ vars.DB_NAME }}
+          db-host: ${{ vars.DB_HOST }}
+          db-port: ${{ vars.DB_PORT }}
+          jwt-secret: ${{ secrets.JWT_SECRET }}
+          telemetry-allowed-ips: ${{ vars.TELEMETRY_ALLOWED_IPS }}
+          ssh-host: ${{ vars.SSH_HOST }}
+          ssh-user: ${{ vars.SSH_USER }}
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          deploy-path: ${{ vars.DEPLOY_PATH }}
+          ts-oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          ts-oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}

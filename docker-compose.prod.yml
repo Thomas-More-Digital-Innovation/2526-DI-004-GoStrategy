@@ -1,6 +1,6 @@
 services:
   backend:
-    image: ghcr.io/${REPO_LOWER}/backend:latest
+    image: ghcr.io/${REPO_LOWER}/backend:${IMAGE_TAG:-latest}
     restart: unless-stopped
     ports:
       - "${BACKEND_PORT}:8080"
@@ -32,7 +32,7 @@ services:
       start_period: 10s
 
   frontend:
-    image: ghcr.io/${REPO_LOWER}/frontend:latest
+    image: ghcr.io/${REPO_LOWER}/frontend:${IMAGE_TAG:-latest}
     restart: unless-stopped
     ports:
       - "${FRONTEND_PORT}:80"
