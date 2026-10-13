@@ -86,9 +86,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3
-
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
@@ -201,14 +198,15 @@ runs:
         key: ${{ inputs.ssh-private-key }}
         passphrase: ${{ inputs.ssh-passphrase }}
         script: |
-          mkdir -p ${{ inputs.deploy-path }}
-          cd ${{ inputs.deploy-path }}
+          bash -e -c '
+          mkdir -p "${{ inputs.deploy-path }}"
+          cd "${{ inputs.deploy-path }}"
           chmod 600 .env
           docker compose -f docker-compose.prod.yml pull
           docker compose -f docker-compose.prod.yml up -d
           echo "Verifying container health..."
           for i in {1..10}; do
-            if docker compose -f docker-compose.prod.yml ps --format '{{.State}}' | grep -Eq 'exited|dead'; then
+            if docker compose -f docker-compose.prod.yml ps --format "{{.State}}" | grep -Eq "exited|dead"; then
               echo "::error::One or more containers failed to start or crashed!"
               docker compose -f docker-compose.prod.yml logs --tail=100
               exit 1
@@ -216,3 +214,4 @@ runs:
             sleep 2
           done
           docker image prune -f
+          '
