@@ -16,6 +16,7 @@ services:
     volumes:
       - ./code/frontend:/app:rw
       - ./CHANGELOG.md:/app/static/CHANGELOG.md:ro
+      - ./docs:/app/static/docs:ro
       - /app/node_modules
       - /app/.svelte-kit
     environment:

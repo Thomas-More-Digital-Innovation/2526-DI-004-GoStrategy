@@ -34,12 +34,13 @@ runs:
         cache: ${{ inputs.install-dependencies == 'true' && 'pnpm' || '' }}
         cache-dependency-path: code/frontend/pnpm-lock.yaml
 
-    - name: Prepare Static Changelog
+    - name: Prepare Static Assets
       if: ${{ inputs.prepare-changelog == 'true' }}
       shell: bash
       run: |
         mkdir -p code/frontend/static
         [ -f CHANGELOG.md ] && cp CHANGELOG.md code/frontend/static/CHANGELOG.md || touch code/frontend/static/CHANGELOG.md
+        [ -d docs ] && rm -rf code/frontend/static/docs && cp -r docs code/frontend/static/docs || true
 
     - name: Install dependencies
       if: ${{ inputs.install-dependencies == 'true' }}

@@ -26,7 +26,7 @@
 </svelte:head>
 
 <div
-	class="min-h-screen flex bg-surface-base/20 relative overflow-hidden"
+	class="min-h-screen flex bg-surface-base/20 relative overflow-x-clip"
 	style:--bg-image="url({backgroundImage()})"
 >
 	<!-- Dynamic Background Layer -->
