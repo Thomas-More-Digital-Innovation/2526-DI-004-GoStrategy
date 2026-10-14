@@ -21,12 +21,14 @@ on:
       - "code/backend/**"
       - "code/frontend/**"
       - ".github/workflows/**"
+      - ".github/actions/**"
   pull_request:
     branches: ["main"]
     paths:
       - "code/backend/**"
       - "code/frontend/**"
       - ".github/workflows/**"
+      - ".github/actions/**"
   schedule:
     - cron: "31 17 * * 2"
 
@@ -48,6 +50,7 @@ jobs:
               - 'code/frontend/**'
             actions:
               - '.github/workflows/**'
+              - '.github/actions/**'
 
       - id: set-matrix
         shell: bash
