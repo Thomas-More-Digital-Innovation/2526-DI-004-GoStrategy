@@ -11,6 +11,9 @@
 		children: Snippet;
 		class?: string;
 		disabledMessage?: string;
+		href?: string;
+		target?: string;
+		rel?: string;
 	}
 
 	let {
@@ -22,7 +25,10 @@
 		onclick,
 		children,
 		class: className = '',
-		disabledMessage
+		disabledMessage,
+		href,
+		target,
+		rel
 	}: Props = $props();
 
 	const shared = `inline-flex items-center justify-center rounded-xl whitespace-nowrap 
@@ -48,25 +54,32 @@
 </script>
 
 <div class="relative group inline-block {className}">
-	<button
-		{type}
-		disabled={disabled || loading}
-		{onclick}
-		class="{shared} {variants[variant]} {sizes[size]} w-full"
-	>
-		{#if loading}
-			<div class="absolute inset-0 flex items-center justify-center">
-				<div
-					class="w-4 h-4 border-2 border-white/20 border-t-current rounded-full animate-spin"
-				></div>
-			</div>
-			<span class="opacity-0">
-				{@render children()}
-			</span>
-		{:else}
+	{#if href}
+		<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+		<a {href} {target} {rel} {onclick} class="{shared} {variants[variant]} {sizes[size]} w-full">
 			{@render children()}
-		{/if}
-	</button>
+		</a>
+	{:else}
+		<button
+			{type}
+			disabled={disabled || loading}
+			{onclick}
+			class="{shared} {variants[variant]} {sizes[size]} w-full"
+		>
+			{#if loading}
+				<div class="absolute inset-0 flex items-center justify-center">
+					<div
+						class="w-4 h-4 border-2 border-white/20 border-t-current rounded-full animate-spin"
+					></div>
+				</div>
+				<span class="opacity-0">
+					{@render children()}
+				</span>
+			{:else}
+				{@render children()}
+			{/if}
+		</button>
+	{/if}
 
 	{#if (disabled || loading) && disabledMessage}
 		<div
