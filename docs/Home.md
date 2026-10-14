@@ -14,14 +14,14 @@ Welcome to the official documentation for **GoStrategy**, an open-source, full-s
 
 ## Core Capabilities
 
-* **Game Engine:** Built in Go with strict game rule validation (including the Two-Square Rule, scout movement, and flag/bomb mechanics).
+* **Game Engine:** Built in Go with strict game rule validation (including all generic stratego rules).
 * **AI Engine & Benchmarking:** Play against Heuristic, Minimax (alpha-beta pruning), and Monte Carlo Tree Search (MCTS) algorithms.
 * **Real-Time Multiplayer:** Concurrency-safe WebSocket hubs supporting low-latency state synchronization and spectator modes.
-* **Custom Board Setups:** Drag-and-drop piece deployment with support for importing and exporting setups to JSON.
+* **Custom Board Setups:** Drag-and-drop piece deployment with support for exporting setups to JSON.
 * **Self-Hostable & Air-Gapped:** Distributed as lightweight multi-stage Docker containers with zero external cloud dependencies.
 
 ---
 
 ## Contributing & Issues
 
-Documentation source files live directly in the main repository inside the `/docs` directory. If you find a typo or want to expand a guide, click the **Edit on GitHub** button on any page or submit a Pull Request.
+Documentation source files live directly in the main repository inside the `/docs` directory. If you find a typo or want to expand a guide, submit a Pull Request. Editing via the GitHub interface is disabled and will be overwritten by the CI/CD pipeline.

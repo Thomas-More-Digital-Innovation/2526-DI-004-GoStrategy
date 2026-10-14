@@ -16,7 +16,7 @@ GoStrategy is architected as an event-driven, decoupled system divided into a Go
                                                     ┌───────────┴───────────┐
                                                     ▼                       ▼
                                               [Rule Engine]          [AI Opponents]
-                                           (Two-Square, Combat)    (Heuristic/MCTS)
+                                        (Checks moves & combat)     (Heuristic/MCTS)
 ```
 
 ---
@@ -38,7 +38,7 @@ GoStrategy is architected as an event-driven, decoupled system divided into a Go
 
 ## 2. Frontend Client (`code/frontend`)
 
-* **Framework:** SvelteKit with Svelte 5 Runes (`$state`, `$derived`, `$props`).
-* **Design & Styling:** Tailwind CSS v4 with bespoke tactical dark theme.
+* **Framework:** SvelteKit with Svelte 5 Runes.
+* **Design & Styling:** Tailwind CSS v4 with custom theme.
 * **State Management:** Reactive state controllers colocated inside feature routes (e.g., `routes/game/[id]/_state/game-session.svelte.ts`).
-* **Runtime:** Distributed as pre-compiled static assets served by Alpine Nginx with SPA route fallback.
+* **Runtime:** Distributed as pre-compiled static assets served by Nginx.

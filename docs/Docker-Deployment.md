@@ -28,6 +28,7 @@ docker compose -f docker-compose.prod.yml up -d
 ```
 
 Once running, access the web client at:
+
 * **Web UI:** `http://localhost:8080` (or your server's public IP / reverse proxy)
 * **Backend Healthcheck:** `http://localhost:8081/health`
 
@@ -55,6 +56,10 @@ If placing GoStrategy behind a reverse proxy with TLS/SSL:
    proxy_set_header Connection "upgrade";
    ```
 3. Set `VITE_API_BASE` and `VITE_WS_BASE` in `.env` to match your domain (e.g., `https://stratego.example.com/api` and `wss://stratego.example.com/api/ws`).
+
+### How I run it on my server:
+
+https://github.com/dotsem/nix-config/blob/943dacadb88cf8c14efffd1a0a47ae39692cb30b/machines/server/battle-bus/nginx.nix#L50-L73
 
 ---
 
