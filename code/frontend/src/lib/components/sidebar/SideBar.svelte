@@ -46,6 +46,25 @@
 		{/each}
 	</nav>
 
+	<div
+		class="px-4 py-2.5 flex items-center justify-between text-[11px] text-white/40 border-t border-white/5 bg-black/10 relative z-10"
+	>
+		<span>v{__VERSION__}</span>
+		{#if __COMMIT_SHA__ !== 'local'}
+			<a
+				href={`https://github.com/${__REPO_NAME__}/commit/${__COMMIT_SHA__}`}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="font-mono text-white/40 hover:text-white transition-colors underline decoration-white/20 hover:decoration-white"
+				title="View live commit on GitHub"
+			>
+				#{__COMMIT_SHA__}
+			</a>
+		{:else}
+			<span class="font-mono text-white/30">#local</span>
+		{/if}
+	</div>
+
 	<div class="group p-4 border-t border-brand-accent/20 bg-black/20 relative z-10">
 		{#if authStore.loading}
 			<Connecting />

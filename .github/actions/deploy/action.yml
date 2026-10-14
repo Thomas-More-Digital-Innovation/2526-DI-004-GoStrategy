@@ -133,6 +133,8 @@ runs:
         build-args: |
           VITE_API_BASE=${{ inputs.vite-api-base }}
           VITE_WS_BASE=${{ inputs.vite-ws-base }}
+          VITE_COMMIT_SHA=${{ github.sha }}
+          VITE_REPO_NAME=${{ github.repository }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
