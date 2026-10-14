@@ -1,7 +1,8 @@
 <script lang="ts">
 	import Button from '$lib/components/ui/Button.svelte';
 	import Card from '$lib/components/ui/Card.svelte';
-	import { Copy, Check, ExternalLink, Terminal } from '@lucide/svelte';
+	import { resolve } from '$app/paths';
+	import { Copy, Check, ExternalLink, Terminal, BookOpen } from '@lucide/svelte';
 
 	let copied = $state(false);
 	const composeCmd = 'docker compose up -d';
@@ -31,7 +32,12 @@
 			</p>
 		</div>
 
-		<div class="flex items-center gap-3 shrink-0">
+		<div class="flex items-center gap-3 shrink-0 flex-wrap">
+			<Button href={resolve('/docs') + '?page=Docker-Deployment'} variant="outline" size="md">
+				<BookOpen class="mr-2 w-3.5 h-3.5" />
+				<span>Documentation</span>
+			</Button>
+
 			<Button
 				href={`https://github.com/${__REPO_NAME__}#running-with-docker-recommended`}
 				target="_blank"

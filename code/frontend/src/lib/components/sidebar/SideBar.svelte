@@ -18,6 +18,7 @@
 		{ name: 'Board Setups', href: resolve('/board-setups') },
 		{ divider: true },
 		{ name: 'Open Source', href: resolve('/opensource') },
+		{ name: 'Documentation', href: resolve('/docs') },
 		{
 			name: 'Github',
 			href: 'https://github.com/Thomas-More-Digital-Innovation/2526-DI-004-GoStrategy',
