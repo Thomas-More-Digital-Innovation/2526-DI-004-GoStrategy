@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.0] - 14-10-2026
+
+### Added
+- **Documentation System**: Added single-source documentation system with interactive reader route (`/docs`), automated GitHub Wiki synchronization, and deployment guides.
+- **Open Source Page**: Introduced dedicated `/opensource` page highlighting license, self-hosting pillars, and system architecture.
+- **Build Metadata in Sidebar**: Display current commit SHA and release version tag in the navigation sidebar.
+- **Staging Deployment Pipeline**: Added automated CD workflow deploying the application stack to the staging VM environment.
+- **CI Test Suite Integration**: Integrated Playwright E2E and Vitest unit testing suites directly into the frontend CI workflow.
+
+### Changed
+- **Card Component Unification**: Centralized visual presentation across screens using the shared `Card` primitive.
+- **Composite Setup Actions**: Refactored frontend and backend CI setup into modular composite GitHub Actions.
+- **Nightly CodeQL Scanning**: Configured advanced security scanning to run nightly across the codebase.
+- **Lefthook Modernization**: Migrated Git pre-commit hooks to the modern jobs pattern and integrated Gitleaks secret scanning.
+
+### Fixed
+- **CI Caching in Security Workflow**: Resolved pnpm cache validation failures when dependencies are not installed.
+- **Docker Shell Execution**: Fixed deployment scripts defaulting to fish shell instead of bash.
+- **Pipeline Permissions**: Resolved pipeline failures caused by file permission mismatches on `.env`.
+
 ## [0.4.1] - 12-10-2026
 
 ### Added
