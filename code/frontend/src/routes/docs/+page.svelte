@@ -116,7 +116,7 @@
 <div class="space-y-8 pb-12">
 	<div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
 		<aside class="lg:col-span-1">
-			<div class="sticky top-6">
+			<div class="sticky top-10">
 				<DocsNav items={navItems} {activeSlug} onSelect={handleSelect} />
 			</div>
 		</aside>
