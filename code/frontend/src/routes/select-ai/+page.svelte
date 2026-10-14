@@ -5,6 +5,7 @@
 	import { games } from '$lib/api/client';
 	import { AIs } from '$lib/data/AI.data';
 	import Button from '$lib/components/ui/Button.svelte';
+	import Card from '$lib/components/ui/Card.svelte';
 	import Alert from '$lib/components/ui/Alert.svelte';
 	import { gamemodes } from '$lib/data/gamemodes.data';
 	import SelectionSummary from '$lib/components/setup/SelectionSummary.svelte';
@@ -108,13 +109,15 @@
 
 	<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 		{#each AIs as ai (ai.id)}
-			<button
-				class="text-left p-6 rounded-2xl border-2 transition-all duration-300 flex items-center gap-6 group relative overflow-hidden {ai1 ===
-					ai.id || ai2 === ai.id
-					? 'border-brand-primary bg-brand-primary/10'
-					: 'border-white/5 bg-surface-elevated/20 hover:border-white/20 hover:bg-white/5'}"
-				onclick={() => selectAi(ai.id)}
+			<Card
+				as="button"
+				padding="md"
 				disabled={creating}
+				onclick={() => selectAi(ai.id)}
+				class="cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center gap-6 group relative overflow-hidden border-2 {ai1 ===
+					ai.id || ai2 === ai.id
+					? 'border-brand-primary! bg-brand-primary/10!'
+					: 'border-white/5 hover:border-white/20 hover:bg-white/5'}"
 			>
 				{#if ai.image}
 					<div class="relative">
@@ -156,7 +159,7 @@
 				{#if (step === 'ai1' && ai1 === ai.id) || (step === 'ai2' && ai2 === ai.id)}
 					<div class="absolute top-0 right-0 w-2 h-full bg-brand-primary"></div>
 				{/if}
-			</button>
+			</Card>
 		{/each}
 	</div>
 

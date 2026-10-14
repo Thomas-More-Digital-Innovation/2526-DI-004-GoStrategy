@@ -3,6 +3,7 @@
 	import { resolve } from '$app/paths';
 	import { authStore } from '$lib/state/auth.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
+	import Card from '$lib/components/ui/Card.svelte';
 	import Alert from '$lib/components/ui/Alert.svelte';
 	import type { GameMode } from '$lib/types/game';
 	import { allGamemodes, gamemodes } from '$lib/data/gamemodes.data';
@@ -49,13 +50,15 @@
 		<!-- Game Mode Selection -->
 		<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 			{#each allGamemodes as gamemode (gamemode.mode)}
-				<button
-					class="text-left cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed rounded-2xl p-6 border-2 transition-all duration-200 {selectedMode.mode ===
-					gamemode.mode
-						? 'border-brand-primary bg-brand-primary/10 scale-[1.02]'
-						: 'border-white/5 bg-surface-elevated/20 hover:border-white/20 hover:bg-white/5'}"
-					onclick={() => (selectedMode = gamemode)}
+				<Card
+					as="button"
+					padding="md"
 					disabled={gamemode.disabled}
+					onclick={() => (selectedMode = gamemode)}
+					class="cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 border-2 {selectedMode.mode ===
+					gamemode.mode
+						? 'border-brand-primary! bg-brand-primary/10! scale-[1.02]'
+						: 'border-white/5 hover:border-white/20 hover:bg-white/5'}"
 				>
 					<div class="text-3xl mb-3">{gamemode.icon}</div>
 					<h3 class="font-bold text-white text-lg tracking-wide uppercase">
@@ -64,7 +67,7 @@
 					<p class="text-white/50 text-xs mt-1 leading-relaxed">
 						{gamemode.desc}
 					</p>
-				</button>
+				</Card>
 			{/each}
 		</div>
 

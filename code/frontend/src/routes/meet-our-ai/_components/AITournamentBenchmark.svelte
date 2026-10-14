@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { AITournamentBenchmark } from '$lib/types/ai';
+	import Card from '$lib/components/ui/Card.svelte';
 
 	let { benchmarks }: { benchmarks: AITournamentBenchmark[] } = $props();
 
@@ -7,7 +8,7 @@
 	const fato = $derived(benchmarks.find((b) => b.aiId === 'fato'));
 </script>
 
-<div class="border border-white/10 bg-surface-elevated/40 rounded-xl overflow-hidden space-y-0">
+<Card padding="none">
 	<div
 		class="p-5 border-b border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
 	>
@@ -109,4 +110,4 @@
 			>Heuristic, Minimax, and MCTS benchmarks will be added once 10k tournament runs finish.</span
 		>
 	</div>
-</div>
+</Card>

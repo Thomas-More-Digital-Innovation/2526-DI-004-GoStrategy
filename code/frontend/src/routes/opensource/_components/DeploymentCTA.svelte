@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Button from '$lib/components/ui/Button.svelte';
+	import Card from '$lib/components/ui/Card.svelte';
 	import { Copy, Check, ExternalLink, Terminal } from '@lucide/svelte';
 
 	let copied = $state(false);
@@ -18,7 +19,7 @@
 	}
 </script>
 
-<section class="border border-brand-primary/30 bg-black/40 rounded-2xl p-6 space-y-4">
+<Card padding="md" class="space-y-4">
 	<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
 		<div class="space-y-1">
 			<h2 class="text-base font-semibold text-white tracking-wide">
@@ -58,4 +59,4 @@
 			{/if}
 		</Button>
 	</div>
-</section>
+</Card>
