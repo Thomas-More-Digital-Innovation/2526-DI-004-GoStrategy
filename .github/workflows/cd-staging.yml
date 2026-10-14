@@ -10,8 +10,8 @@ on:
       - main
     paths:
       - "**"
-      - "docs/**"
       - "!**.md"
+      - "docs/**"
       - "!.gitignore"
       - "!.github/workflows/codeql.yml"
       - "!.github/workflows/security-audit.yml"
