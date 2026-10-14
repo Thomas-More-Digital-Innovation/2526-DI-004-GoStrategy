@@ -30,7 +30,8 @@ on:
       - ".github/workflows/**"
       - ".github/actions/**"
   schedule:
-    - cron: "31 17 * * 2"
+    - cron: "30 2 * * *"
+  workflow_dispatch:
 
 jobs:
   filter:
@@ -56,13 +57,13 @@ jobs:
         shell: bash
         run: |
           MATRIX="[]"
-          if [[ "${{ github.event_name }}" == "schedule" || "${{ steps.filter.outputs.go }}" == "true" ]]; then
+          if [[ "${{ github.event_name }}" == "schedule" || "${{ github.event_name }}" == "workflow_dispatch" || "${{ steps.filter.outputs.go }}" == "true" ]]; then
             MATRIX=$(echo $MATRIX | jq -c '. += [{"language": "go", "build-mode": "autobuild"}]')
           fi
-          if [[ "${{ github.event_name }}" == "schedule" || "${{ steps.filter.outputs.frontend }}" == "true" ]]; then
+          if [[ "${{ github.event_name }}" == "schedule" || "${{ github.event_name }}" == "workflow_dispatch" || "${{ steps.filter.outputs.frontend }}" == "true" ]]; then
             MATRIX=$(echo $MATRIX | jq -c '. += [{"language": "javascript-typescript", "build-mode": "none"}]')
           fi
-          if [[ "${{ github.event_name }}" == "schedule" || "${{ steps.filter.outputs.actions }}" == "true" ]]; then
+          if [[ "${{ github.event_name }}" == "schedule" || "${{ github.event_name }}" == "workflow_dispatch" || "${{ steps.filter.outputs.actions }}" == "true" ]]; then
             MATRIX=$(echo $MATRIX | jq -c '. += [{"language": "actions", "build-mode": "none"}]')
           fi
           echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
@@ -112,12 +113,7 @@ jobs:
         with:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
-          # If you wish to specify custom queries, you can do so here or in a config file.
-          # By default, queries listed here will override any specified in a config file.
-          # Prefix the list here with "+" to use these queries and those in the config file.
-
-          # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
-          # queries: security-extended,security-and-quality
+          queries: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && 'security-and-quality' || 'security-extended' }}
 
           # If the analyze step fails for one of the languages you are analyzing with
           # "We were unable to automatically build your code", modify the matrix above
