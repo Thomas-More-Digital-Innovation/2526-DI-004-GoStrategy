@@ -1,0 +1,25 @@
+name: Setup backend
+description: Setup backend for GoStrategy
+
+inputs:
+  go-version:
+    description: Go version to use (falls back to code/backend/go.mod if omitted)
+    required: false
+    default: ""
+
+outputs:
+  go-version:
+    description: The installed Go version
+    value: ${{ steps.setup-go.outputs.go-version }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Go
+      id: setup-go
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ inputs.go-version }}
+        go-version-file: ${{ inputs.go-version == '' && 'code/backend/go.mod' || '' }}
+        cache: true
+        cache-dependency-path: code/backend/go.sum

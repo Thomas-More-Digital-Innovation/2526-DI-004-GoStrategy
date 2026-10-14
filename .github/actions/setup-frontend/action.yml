@@ -1,0 +1,48 @@
+name: Setup frontend
+description: Sets up node & pnpm
+
+inputs:
+  node-version:
+    description: Node version to use
+    required: false
+    default: "22.x"
+  pnpm-version:
+    description: pnpm version to use
+    required: false
+    default: "11"
+  install-dependencies:
+    description: Install dependencies
+    required: false
+    default: "true"
+  prepare-changelog:
+    description: Prepare static CHANGELOG.md in code/frontend/static
+    required: false
+    default: "false"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: ${{ inputs.pnpm-version }}
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: "pnpm"
+        cache-dependency-path: code/frontend/pnpm-lock.yaml
+
+    - name: Prepare Static Changelog
+      if: ${{ inputs.prepare-changelog == 'true' }}
+      shell: bash
+      run: |
+        mkdir -p code/frontend/static
+        [ -f CHANGELOG.md ] && cp CHANGELOG.md code/frontend/static/CHANGELOG.md || touch code/frontend/static/CHANGELOG.md
+
+    - name: Install dependencies
+      if: ${{ inputs.install-dependencies == 'true' }}
+      working-directory: code/frontend
+      run: pnpm install --frozen-lockfile
+      shell: bash
