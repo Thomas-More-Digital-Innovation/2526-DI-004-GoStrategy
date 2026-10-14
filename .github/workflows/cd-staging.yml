@@ -8,12 +8,13 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      - "**.md"
+    paths:
+      - "**"
       - "docs/**"
-      - ".gitignore"
-      - ".github/workflows/codeql.yml"
-      - ".github/workflows/security-audit.yml"
+      - "!**.md"
+      - "!.gitignore"
+      - "!.github/workflows/codeql.yml"
+      - "!.github/workflows/security-audit.yml"
   workflow_dispatch:
 
 concurrency:
