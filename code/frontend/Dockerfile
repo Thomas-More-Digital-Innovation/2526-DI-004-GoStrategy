@@ -10,8 +10,10 @@ WORKDIR /app
 RUN apk add --no-cache gcompat
 COPY --from=deps /app/node_modules ./node_modules
 COPY code/frontend/ .
-# Copy the changelog into the static folder so SvelteKit sees it during build
+
+# Copy the changelog and documentation into the static folder so SvelteKit sees it during build
 COPY CHANGELOG.md ./static/CHANGELOG.md
+COPY docs ./static/docs
 ARG VITE_API_BASE
 ARG VITE_WS_BASE
 ARG VITE_COMMIT_SHA
