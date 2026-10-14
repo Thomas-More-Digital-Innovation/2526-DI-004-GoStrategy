@@ -114,13 +114,6 @@
 </svelte:head>
 
 <div class="space-y-8 pb-12">
-	<header class="space-y-2 border-b border-white/10 pb-6">
-		<h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight">Documentation</h1>
-		<p class="text-sm sm:text-base text-white/60">
-			Single source of truth guides for self-hosting, configuration, and engine architecture.
-		</p>
-	</header>
-
 	<div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
 		<aside class="lg:col-span-1">
 			<div class="sticky top-6">
