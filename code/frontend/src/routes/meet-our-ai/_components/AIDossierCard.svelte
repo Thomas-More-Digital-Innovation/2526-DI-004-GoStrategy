@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { AIDossier } from '$lib/types/ai';
 	import Button from '$lib/components/ui/Button.svelte';
+	import Card from '$lib/components/ui/Card.svelte';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 
@@ -9,7 +10,7 @@
 	let expanded = $state(false);
 </script>
 
-<div class="border border-white/10 bg-surface-elevated/40 rounded-xl p-5 space-y-4">
+<Card padding="md" class="space-y-4">
 	<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
 		<div class="flex items-start gap-4">
 			<img
@@ -121,4 +122,4 @@
 			{expanded ? 'Hide specs' : 'Show technical specs'}
 		</button>
 	</div>
-</div>
+</Card>

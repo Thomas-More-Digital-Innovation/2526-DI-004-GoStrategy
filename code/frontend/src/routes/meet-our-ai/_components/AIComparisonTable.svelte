@@ -1,10 +1,11 @@
 <script lang="ts">
 	import type { AIDossier } from '$lib/types/ai';
+	import Card from '$lib/components/ui/Card.svelte';
 
 	let { dossiers }: { dossiers: AIDossier[] } = $props();
 </script>
 
-<div class="border border-white/10 bg-surface-elevated/40 rounded-xl overflow-hidden">
+<Card padding="none">
 	<div class="p-5 border-b border-white/10">
 		<h2 class="text-base font-bold text-white uppercase tracking-wider">Engine Specifications</h2>
 	</div>
@@ -50,4 +51,4 @@
 			</tbody>
 		</table>
 	</div>
-</div>
+</Card>

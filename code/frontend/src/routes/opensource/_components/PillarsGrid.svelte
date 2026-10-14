@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Network, Bot, Database, Code } from '@lucide/svelte';
+	import Card from '$lib/components/ui/Card.svelte';
 
 	const pillars = [
 		{
@@ -37,7 +38,7 @@
 	<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 		{#each pillars as pillar (pillar.title)}
 			{@const Icon = pillar.icon}
-			<div class="border border-white/10 bg-black/30 rounded-xl p-5 flex flex-col justify-between">
+			<Card padding="md" class="flex flex-col justify-between">
 				<div>
 					<div class="flex items-center gap-3">
 						<div
@@ -51,7 +52,7 @@
 						{pillar.description}
 					</p>
 				</div>
-			</div>
+			</Card>
 		{/each}
 	</div>
 </section>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Cpu, ExternalLink } from '@lucide/svelte';
+	import Card from '$lib/components/ui/Card.svelte';
 
 	const stackLayers = [
 		{
@@ -40,7 +41,7 @@
 
 	<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
 		{#each stackLayers as layer (layer.name)}
-			<div class="border border-white/10 bg-black/30 rounded-xl p-4 flex flex-col justify-between">
+			<Card padding="md" class="flex flex-col justify-between">
 				<div>
 					<div class="flex items-center justify-between">
 						<span class="text-sm font-semibold text-white/90">{layer.name}</span>
@@ -60,7 +61,7 @@
 						{layer.description}
 					</p>
 				</div>
-			</div>
+			</Card>
 		{/each}
 	</div>
 </section>
