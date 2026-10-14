@@ -31,7 +31,7 @@ runs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
-        cache: "pnpm"
+        cache: ${{ inputs.install-dependencies == 'true' && 'pnpm' || '' }}
         cache-dependency-path: code/frontend/pnpm-lock.yaml
 
     - name: Prepare Static Changelog
