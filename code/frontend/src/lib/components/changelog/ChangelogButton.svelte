@@ -1,7 +1,3 @@
-<script lang="ts" module>
-	declare const __VERSION__: string;
-</script>
-
 <script lang="ts">
 	import Changelog from './Changelog.svelte';
 	import { fade, scale } from 'svelte/transition';
@@ -67,7 +63,23 @@
 			</div>
 
 			<div class="border-t border-white/10 p-4 text-center text-xs text-white/50">
-				GoStrategy v{__VERSION__} — THOMAS MORE DIGITAL INNOVATION
+				GoStrategy v{__VERSION__}
+				{#if __COMMIT_SHA__ !== 'local'}
+					(
+					<a
+						href={`https://github.com/${__REPO_NAME__}/commit/${__COMMIT_SHA__}`}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="font-mono underline decoration-white/20 hover:decoration-white hover:text-white transition-colors"
+						title="View commit on GitHub"
+					>
+						#{__COMMIT_SHA__}
+					</a>
+					)
+				{:else}
+					(<span class="font-mono text-white/30">#local</span>)
+				{/if}
+				— THOMAS MORE DIGITAL INNOVATION
 				<br />
 				Made by Sem Van Broekhoven
 			</div>
