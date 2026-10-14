@@ -4,7 +4,7 @@ This document outlines the planned improvements and future directions for the Go
 
 ---
 
-## v0.5.0 - Replays
+## Replays
 *Focus: Storing and viewing past games.*
 
 ### Replay System
@@ -14,7 +14,7 @@ This document outlines the planned improvements and future directions for the Go
 
 ---
 
-## v0.6.0 - Social & PvP
+## Social & PvP
 *Focus: Connecting players and building a competitive community.*
 
 ### Social Features
@@ -25,7 +25,7 @@ This document outlines the planned improvements and future directions for the Go
 
 ---
 
-## v0.7.0 - Mobile & PWA
+## Mobile & PWA
 *Focus: Making GoStrategy available everywhere.*
 
 ### Mobile Experience
