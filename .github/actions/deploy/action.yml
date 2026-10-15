@@ -87,10 +87,10 @@ runs:
   using: "composite"
   steps:
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+      uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069
 
     - name: Log in to GitHub Container Registry
-      uses: docker/login-action@v3
+      uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
@@ -103,7 +103,7 @@ runs:
         echo "repo_lower=${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
 
     - name: Build and push Backend
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc
       with:
         context: ./code/backend
         push: true
@@ -121,7 +121,7 @@ runs:
         [ -f CHANGELOG.md ] && cp CHANGELOG.md code/frontend/static/CHANGELOG.md || touch code/frontend/static/CHANGELOG.md
 
     - name: Build and push Frontend
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc
       with:
         context: .
         file: ./code/frontend/Dockerfile
@@ -139,7 +139,7 @@ runs:
         cache-to: type=gha,mode=max
 
     - name: Connect to Tailscale
-      uses: tailscale/github-action@v3
+      uses: tailscale/github-action@d1b6cd204f8dceda5b3eaad7f1f767be390056cd
       with:
         oauth-client-id: ${{ inputs.ts-oauth-client-id }}
         oauth-secret: ${{ inputs.ts-oauth-secret }}
@@ -183,7 +183,7 @@ runs:
         EOF
 
     - name: Copy deployment files
-      uses: appleboy/scp-action@v0.1.7
+      uses: appleboy/scp-action@ff85246acaad7bdce478db94a363cd2bf7c90345
       with:
         host: ${{ inputs.ssh-host }}
         username: ${{ inputs.ssh-user }}
@@ -193,7 +193,7 @@ runs:
         target: ${{ inputs.deploy-path }}
 
     - name: Deploy to VM
-      uses: appleboy/ssh-action@v1.0.3
+      uses: appleboy/ssh-action@0ff4204d59e8e51228ff73bce53f80d53301dee2
       with:
         host: ${{ inputs.ssh-host }}
         username: ${{ inputs.ssh-user }}
