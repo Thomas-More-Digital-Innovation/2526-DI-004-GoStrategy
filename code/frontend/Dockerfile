@@ -29,4 +29,5 @@ COPY --from=build /app/build /usr/share/nginx/html
 # Fix nginx config path for root context
 COPY code/frontend/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 8080
+USER nginx
 CMD ["/usr/sbin/nginx", "-g", "daemon off;"]
