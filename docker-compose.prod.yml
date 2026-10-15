@@ -35,7 +35,7 @@ services:
     image: ghcr.io/${REPO_LOWER}/frontend:${IMAGE_TAG:-latest}
     restart: unless-stopped
     ports:
-      - "${FRONTEND_PORT}:80"
+      - "${FRONTEND_PORT}:8080"
     depends_on:
       - backend
     deploy:
