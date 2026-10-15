@@ -2,6 +2,7 @@ package game
 
 import (
 	"digital-innovation/gostrategy/internal/logging"
+	// nosemgrep: go.lang.security.audit.crypto.math_random.math-random-used
 	"math/rand"
 	"time"
 )
