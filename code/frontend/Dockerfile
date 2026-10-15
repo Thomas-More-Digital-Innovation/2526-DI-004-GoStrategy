@@ -24,10 +24,9 @@ ENV VITE_COMMIT_SHA=$VITE_COMMIT_SHA
 ENV VITE_REPO_NAME=$VITE_REPO_NAME
 RUN bun run build
 
-FROM nginx:stable-alpine AS runtime
+FROM nginxinc/nginx-unprivileged:1.27-alpine AS runtime
 COPY --from=build /app/build /usr/share/nginx/html
 # Fix nginx config path for root context
 COPY code/frontend/nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
-USER non-root
+EXPOSE 8080
 CMD ["/usr/sbin/nginx", "-g", "daemon off;"]
