@@ -17,7 +17,7 @@ runs:
   steps:
     - name: Set up Go
       id: setup-go
-      uses: actions/setup-go@v5
+      uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
       with:
         go-version: ${{ inputs.go-version }}
         go-version-file: ${{ inputs.go-version == '' && 'code/backend/go.mod' || '' }}

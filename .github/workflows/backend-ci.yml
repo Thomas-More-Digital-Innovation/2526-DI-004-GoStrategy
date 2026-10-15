@@ -33,14 +33,14 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - name: Set up Go
         id: setup-backend
         uses: ./.github/actions/setup-backend
 
       - name: Cache golangci-lint analysis results
-        uses: actions/cache@v4
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: ~/.cache/golangci-lint
           key: ${{ runner.os }}-golangci-cache-${{ hashFiles('code/backend/go.sum') }}
@@ -59,7 +59,7 @@ jobs:
 
       - name: Cache golangci-lint binary
         id: cache-golangci-lint
-        uses: actions/cache@v4
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: ~/go/bin/golangci-lint
           key: ${{ runner.os }}-go-${{ steps.setup-backend.outputs.go-version }}-golangci-lint-v2.12.2
@@ -94,7 +94,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - name: Set up Go
         id: setup-backend
@@ -116,7 +116,7 @@ jobs:
 
       - name: Cache gotestsum binary
         id: cache-gotestsum
-        uses: actions/cache@v4
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: ~/go/bin/gotestsum
           key: ${{ runner.os }}-go-${{ steps.setup-backend.outputs.go-version }}-gotestsum-v1.13.0
@@ -135,7 +135,7 @@ jobs:
           $(go env GOPATH)/bin/gotestsum --format pkgname-and-test-fails --junitfile unit-tests.xml -- -race ./... -coverprofile=coverage.out -covermode=atomic
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5
         with:
           file: code/backend/coverage.out
           flags: backend
@@ -144,14 +144,14 @@ jobs:
 
       - name: Upload coverage report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: backend-coverage-report
           path: code/backend/coverage.out
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: backend-test-results
           path: code/backend/unit-tests.xml
@@ -159,7 +159,7 @@ jobs:
       # --- Test & Coverage Analysis ---
       - name: check test coverage
         id: coverage
-        uses: vladopajic/go-test-coverage@v2
+        uses: vladopajic/go-test-coverage@f484eec846448c97c777a26f8b58c5a69a327e12
         continue-on-error: true
         with:
           config: ./.github/.testcoverage.yml
@@ -197,7 +197,7 @@ jobs:
 
       - name: post coverage report
         if: always() && steps.find_pr.outputs.pull_request_id
-        uses: thollander/actions-comment-pull-request@v3
+        uses: thollander/actions-comment-pull-request@24bffb9b452ba05a4f3f77933840a6a841d1b32b
         continue-on-error: true
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
