@@ -12,18 +12,21 @@
 	import { ExternalLink } from '@lucide/svelte';
 
 	const navItems = [
-		{ name: 'Command Center', href: resolve('/') },
-		{ name: 'Meet our AI', href: resolve('/meet-our-ai') },
-		{ name: 'Profile', href: resolve('/profile') },
-		{ name: 'Board Setups', href: resolve('/board-setups') },
-		{ divider: true },
-		{ name: 'Open Source', href: resolve('/opensource') },
-		{ name: 'Documentation', href: resolve('/docs') },
-		{
-			name: 'Github',
-			href: 'https://github.com/Thomas-More-Digital-Innovation/2526-DI-004-GoStrategy',
-			external: true
-		}
+		[
+			{ name: 'Command Center', href: resolve('/') },
+			{ name: 'Meet our AI', href: resolve('/meet-our-ai') },
+			{ name: 'Profile', href: resolve('/profile') },
+			{ name: 'Board Setups', href: resolve('/board-setups') }
+		],
+		[
+			{ name: 'Open Source', href: resolve('/opensource') },
+			{ name: 'Documentation', href: resolve('/docs') },
+			{
+				name: 'Github',
+				href: 'https://github.com/Thomas-More-Digital-Innovation/2526-DI-004-GoStrategy',
+				external: true
+			}
+		]
 	];
 
 	onMount(async () => {
@@ -42,31 +45,33 @@
 	</div>
 
 	<!-- eslint-disable svelte/no-navigation-without-resolve -->
-	<nav class="flex-1 space-y-1 px-4 relative z-10">
-		{#each navItems as item, idx (item.name ?? idx)}
-			{#if item.divider}
-				<div class="border-t border-white/10 my-8"></div>
-			{:else if item.external}
-				<a
-					href={item.href}
-					target="_blank"
-					rel="noopener noreferrer"
-					class="flex items-center gap-1 px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 group text-white/50 hover:bg-white/5 hover:text-white"
-				>
-					<span>{item.name}</span>
-					<ExternalLink class="w-3.5 h-3.5" />
-				</a>
-			{:else}
-				<a
-					href={item.href}
-					class="flex items-center gap-1 px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 group {item.href ===
-					page.url.pathname
-						? 'bg-brand-primary/10 text-brand-primary'
-						: 'text-white/50 hover:bg-white/5 hover:text-white'}"
-				>
-					<span>{item.name}</span>
-				</a>
-			{/if}
+	<nav class="flex flex-1 flex-col justify-between px-4 relative z-10">
+		{#each navItems as group, idx (idx)}
+			<div class="mb-2">
+				{#each group as item (item.name ?? idx)}
+					{#if item.external}
+						<a
+							href={item.href}
+							target="_blank"
+							rel="noopener noreferrer"
+							class="flex items-center gap-1 px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 group text-white/50 hover:bg-white/5 hover:text-white"
+						>
+							<span>{item.name}</span>
+							<ExternalLink class="w-3.5 h-3.5" />
+						</a>
+					{:else}
+						<a
+							href={item.href}
+							class="flex items-center gap-1 px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 group {item.href ===
+							page.url.pathname
+								? 'bg-brand-primary/10 text-brand-primary'
+								: 'text-white/50 hover:bg-white/5 hover:text-white'}"
+						>
+							<span>{item.name}</span>
+						</a>
+					{/if}
+				{/each}
+			</div>
 		{/each}
 	</nav>
 	<!-- eslint-enable svelte/no-navigation-without-resolve -->
