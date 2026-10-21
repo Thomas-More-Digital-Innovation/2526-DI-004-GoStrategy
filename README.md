@@ -35,7 +35,7 @@ This project aims to provide a robust platform for playing GoStrategy while serv
 
 ### Prerequisites
 - Docker and Docker Compose
-- Bun (for local frontend development)
+- Node.js 22+ and pnpm (for local frontend development)
 - Go 1.26+ (for local backend development)
 - [just](https://github.com/casey/just) command runner
 - [lefthook](https://github.com/evilmartians/lefthook) Git hooks manager
@@ -67,12 +67,6 @@ go run cmd/server/main.go
 ```
 
 **Frontend:**
-```bash
-cd code/frontend
-bun install
-bun run dev
-```
-or use pnpm:
 ```bash
 cd code/frontend
 pnpm install

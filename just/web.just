@@ -4,10 +4,6 @@ set working-directory := '../code/frontend'
 install:
     pnpm install
 
-# update lockfiles (pnpm and bun)
-update-locks:
-    pnpm install && bun install
-
 # run Svelte type checking
 check:
     pnpm check

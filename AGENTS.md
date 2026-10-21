@@ -43,7 +43,7 @@ Before writing any code, stop at the first rung that holds:
 - **Clean Code:** Zero dead code, unused imports, or magic numbers (use named constants or enums).
 
 ### 1.4 Development & Tooling Guardrails
-- **Package Managers:** Frontend strictly uses `pnpm` or `bun`. Never run `npm` or `yarn`.
+- **Package Managers:** Frontend strictly uses `pnpm`. Never run `npm`, `yarn`, or `bun`.
 - **Pre-commit Automation:** Enforced via `lefthook` (runs `gofmt` and `just go lint`).
 - **AI Tooling Constraints:**
   - AI assistants must **never** run `git commit` or `git push`.
@@ -170,7 +170,6 @@ code/frontend/src/
 | Command | Description |
 | :--- | :--- |
 | `just web install` | Install frontend dependencies (`pnpm install`) |
-| `just web update-locks` | Update and sync lockfiles (`pnpm install && bun install`) |
 | `just web check` | Run `svelte-check` type checking against `tsconfig.json` |
 | `just web lint` | Alias to `check` |
 | `just web dev` | Run Vite development server (`pnpm dev`) |
