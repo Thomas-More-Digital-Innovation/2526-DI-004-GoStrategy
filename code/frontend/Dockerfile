@@ -1,13 +1,13 @@
-FROM oven/bun:1-alpine AS deps
+FROM node:22.14-alpine AS deps
 WORKDIR /app
-COPY code/frontend/package.json code/frontend/bun.lock* ./
-RUN apk add --no-cache gcompat
+RUN corepack enable && corepack prepare pnpm@11.26.0 --activate
+COPY code/frontend/package.json code/frontend/pnpm-lock.yaml code/frontend/pnpm-workspace.yaml* ./
 ENV NODE_ENV=development
-RUN bun install --frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
-FROM oven/bun:1-alpine AS build
+FROM node:22.14-alpine AS build
 WORKDIR /app
-RUN apk add --no-cache gcompat
+RUN corepack enable && corepack prepare pnpm@11.26.0 --activate
 COPY --from=deps /app/node_modules ./node_modules
 COPY code/frontend/ .
 
@@ -22,7 +22,7 @@ ENV VITE_API_BASE=$VITE_API_BASE
 ENV VITE_WS_BASE=$VITE_WS_BASE
 ENV VITE_COMMIT_SHA=$VITE_COMMIT_SHA
 ENV VITE_REPO_NAME=$VITE_REPO_NAME
-RUN bun run build
+RUN pnpm build
 
 FROM nginxinc/nginx-unprivileged:1.29-alpine AS runtime
 COPY --from=build /app/build /usr/share/nginx/html

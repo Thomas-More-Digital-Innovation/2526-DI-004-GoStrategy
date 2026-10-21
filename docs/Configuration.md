@@ -33,7 +33,7 @@ All GoStrategy services are configured via environment variables. Copy `.env.tem
 
 ### Frontend Build Variables
 
-These variables are consumed during frontend compilation (`bun run build` or Vite dev):
+These variables are consumed during frontend compilation (`pnpm build` or Vite dev):
 
 | Variable | Default | Description |
 | :--- | :--- | :--- |
