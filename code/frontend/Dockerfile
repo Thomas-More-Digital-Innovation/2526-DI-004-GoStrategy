@@ -1,11 +1,11 @@
-FROM node:22.14-alpine AS deps
+FROM node:22.23.4-alpine AS deps
 WORKDIR /app
 RUN corepack enable && corepack prepare pnpm@11.26.0 --activate
 COPY code/frontend/package.json code/frontend/pnpm-lock.yaml code/frontend/pnpm-workspace.yaml* ./
 ENV NODE_ENV=development
 RUN pnpm install --frozen-lockfile
 
-FROM node:22.14-alpine AS build
+FROM node:22.23.4-alpine AS build
 WORKDIR /app
 RUN corepack enable && corepack prepare pnpm@11.26.0 --activate
 COPY --from=deps /app/node_modules ./node_modules
