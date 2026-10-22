@@ -4,16 +4,17 @@ on:
   push:
     branches: [main, develop]
     paths-ignore:
-      - '**/*.md'
+      - "**/*.md"
   pull_request:
     branches: [main, develop]
     paths-ignore:
-      - '**/*.md'
+      - "**/*.md"
 
 permissions:
   contents: read
   actions: read
   pull-requests: read
+  security-events: write
 
 jobs:
   gitleaks:
@@ -46,3 +47,26 @@ jobs:
         with:
           name: semgrep-report
           path: semgrep.sarif
+
+  trivy:
+    name: Trivy (Vulnerability Scanner)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Run Trivy FS Scanner
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
+        with:
+          scan-type: "fs"
+          scan-ref: "."
+          ignore-unfixed: true
+          format: "sarif"
+          output: "trivy-results.sarif"
+          severity: "CRITICAL,HIGH"
+
+      - name: Upload Trivy SARIF report
+        uses: github/codeql-action/upload-sarif@d208ec71e39ae46397cbf6569bef8439b9aab974 # v3
+        if: always() && hashFiles('trivy-results.sarif') != ''
+        with:
+          sarif_file: "trivy-results.sarif"
+          category: "trivy-fs"
