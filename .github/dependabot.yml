@@ -27,8 +27,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/code/frontend"
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: "daily"
       time: "04:00"
       timezone: "UTC"
     target-branch: "main"
@@ -95,8 +94,7 @@ updates:
       - "/code/backend"
       - "/code/frontend"
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: "daily"
       time: "04:00"
       timezone: "UTC"
     target-branch: "main"

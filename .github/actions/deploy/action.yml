@@ -138,6 +138,24 @@ runs:
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
+    - name: Scan Backend image with Trivy
+      uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
+      with:
+        image-ref: ghcr.io/${{ steps.prep.outputs.repo_lower }}/backend:${{ inputs.tag }}
+        format: "table"
+        exit-code: "1"
+        ignore-unfixed: true
+        severity: "CRITICAL"
+
+    - name: Scan Frontend image with Trivy
+      uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
+      with:
+        image-ref: ghcr.io/${{ steps.prep.outputs.repo_lower }}/frontend:${{ inputs.tag }}
+        format: "table"
+        exit-code: "1"
+        ignore-unfixed: true
+        severity: "CRITICAL"
+
     - name: Connect to Tailscale
       uses: tailscale/github-action@d1b6cd204f8dceda5b3eaad7f1f767be390056cd
       with:
