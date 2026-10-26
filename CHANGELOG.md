@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.0] - 26-10-2026
+
+### Changed
+- **SvelteKit 3 Upgrade**: Upgraded `@sveltejs/kit` to 3.0.0 alongside core Svelte ecosystem dependency updates.
+- **Structured Logging (`slog`)**: Migrated standard library `log` calls across the backend to Go's structured `log/slog` logging framework.
+- **Dependency & Base Image Updates**: Upgraded Node Docker base image to 26.11-alpine and Nginx unprivileged image to 1.30-alpine, and bumped tooling versions including ESLint (10.13.0), Vitest (5.0.5), and Playwright (1.64.1).
+- **Security Workflow Optimization**: Improved CI security analysis workflow rollout.
+
+### Fixed
+- **Corepack Availability**: Resolved Corepack unavailability on Node 26 base container images.
+
+## [0.5.1] - 22-10-2026
+
+### Added
+- **Dependabot Configuration**: Added automated dependency update configuration for Docker, Go backend, and frontend dependencies.
+- **Security Workflow**: Integrated automated security analysis workflow into CI pipeline.
+
+### Changed
+- **Remove Bun Runtime**: Refactored frontend workflow to completely remove Bun from the codebase in favor of PNPM.
+- **Dependency Updates**: Bumped Vite to 8.3.4, Node to 22.23.4, along with dependency group updates across Docker, Go, Svelte, and tooling ecosystems.
+
+### Fixed
+- **Nginx Non-Root User**: Fixed missing non-root user execution issue on the Nginx Alpine container image.
+
 ## [0.5.0] - 14-10-2026
 
 ### Added
