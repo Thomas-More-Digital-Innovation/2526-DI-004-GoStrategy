@@ -212,7 +212,14 @@ export class GameStore {
 		this.currentHistoryIndex = index;
 
 		const historyItem = this.history[index];
-		if (this.boardState) {
+		if (!this.boardState) {
+			this.boardState = {
+				board: historyItem.boardState,
+				width: 10,
+				height: 10,
+				lastMove: historyItem.move
+			};
+		} else {
 			this.boardState.board = historyItem.boardState;
 			this.lastMove = historyItem.move;
 		}

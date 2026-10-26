@@ -121,3 +121,21 @@ export interface UserStats {
 	total_moves: number;
 	avg_game_duration_seconds: number;
 }
+
+export interface GameRecord {
+	id: string;
+	player1_user_id: number | null;
+	player2_user_id: number | null;
+	winner_id: number | null;
+	game_type: string;
+	initial_state?: string;
+	created_at: string;
+	finished_at: string | null;
+}
+
+export interface GameHistoryResponse {
+	gameId: string;
+	initialState: (PieceData | null)[][];
+	moves: HistoricalMove[];
+	winnerId: number | null;
+}
