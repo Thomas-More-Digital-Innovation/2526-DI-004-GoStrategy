@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Network, Bot, Database, Code } from '@lucide/svelte';
-	import Card from '$lib/components/ui/Card.svelte';
+	import Card from '#lib/components/ui/Card.svelte';
 
 	const pillars = [
 		{

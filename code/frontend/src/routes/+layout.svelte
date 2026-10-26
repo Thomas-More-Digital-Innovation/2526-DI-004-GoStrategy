@@ -1,14 +1,14 @@
 <script lang="ts">
 	import './layout.css';
 	import { page } from '$app/state';
-	import logo from '$lib/assets/favicon.png';
-	import baseBg from '$lib/assets/background.webp';
-	import profileBg from '$lib/assets/background-profile.webp';
-	import boardBg from '$lib/assets/background-board-setup.webp';
-	import EarlyAccessDisclaimer from '$lib/components/EarlyAccessDisclaimer.svelte';
-	import SideBar from '$lib/components/sidebar/SideBar.svelte';
-	import Toaster from '$lib/components/ui/Toaster.svelte';
-	import SmallScreenMessage from '$lib/components/SmallScreenMessage.svelte';
+	import logo from '#lib/assets/favicon.png';
+	import baseBg from '#lib/assets/background.webp';
+	import profileBg from '#lib/assets/background-profile.webp';
+	import boardBg from '#lib/assets/background-board-setup.webp';
+	import EarlyAccessDisclaimer from '#lib/components/EarlyAccessDisclaimer.svelte';
+	import SideBar from '#lib/components/sidebar/SideBar.svelte';
+	import Toaster from '#lib/components/ui/Toaster.svelte';
+	import SmallScreenMessage from '#lib/components/SmallScreenMessage.svelte';
 
 	let { children } = $props();
 

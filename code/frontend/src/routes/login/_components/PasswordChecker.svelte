@@ -3,7 +3,7 @@
 		validatePasswordInput,
 		getPasswordStrengthScore,
 		isPasswordStrong
-	} from '$lib/utils/authValidation';
+	} from '#lib/utils/authValidation.js';
 	import { Check, X } from '@lucide/svelte';
 
 	interface Props {

@@ -1,6 +1,6 @@
-import type { GameInfo, User, UserStats } from '$lib/types/game';
-import type { BoardSetup, ExportedBoardSetup } from '$lib/types/board-setup';
-import { parseApiMessage } from '$lib/utils/api';
+import type { GameInfo, User, UserStats } from '#lib/types/game.js';
+import type { BoardSetup, ExportedBoardSetup } from '#lib/types/board-setup.js';
+import { parseApiMessage } from '#lib/utils/api.js';
 
 interface ApiError extends Error {
 	type?: string;

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { ArrowLeft, ArrowRight } from '@lucide/svelte';
-	import Card from '$lib/components/ui/Card.svelte';
+	import Card from '#lib/components/ui/Card.svelte';
 
 	let {
 		html,

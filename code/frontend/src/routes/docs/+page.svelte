@@ -71,7 +71,7 @@
 	function handleSelect(slug: string) {
 		const targetSlug = slug.replace(/\.md$/, '');
 		// eslint-disable-next-line svelte/no-navigation-without-resolve
-		goto(`${resolve('/docs')}?page=${targetSlug}`, { keepFocus: true, noScroll: false });
+		goto(`${resolve('docs')}?page=${targetSlug}`);
 	}
 
 	function handleContentClick(event: MouseEvent) {

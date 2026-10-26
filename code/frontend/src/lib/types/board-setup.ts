@@ -1,8 +1,8 @@
-const blueIcons = import.meta.glob('$lib/assets/pieces/blue/*.webp', {
+const blueIcons = import.meta.glob('#lib/assets/pieces/blue/*.webp', {
 	eager: true,
 	import: 'default'
 });
-const redIcons = import.meta.glob('$lib/assets/pieces/red/*.webp', {
+const redIcons = import.meta.glob('#lib/assets/pieces/red/*.webp', {
 	eager: true,
 	import: 'default'
 });

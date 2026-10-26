@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import flankUrl from '$lib/assets/patterns/tactical-flank.svg';
-	import pincerUrl from '$lib/assets/patterns/tactical-pincer.svg';
-	import infiltrateUrl from '$lib/assets/patterns/tactical-infiltrate.svg';
-	import blitzUrl from '$lib/assets/patterns/tactical-blitz.svg';
+	import flankUrl from '#lib/assets/patterns/tactical-flank.svg';
+	import pincerUrl from '#lib/assets/patterns/tactical-pincer.svg';
+	import infiltrateUrl from '#lib/assets/patterns/tactical-infiltrate.svg';
+	import blitzUrl from '#lib/assets/patterns/tactical-blitz.svg';
 
 	export type TacticalVariant = 'mixed' | 'random' | 'flank' | 'pincer' | 'infiltrate' | 'blitz';
 

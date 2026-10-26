@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { HistoricalMove } from '$lib/types/game';
+	import type { HistoricalMove } from '#lib/types/game.js';
 
-	import { BOARD_CONFIG } from '$lib/data/board.data';
+	import { BOARD_CONFIG } from '#lib/data/board.data.js';
 	import MoveArrow from './MoveArrow.svelte';
 	import CombatIndicator from './CombatIndicator.svelte';
 	import MoveHighlight from './MoveHighlight.svelte';

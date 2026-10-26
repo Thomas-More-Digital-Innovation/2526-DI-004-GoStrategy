@@ -1,4 +1,4 @@
-import type { Position } from '$lib/types/game';
+import type { Position } from '#lib/types/game.js';
 
 const WS_BASE = import.meta.env.VITE_WS_BASE || 'ws://localhost:8080';
 

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { Piece as PieceType } from '$lib/types/game';
-	import { PIECE_INVENTORY, type PieceInfo } from '$lib/types/board-setup';
+	import type { Piece as PieceType } from '#lib/types/game.js';
+	import { PIECE_INVENTORY, type PieceInfo } from '#lib/types/board-setup.js';
 
 	interface Props {
 		piece: PieceType | null;

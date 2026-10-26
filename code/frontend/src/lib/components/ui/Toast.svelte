@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { fly, fade } from 'svelte/transition';
-	import type { ToastType } from '$lib/state/toast.svelte';
-	import { toastStore } from '$lib/state/toast.svelte';
+	import type { ToastType } from '#lib/state/toast.svelte.js';
+	import { toastStore } from '#lib/state/toast.svelte.js';
 
 	interface Props {
 		id: string;

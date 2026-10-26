@@ -1,7 +1,7 @@
-import { GameSocket } from '$lib/api/websocket';
-import { games as gamesApi } from '$lib/api/client';
-import { toastStore } from '$lib/state/toast.svelte';
-import { serverStore } from '$lib/state/server.svelte';
+import { GameSocket } from '#lib/api/websocket.js';
+import { games as gamesApi } from '#lib/api/client.js';
+import { toastStore } from '#lib/state/toast.svelte.js';
+import { serverStore } from '#lib/state/server.svelte.js';
 
 export class GameConnectionManager {
 	socket = new GameSocket();

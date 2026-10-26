@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Button from '$lib/components/ui/Button.svelte';
-	import Title from '$lib/components/Title.svelte';
+	import Button from '#lib/components/ui/Button.svelte';
+	import Title from '#lib/components/Title.svelte';
 	import { Save } from '@lucide/svelte';
 	import { useGameSession } from '../_state/context';
 

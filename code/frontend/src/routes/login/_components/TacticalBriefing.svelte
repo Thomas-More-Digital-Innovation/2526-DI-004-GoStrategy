@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Title from '$lib/components/Title.svelte';
-	import TacticalPattern from '$lib/components/TacticalPattern.svelte';
+	import Title from '#lib/components/Title.svelte';
+	import TacticalPattern from '#lib/components/TacticalPattern.svelte';
 	import Commander from './Commander.svelte';
 
 	let { isBlueCommander = $bindable(true) } = $props();

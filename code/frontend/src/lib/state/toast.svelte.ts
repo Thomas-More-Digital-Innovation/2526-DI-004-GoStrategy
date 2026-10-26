@@ -1,4 +1,4 @@
-import { parseApiMessage } from '$lib/utils/api';
+import { parseApiMessage } from '#lib/utils/api.js';
 
 export type ToastType = 'info' | 'success' | 'warning' | 'error';
 

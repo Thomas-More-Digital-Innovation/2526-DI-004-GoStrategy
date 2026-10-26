@@ -1,5 +1,5 @@
-import type { Position, BoardState } from '$lib/types/game';
-import type { GameSocket } from '$lib/api/websocket';
+import type { Position, BoardState } from '#lib/types/game.js';
+import type { GameSocket } from '#lib/api/websocket.js';
 
 export function handlePieceCellClick(
 	x: number,

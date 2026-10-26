@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { aiDossiers, tournamentBenchmarks } from '$lib/data/ai-intel.data';
+	import { aiDossiers, tournamentBenchmarks } from '#lib/data/ai-intel.data.js';
 	import AIDossierCard from './_components/AIDossierCard.svelte';
 	import AIComparisonTable from './_components/AIComparisonTable.svelte';
 	import AITournamentBenchmark from './_components/AITournamentBenchmark.svelte';
-	import Tabs from '$lib/components/ui/Tabs.svelte';
+	import Tabs from '#lib/components/ui/Tabs.svelte';
 
 	type ViewMode = 'dossiers' | 'matrix' | 'benchmarks';
 	let activeView = $state<ViewMode>('dossiers');

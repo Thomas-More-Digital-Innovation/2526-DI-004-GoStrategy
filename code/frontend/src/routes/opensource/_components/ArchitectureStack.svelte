@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Cpu, ExternalLink } from '@lucide/svelte';
-	import Card from '$lib/components/ui/Card.svelte';
+	import Card from '#lib/components/ui/Card.svelte';
 
 	const stackLayers = [
 		{

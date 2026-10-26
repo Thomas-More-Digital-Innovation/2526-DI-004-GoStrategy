@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { authStore } from '$lib/state/auth.svelte';
-	import { toastStore } from '$lib/state/toast.svelte';
-	import Button from '$lib/components/ui/Button.svelte';
-	import Input from '$lib/components/ui/Input.svelte';
+	import { authStore } from '#lib/state/auth.svelte.js';
+	import { toastStore } from '#lib/state/toast.svelte.js';
+	import Button from '#lib/components/ui/Button.svelte';
+	import Input from '#lib/components/ui/Input.svelte';
 	import TacticalBriefing from './_components/TacticalBriefing.svelte';
 	import PasswordChecker from './_components/PasswordChecker.svelte';
 	import { User, Lock } from '@lucide/svelte';

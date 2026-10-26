@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PIECE_INVENTORY } from '$lib/types/board-setup';
+	import { PIECE_INVENTORY } from '#lib/types/board-setup.js';
 	import Card from '../ui/Card.svelte';
 
 	interface Props {

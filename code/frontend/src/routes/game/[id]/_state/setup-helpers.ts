@@ -1,5 +1,5 @@
-import type { GameMode } from '$lib/types/game';
-import { gamemodes } from '$lib/data/gamemodes.data';
+import type { GameMode } from '#lib/types/game.js';
+import { gamemodes } from '#lib/data/gamemodes.data.js';
 
 export function getDisabledRows(
 	isSetup: boolean,

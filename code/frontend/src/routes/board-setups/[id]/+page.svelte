@@ -3,15 +3,15 @@
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import SetupEditor from '$lib/components/setup/SetupEditor.svelte';
-	import BoardSetupMetaForm from '$lib/components/setup/BoardSetupMetaForm.svelte';
-	import Loading from '$lib/components/ui/Loading.svelte';
-	import { boardSetups } from '$lib/api/client';
-	import Card from '$lib/components/ui/Card.svelte';
-	import Button from '$lib/components/ui/Button.svelte';
-	import { toastStore } from '$lib/state/toast.svelte';
-	import type { BoardSetup } from '$lib/types/board-setup';
-	import { exportSetupAsJson } from '$lib/utils/board-binary';
+	import SetupEditor from '#lib/components/setup/SetupEditor.svelte';
+	import BoardSetupMetaForm from '#lib/components/setup/BoardSetupMetaForm.svelte';
+	import Loading from '#lib/components/ui/Loading.svelte';
+	import { boardSetups } from '#lib/api/client.js';
+	import Card from '#lib/components/ui/Card.svelte';
+	import Button from '#lib/components/ui/Button.svelte';
+	import { toastStore } from '#lib/state/toast.svelte.js';
+	import type { BoardSetup } from '#lib/types/board-setup.js';
+	import { exportSetupAsJson } from '#lib/utils/board-binary.js';
 
 	let id = $derived(Number(page.params.id));
 	let setup = $state<BoardSetup | null>(null);
@@ -51,7 +51,7 @@
 				setup_data: setupData,
 				is_default: isDefault
 			});
-			goto(resolve('/board-setups'));
+			goto(resolve('board-setups'));
 		} catch (e) {
 			toastStore.handleApiMessage(e, 'Failed to update setup');
 			saving = false;
@@ -90,7 +90,8 @@
 	{:else if loadError && !setup}
 		<Card class="text-center py-12">
 			<p class="text-brand-secondary">{loadError}</p>
-			<Button variant="ghost" class="mt-4" onclick={() => goto(resolve('/board-setups'))}
+
+			<Button variant="ghost" class="mt-4" onclick={() => goto(resolve('board-setups'))}
 				>Back to List</Button
 			>
 		</Card>
@@ -107,7 +108,7 @@
 			<SetupEditor
 				initialSetup={setup.setup_data}
 				onSave={handleSave}
-				onCancel={() => goto(resolve('/board-setups'))}
+				onCancel={() => goto(resolve('board-setups'))}
 			/>
 		{/if}
 	{/if}

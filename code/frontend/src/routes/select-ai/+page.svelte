@@ -2,13 +2,13 @@
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { games } from '$lib/api/client';
-	import { AIs } from '$lib/data/AI.data';
-	import Button from '$lib/components/ui/Button.svelte';
-	import Card from '$lib/components/ui/Card.svelte';
-	import Alert from '$lib/components/ui/Alert.svelte';
-	import { gamemodes } from '$lib/data/gamemodes.data';
-	import SelectionSummary from '$lib/components/setup/SelectionSummary.svelte';
+	import { games } from '#lib/api/client.js';
+	import { AIs } from '#lib/data/AI.data.js';
+	import Button from '#lib/components/ui/Button.svelte';
+	import Card from '#lib/components/ui/Card.svelte';
+	import Alert from '#lib/components/ui/Alert.svelte';
+	import { gamemodes } from '#lib/data/gamemodes.data.js';
+	import SelectionSummary from '#lib/components/setup/SelectionSummary.svelte';
 	import { onMount } from 'svelte';
 
 	const gameMode = gamemodes.fromString(page.url.searchParams.get('mode') || 'human_vs_ai');
@@ -40,7 +40,7 @@
 		error = '';
 		try {
 			const info = await games.create(gameMode.mode, ai1, ai2);
-			goto(resolve(`/game/${info.gameId}?mode=${gameMode.mode}`));
+			goto(resolve(`game/${info.gameId}?mode=${gameMode.mode}`));
 		} catch (e) {
 			error = e instanceof Error ? e.message : 'Failed to create game';
 			creating = false;

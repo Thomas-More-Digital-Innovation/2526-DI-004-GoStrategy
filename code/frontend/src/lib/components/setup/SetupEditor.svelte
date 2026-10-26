@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { PIECE_INVENTORY } from '$lib/types/board-setup';
-	import type { Piece as PieceType, Position } from '$lib/types/game';
-	import { decodeSetup, encodeSetup, exportSetupAsJson } from '$lib/utils/board-binary';
+	import { PIECE_INVENTORY } from '#lib/types/board-setup.js';
+	import type { Piece as PieceType, Position } from '#lib/types/game.js';
+	import { decodeSetup, encodeSetup, exportSetupAsJson } from '#lib/utils/board-binary.js';
 	import Board from '../game/Board.svelte';
 	import Button from '../ui/Button.svelte';
 	import SetupInventory from './SetupInventory.svelte';

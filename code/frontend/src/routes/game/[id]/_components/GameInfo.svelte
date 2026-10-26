@@ -1,8 +1,8 @@
 <script lang="ts">
-	import Card from '$lib/components/ui/Card.svelte';
-	import type { GameMode, GameState } from '$lib/types/game';
-	import { gamemodes } from '$lib/data/gamemodes.data';
-	import { AIs } from '$lib/data/AI.data';
+	import Card from '#lib/components/ui/Card.svelte';
+	import type { GameMode, GameState } from '#lib/types/game.js';
+	import { gamemodes } from '#lib/data/gamemodes.data.js';
+	import { AIs } from '#lib/data/AI.data.js';
 	import { useGameSession } from '../_state/context';
 
 	interface Props {

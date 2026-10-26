@@ -1,5 +1,5 @@
 <script lang="ts">
-	import background from '$lib/assets/background.webp';
+	import background from '#lib/assets/background.webp';
 	let screenWidth = window.innerWidth;
 
 	function handleResize() {
