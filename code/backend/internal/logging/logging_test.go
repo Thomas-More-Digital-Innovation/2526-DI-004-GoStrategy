@@ -1,21 +1,15 @@
 package logging
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"log/slog"
 	"testing"
-)
 
-func TestGetCallerLocation(t *testing.T) {
-	// depth 1 should be this function
-	loc := getCallerLocation(1)
-	if loc == "" || loc == "???:0" {
-		t.Errorf("Expected valid location, got %q", loc)
-	}
-	// It should contain logging_test.go
-	if !contains(loc, "logging_test.go") {
-		t.Errorf("Expected location to contain logging_test.go, got %q", loc)
-	}
-}
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+)
 
 func TestSanitize(t *testing.T) {
 	tests := []struct {
@@ -25,17 +19,25 @@ func TestSanitize(t *testing.T) {
 		{"normal string", "normal string"},
 		{"  trimmed  ", "trimmed"},
 		{"string with\nnewline", "string with newline"},
+		{"string with\rreturn", "string with return"},
 		{"string with\x00null", "string with null"},
-		{"\x1b[31mcolor codes\x1b[0m", "[31mcolor codes [0m"}, // control chars replaced by spaces, then trimmed
+		{"\x1b[31mcolor codes\x1b[0m", "[31mcolor codes [0m"},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.input, func(t *testing.T) {
-			if got := sanitize(tt.input); got != tt.want {
-				t.Errorf("sanitize(%q) = %q, want %q", tt.input, got, tt.want)
-			}
+			assert.Equal(t, tt.want, sanitize(tt.input))
 		})
 	}
+}
+
+func TestCleanTag(t *testing.T) {
+	assert.Equal(t, "game", CleanTag(TagGame))
+	assert.Equal(t, "auth", CleanTag(TagAuth))
+	assert.Equal(t, "web", CleanTag(TagWeb))
+	assert.Equal(t, "security", CleanTag(TagSecurity))
+	assert.Equal(t, "custom", CleanTag("[ CUSTOM ]"))
+	assert.Equal(t, "general", CleanTag(""))
 }
 
 func TestFormatUser(t *testing.T) {
@@ -52,16 +54,57 @@ func TestFormatUser(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.username, func(t *testing.T) {
-			if got := FormatUser(tt.username, tt.userID); got != tt.want {
-				t.Errorf("FormatUser(%q, %d) = %q, want %q", tt.username, tt.userID, got, tt.want)
-			}
+			assert.Equal(t, tt.want, FormatUser(tt.username, tt.userID))
 		})
 	}
 }
 
-func TestLoggingFunctions(_ *testing.T) {
-	// These tests just call the functions to ensure they don't panic unexpectedly
-	// and to get coverage. We can't easily verify the output without mocking log.
+func TestStructuredJSONOutput(t *testing.T) {
+	var buf bytes.Buffer
+	t.Setenv("LOG_FORMAT", "json")
+	t.Setenv("LOG_LEVEL", "debug")
+	initLogger(&buf)
+	defer initLogger(nil)
+
+	UserLoggedIn("testadmin", 42)
+
+	var entry map[string]any
+	err := json.Unmarshal(buf.Bytes(), &entry)
+	require.NoError(t, err)
+
+	assert.Equal(t, "INFO", entry["level"])
+	assert.Equal(t, "user logged in", entry["msg"])
+	assert.Equal(t, "auth", entry["component"])
+	assert.Equal(t, "testadmin", entry["user"])
+	assert.Equal(t, float64(42), entry["user_id"])
+
+	// Check caller source attribution
+	source, ok := entry["source"].(map[string]any)
+	require.True(t, ok)
+	assert.Contains(t, source["function"], "TestStructuredJSONOutput")
+	assert.Equal(t, "logging_test.go", source["file"])
+}
+
+func TestLogLevelFiltering(t *testing.T) {
+	var buf bytes.Buffer
+	initLogger(&buf)
+	defer initLogger(nil)
+
+	SetLogLevel(slog.LevelInfo)
+	Debug(TagGame, "should not appear")
+	assert.Empty(t, buf.String())
+
+	SetLogLevel(slog.LevelDebug)
+	Debug(TagGame, "should appear %s", "now")
+	assert.Contains(t, buf.String(), "should appear now")
+	assert.Contains(t, buf.String(), "game")
+}
+
+func TestLoggingFunctions(t *testing.T) {
+	var buf bytes.Buffer
+	initLogger(&buf)
+	defer initLogger(nil)
+	SetLogLevel(slog.LevelDebug)
 
 	err := fmt.Errorf("test error")
 
@@ -75,50 +118,54 @@ func TestLoggingFunctions(_ *testing.T) {
 	ConnectionError("game1", "testuser", 1, err)
 	ConnectionClosed("game1", "testuser", 1)
 
-	Error("message", err)
-	ErrorWithUser("message", "testuser", 1, err)
-	ErrorWith2Users("message", "user1", 1, "user2", 2, err)
-	ErrorWithIP("message", "127.0.0.1", err)
+	Error("generic error", err)
+	ErrorWithUser("user error", "testuser", 1, err)
+	ErrorWith2Users("2 users error", "user1", 1, "user2", 2, err)
+	ErrorWithIP("ip error", "127.0.0.1", err)
 
-	SecurityWarning("message", "details", "testuser", 1)
-	SecurityWarningWithIP("message", "details", "127.0.0.1")
+	SecurityWarning("warning", "bad origin", "testuser", 1)
+	SecurityWarningWithIP("warning ip", "details", "127.0.0.1")
 
+	Info("general info", "key1", "val1", "key2", 123)
+	Warn("general warn", "key1", "val1")
 	LogRaw("raw message")
+
+	out := buf.String()
+	assert.Contains(t, out, "user registered")
+	assert.Contains(t, out, "game started")
+	assert.Contains(t, out, "generic error")
+	assert.Contains(t, out, "bad origin")
+	assert.Contains(t, out, "general info")
+	assert.Contains(t, out, "raw message")
 }
 
 func TestFatal(t *testing.T) {
 	defer func() {
-		if r := recover(); r == nil {
-			t.Errorf("Fatal did not panic")
-		}
+		r := recover()
+		assert.NotNil(t, r, "Fatal should panic")
 	}()
 	Fatal("fatal message", fmt.Errorf("fatal error"))
 }
 
 func TestFatalf(t *testing.T) {
 	defer func() {
-		if r := recover(); r == nil {
-			t.Errorf("Fatalf did not panic")
-		}
+		r := recover()
+		assert.NotNil(t, r, "Fatalf should panic")
 	}()
 	Fatalf("fatal message %s", "formatted")
 }
 
-func TestDebug(t *testing.T) {
-	t.Setenv("GOSTRATEGY_DEBUG", "true")
-	Debug("TAG", "debug message %s", "val")
-	DebugWithUser("TAG", "user", 1, "debug message %s", "val")
+func TestDebugWithUser(t *testing.T) {
+	var buf bytes.Buffer
+	initLogger(&buf)
+	defer initLogger(nil)
+	SetLogLevel(slog.LevelDebug)
 
-	t.Setenv("GOSTRATEGY_DEBUG", "false")
-	Debug("TAG", "debug message %s", "val")
-	DebugWithUser("TAG", "user", 1, "debug message %s", "val")
+	DebugWithUser(TagWeb, "player1", 10, "state update %d", 42)
+	assert.Contains(t, buf.String(), "state update 42")
+	assert.Contains(t, buf.String(), "player1")
 }
 
-func contains(s, substr string) bool {
-	for i := 0; i <= len(s)-len(substr); i++ {
-		if s[i:i+len(substr)] == substr {
-			return true
-		}
-	}
-	return false
+func TestGetLogger(t *testing.T) {
+	assert.NotNil(t, GetLogger())
 }

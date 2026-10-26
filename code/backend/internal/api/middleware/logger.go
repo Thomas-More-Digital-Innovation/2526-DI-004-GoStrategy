@@ -5,7 +5,6 @@ import (
 	"digital-innovation/gostrategy/internal/auth"
 	"digital-innovation/gostrategy/internal/logging"
 	"digital-innovation/gostrategy/internal/utils"
-	"encoding/json"
 	"strings"
 	"time"
 
@@ -30,7 +29,7 @@ func maskSensitiveParams(query string) string {
 	return strings.Join(params, "&")
 }
 
-// JSONLoggerMiddleware logs requests in JSON format
+// JSONLoggerMiddleware logs requests in structured format
 func JSONLoggerMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		start := time.Now()
@@ -52,19 +51,14 @@ func JSONLoggerMiddleware() gin.HandlerFunc {
 		user := auth.GetCurrentUser(c)
 		username, userID := utils.TryGetUser(user)
 
-		logData := map[string]any{
-			"time":    time.Now().Format(time.RFC3339),
-			"latency": time.Since(start).String(),
-			"ip":      c.ClientIP(),
-			methodKey: c.Request.Method,
-			pathKey:   fullPath,
-			"status":  c.Writer.Status(),
-			"user":    logging.FormatUser(username, userID),
-			"agent":   c.Request.UserAgent(),
-		}
-
-		if jsonBytes, err := json.Marshal(logData); err == nil {
-			logging.LogRaw(string(jsonBytes))
-		}
+		logging.Info("http request",
+			"latency", time.Since(start).String(),
+			"ip", c.ClientIP(),
+			methodKey, c.Request.Method,
+			pathKey, fullPath,
+			"status", c.Writer.Status(),
+			"user", logging.FormatUser(username, userID),
+			"agent", c.Request.UserAgent(),
+		)
 	}
 }

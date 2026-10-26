@@ -1,14 +1,23 @@
 package logging
 
 import (
+	"context"
 	"fmt"
-	"log"
+	"io"
+	"log/slog"
+	"os"
 	"regexp"
 	"runtime"
 	"strings"
+	"time"
 )
 
-var nonPrintableRegex = regexp.MustCompile(`[[:cntrl:]]`)
+var (
+	nonPrintableRegex = regexp.MustCompile(`[[:cntrl:]]`)
+	ansiRegex         = regexp.MustCompile(`\x1b\[[0-9;]*[a-zA-Z]`)
+	logLevelVar       = new(slog.LevelVar)
+	logger            *slog.Logger
+)
 
 const (
 	colorReset  = "\033[0m"
@@ -22,7 +31,7 @@ const (
 	colorBold   = "\033[1m"
 )
 
-// Log tags for different components
+// Legacy log tags maintained for caller compatibility
 const (
 	TagDebug    = colorBold + colorBlack + colorGreen + "[ DEBUG ]" + colorReset
 	TagAuth     = colorBold + colorWhite + colorBlue + "[  AUTH  ]" + colorReset
@@ -37,39 +46,81 @@ const (
 const GuestUser = "Guest"
 
 func init() {
-	// Only set time flags, we will handle the location manually for custom ordering
-	log.SetFlags(log.LstdFlags)
+	initLogger(os.Stdout)
 }
 
-// sanitize removes control characters to prevent log injection and terminal manipulation
+func initLogger(w io.Writer) {
+	level := slog.LevelInfo
+	envLevel := strings.ToLower(os.Getenv("LOG_LEVEL"))
+	debugEnv := strings.ToLower(os.Getenv("GOSTRATEGY_DEBUG"))
+
+	switch {
+	case envLevel == "debug" || debugEnv == "true":
+		level = slog.LevelDebug
+	case envLevel == "warn":
+		level = slog.LevelWarn
+	case envLevel == "error":
+		level = slog.LevelError
+	}
+	logLevelVar.Set(level)
+
+	opts := &slog.HandlerOptions{
+		Level:     logLevelVar,
+		AddSource: true,
+		ReplaceAttr: func(_ []string, a slog.Attr) slog.Attr {
+			if a.Key == slog.SourceKey {
+				if src, ok := a.Value.Any().(*slog.Source); ok && src != nil {
+					idx := strings.LastIndex(src.File, "/")
+					if idx != -1 {
+						src.File = src.File[idx+1:]
+					}
+				}
+			}
+			return a
+		},
+	}
+
+	var handler slog.Handler
+	if strings.ToLower(os.Getenv("LOG_FORMAT")) == "json" || strings.ToLower(os.Getenv("GIN_MODE")) == "release" {
+		handler = slog.NewJSONHandler(w, opts)
+	} else {
+		handler = slog.NewTextHandler(w, opts)
+	}
+
+	logger = slog.New(handler)
+	slog.SetDefault(logger)
+}
+
+// sanitize strips control characters and CRLF to prevent log injection
 func sanitize(s string) string {
+	s = strings.ReplaceAll(s, "\n", " ")
+	s = strings.ReplaceAll(s, "\r", " ")
 	s = nonPrintableRegex.ReplaceAllString(s, " ")
 	return strings.TrimSpace(s)
 }
 
-// logOutput logs a message with a tag and location
-// This custom logging impl is necessary to put the location after the tag
-// It is used by all other log functions
-// It is not intended to be used directly
-func logOutput(tag string, message string) {
-	location := getCallerLocation(3)
-	log.Printf("%s %s: %s", tag, location, message)
+// CleanTag extracts a clean lowercase component string from legacy tags
+func CleanTag(tag string) string {
+	tag = ansiRegex.ReplaceAllString(tag, "")
+	s := sanitize(tag)
+	s = strings.Trim(s, "[] ")
+	if s == "" {
+		return "general"
+	}
+	return strings.ToLower(s)
 }
 
-// getCallerLocation returns the file:line of the caller at the specified depth
-func getCallerLocation(depth int) string {
-	_, file, line, ok := runtime.Caller(depth)
-	if !ok {
-		return "???:0"
+// logRecord dispatches a structured record at the true caller depth
+func logRecord(level slog.Level, depth int, msg string, attrs ...slog.Attr) {
+	ctx := context.Background()
+	if !logger.Enabled(ctx, level) {
+		return
 	}
-	short := file
-	for i := len(file) - 1; i > 0; i-- {
-		if file[i] == '/' {
-			short = file[i+1:]
-			break
-		}
-	}
-	return fmt.Sprintf("%s:%d", short, line)
+	var pcs [1]uintptr
+	runtime.Callers(depth, pcs[:])
+	r := slog.NewRecord(time.Now(), level, sanitize(msg), pcs[0])
+	r.AddAttrs(attrs...)
+	_ = logger.Handler().Handle(ctx, r)
 }
 
 // FormatUser returns a standardized user identifier for logs
@@ -80,103 +131,52 @@ func FormatUser(username string, userID int) string {
 	return fmt.Sprintf("%s (ID: %d)", sanitize(username), userID)
 }
 
-// --------------------------------------------------------------------------------
-// Auth
-// --------------------------------------------------------------------------------
-
-// UserRegistered logs a registration event
-func UserRegistered(username string, userID int) {
-	logOutput(TagAuth, fmt.Sprintf("User registered: %s", FormatUser(username, userID)))
+// GetLogger returns the active structured slog logger
+func GetLogger() *slog.Logger {
+	return logger
 }
 
-// UserLoggedIn logs a login event
-func UserLoggedIn(username string, userID int) {
-	logOutput(TagAuth, fmt.Sprintf("User logged in: %s", FormatUser(username, userID)))
+// SetLogLevel sets the active logging level dynamically
+func SetLogLevel(level slog.Level) {
+	logLevelVar.Set(level)
 }
 
-// --------------------------------------------------------------------------------
-// Game
-// --------------------------------------------------------------------------------
-
-// GameStarted logs a game started event
-func GameStarted(gameID, gameType string, username string, userID int) {
-	logOutput(TagGame, fmt.Sprintf("Game started: %s (Type: %s) by %s", sanitize(gameID), sanitize(gameType), FormatUser(username, userID)))
+// Info logs a general structured informational message
+func Info(msg string, args ...any) {
+	logRecord(slog.LevelInfo, 3, msg, argsToAttrs(args)...)
 }
 
-// GameFinished logs a game finished event
-func GameFinished(gameID string, winner, loser string, rounds int) {
-	logOutput(TagGame, fmt.Sprintf("Game finished: %s | Winner: %s | Loser: %s | Rounds: %d", sanitize(gameID), sanitize(winner), sanitize(loser), rounds))
+// Warn logs a general structured warning message
+func Warn(msg string, args ...any) {
+	logRecord(slog.LevelWarn, 3, msg, argsToAttrs(args)...)
 }
 
-// GameAborted logs a game aborted event
-func GameAborted(gameID string, reason string, username string, userID int) {
-	logOutput(TagGame, fmt.Sprintf("Game aborted: %s (Reason: %s) by %s", sanitize(gameID), sanitize(reason), FormatUser(username, userID)))
-}
-
-// --------------------------------------------------------------------------------
-// Connections
-// --------------------------------------------------------------------------------
-
-// ConnectionError logs a connection error event
-func ConnectionError(gameID string, username string, userID int, err error) {
-	logOutput(TagWeb, fmt.Sprintf("WebSocket error [User: %s] in game %s: %v", FormatUser(username, userID), sanitize(gameID), err))
-}
-
-// ConnectionClosed logs a connection closed event
-func ConnectionClosed(gameID string, username string, userID int) {
-	logOutput(TagWeb, fmt.Sprintf("Connection closed: Game: %s, User: %s", sanitize(gameID), FormatUser(username, userID)))
-}
-
-// --------------------------------------------------------------------------------
-// Errors & Security
-// --------------------------------------------------------------------------------
-
-// Error logs a generic error event
-func Error(message string, err error) {
-	logOutput(TagError, fmt.Sprintf("%s: %v", sanitize(message), err))
-}
-
-// ErrorWithUser logs an error that includes a user in the message
-func ErrorWithUser(message string, username string, userID int, err error) {
-	logOutput(TagError, fmt.Sprintf("%s [User: %s]: %v", sanitize(message), FormatUser(username, userID), err))
-}
-
-// ErrorWith2Users logs an error that includes two users in the message.
-// Use this when 2 users are involved in the error.
-func ErrorWith2Users(message string, username1 string, userID1 int, username2 string, userID2 int, err error) {
-	logOutput(TagError, fmt.Sprintf("%s [User 1: %s, User 2: %s]: %v", sanitize(message), FormatUser(username1, userID1), FormatUser(username2, userID2), err))
-}
-
-// ErrorWithIP logs an error that includes an IP address in the message
-func ErrorWithIP(message string, ip string, err error) {
-	logOutput(TagError, fmt.Sprintf("%s [IP: %s]: %v", sanitize(message), sanitize(ip), err))
-}
-
-// SecurityWarning logs a security warning that includes a user in the message
-func SecurityWarning(message string, details string, username string, userID int) {
-	logOutput(TagSecurity, fmt.Sprintf("%s [User: %s] | Details: %s", sanitize(message), FormatUser(username, userID), sanitize(details)))
-}
-
-// SecurityWarningWithIP logs a security warning that includes an IP address in the message
-func SecurityWarningWithIP(message string, details string, ip string) {
-	logOutput(TagSecurity, fmt.Sprintf("%s [IP: %s] | Details: %s", sanitize(message), sanitize(ip), sanitize(details)))
+func argsToAttrs(args []any) []slog.Attr {
+	attrs := make([]slog.Attr, 0, len(args)/2)
+	for i := 0; i < len(args); i += 2 {
+		if i+1 < len(args) {
+			attrs = append(attrs, slog.Any(fmt.Sprint(args[i]), args[i+1]))
+		} else {
+			attrs = append(attrs, slog.Any("extra", args[i]))
+		}
+	}
+	return attrs
 }
 
 // Fatal logs a message and exits the application
 func Fatal(message string, err error) {
-	logOutput(TagFatal, fmt.Sprintf("%s: %v", sanitize(message), err))
+	logRecord(slog.LevelError, 3, message, slog.Any("error", err))
 	panic(err)
 }
 
 // Fatalf logs a formatted message and exits the application
 func Fatalf(format string, v ...any) {
 	msg := fmt.Sprintf(format, v...)
-	logOutput(TagFatal, sanitize(msg))
+	logRecord(slog.LevelError, 3, msg)
 	panic(msg)
 }
 
-// LogRaw prints a raw string to the log without any tags or sanitization.
-// Use this only for pre-sanitized or structured data like JSON.
+// LogRaw logs a message without additional attributes
 func LogRaw(s string) {
-	log.Println(s)
+	logRecord(slog.LevelInfo, 3, s)
 }
