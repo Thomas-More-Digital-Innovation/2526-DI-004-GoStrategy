@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import fafo from '$lib/assets/ai/fafo.webp';
-	import fato from '$lib/assets/ai/fato.webp';
+	import fafo from '#lib/assets/ai/fafo.webp';
+	import fato from '#lib/assets/ai/fato.webp';
 
 	interface Props {
 		title?: string;

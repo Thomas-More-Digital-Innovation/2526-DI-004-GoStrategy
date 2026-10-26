@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { BoardSetup } from '$lib/types/board-setup';
-	import BoardSetupCard from '$lib/components/setup/BoardSetupCard.svelte';
-	import Modal from '$lib/components/ui/Modal.svelte';
+	import type { BoardSetup } from '#lib/types/board-setup.js';
+	import BoardSetupCard from '#lib/components/setup/BoardSetupCard.svelte';
+	import Modal from '#lib/components/ui/Modal.svelte';
 	import { useGameSession } from '../_state/context';
 
 	interface Props {

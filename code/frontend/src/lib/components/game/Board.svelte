@@ -1,15 +1,20 @@
 <script lang="ts">
 	import Piece from './Piece.svelte';
-	import type { BoardState, Position, Piece as PieceType, HistoricalMove } from '$lib/types/game';
+	import type {
+		BoardState,
+		Position,
+		Piece as PieceType,
+		HistoricalMove
+	} from '#lib/types/game.js';
 	import MoveVisualization from './move-visualization/MoveVisualization.svelte';
-	import { BOARD_CONFIG } from '$lib/data/board.data';
+	import { BOARD_CONFIG } from '#lib/data/board.data.js';
 	import {
 		a11yStore,
 		getCellAriaLabel,
 		handleBoardKeyDown,
 		isLake,
 		announceMove
-	} from '$lib/utils/a11y.svelte';
+	} from '#lib/utils/a11y.svelte.js';
 
 	interface Props {
 		boardState?: BoardState | null;

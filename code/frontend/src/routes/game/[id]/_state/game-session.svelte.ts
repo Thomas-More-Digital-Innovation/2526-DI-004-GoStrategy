@@ -1,7 +1,7 @@
 import { GameStore } from './game-store.svelte';
-import { toastStore } from '$lib/state/toast.svelte';
-import { gamemodes } from '$lib/data/gamemodes.data';
-import type { Position } from '$lib/types/game';
+import { toastStore } from '#lib/state/toast.svelte.js';
+import { gamemodes } from '#lib/data/gamemodes.data.js';
+import type { Position } from '#lib/types/game.js';
 import { GameConnectionManager } from './game-connection.svelte';
 import { getDisabledRows, getHighlightedRows, getHighlightColor } from './setup-helpers';
 import { handlePieceCellClick, handleSetupPieceSwap } from './board-interaction';

@@ -5,14 +5,14 @@ import type {
 	HistoryMove,
 	Piece,
 	CombatAnimation
-} from '$lib/types/game';
+} from '#lib/types/game.js';
 import {
 	getBoardAtMove,
 	type PieceData,
 	type GameHistory,
 	type HistoricalMove
-} from '$lib/replayEngine';
-import { gamemodes } from '$lib/data/gamemodes.data';
+} from '#lib/replayEngine.js';
+import { gamemodes } from '#lib/data/gamemodes.data.js';
 
 export class GameStore {
 	gameState = $state<GameState | null>(null);

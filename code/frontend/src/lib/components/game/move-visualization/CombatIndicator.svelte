@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
-	import type { HistoricalMove } from '$lib/types/game';
-	import { getPieceIcon } from '$lib/utils/game';
+	import type { HistoricalMove } from '#lib/types/game.js';
+	import { getPieceIcon } from '#lib/utils/game.js';
 
 	interface Props {
 		move: HistoricalMove;

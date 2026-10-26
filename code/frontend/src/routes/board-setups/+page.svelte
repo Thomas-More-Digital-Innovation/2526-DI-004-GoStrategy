@@ -2,15 +2,15 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { authStore } from '$lib/state/auth.svelte';
-	import { boardSetups } from '$lib/api/client';
-	import Card from '$lib/components/ui/Card.svelte';
-	import Button from '$lib/components/ui/Button.svelte';
-	import Alert from '$lib/components/ui/Alert.svelte';
-	import type { BoardSetup } from '$lib/types/board-setup';
-	import { MAX_BOARD_SETUPS } from '$lib/types/board-setup';
-	import BoardSetupCard from '$lib/components/setup/BoardSetupCard.svelte';
-	import { exportSetupAsJson } from '$lib/utils/board-binary';
+	import { authStore } from '#lib/state/auth.svelte.js';
+	import { boardSetups } from '#lib/api/client.js';
+	import Card from '#lib/components/ui/Card.svelte';
+	import Button from '#lib/components/ui/Button.svelte';
+	import Alert from '#lib/components/ui/Alert.svelte';
+	import type { BoardSetup } from '#lib/types/board-setup.js';
+	import { MAX_BOARD_SETUPS } from '#lib/types/board-setup.js';
+	import BoardSetupCard from '#lib/components/setup/BoardSetupCard.svelte';
+	import { exportSetupAsJson } from '#lib/utils/board-binary.js';
 
 	let setups = $state<BoardSetup[]>([]);
 	let error = $state('');
@@ -19,7 +19,7 @@
 	onMount(async () => {
 		await authStore.check();
 		if (!authStore.user) {
-			goto(resolve('/login'));
+			goto(resolve('login'));
 			return;
 		}
 		await loadSetups();
@@ -75,10 +75,8 @@
 			<Button
 				variant="primary"
 				disabled={setups.length >= MAX_BOARD_SETUPS}
-				onclick={() => goto(resolve('/board-setups/new'))}
+				onclick={() => goto(resolve('board-setups/new'))}>+ Create New</Button
 			>
-				+ Create New
-			</Button>
 		</div>
 	</div>
 
@@ -102,16 +100,15 @@
 								variant="outline"
 								size="sm"
 								class="flex-1"
-								onclick={() => goto(resolve(`/board-setups/${setup.id}`))}
+								onclick={() => goto(resolve(`board-setups/${setup.id}`))}>Edit</Button
 							>
-								Edit
-							</Button>
-							<Button variant="outline" size="sm" onclick={() => exportSetupAsJson(setup)}>
-								Export
-							</Button>
-							<Button variant="ghost" size="sm" onclick={() => deleteSetup(setup.id)}>
-								Delete
-							</Button>
+
+							<Button variant="outline" size="sm" onclick={() => exportSetupAsJson(setup)}
+								>Export</Button
+							>
+
+							<Button variant="ghost" size="sm" onclick={() => deleteSetup(setup.id)}>Delete</Button
+							>
 						</div>
 					{/snippet}
 				</BoardSetupCard>

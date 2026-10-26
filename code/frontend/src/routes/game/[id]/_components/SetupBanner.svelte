@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import Button from '$lib/components/ui/Button.svelte';
-	import { boardSetups } from '$lib/api/client';
-	import { flipSetup } from '$lib/utils/board-binary';
-	import type { BoardSetup } from '$lib/types/board-setup';
-	import { gamemodes } from '$lib/data/gamemodes.data';
+	import Button from '#lib/components/ui/Button.svelte';
+	import { boardSetups } from '#lib/api/client.js';
+	import { flipSetup } from '#lib/utils/board-binary.js';
+	import type { BoardSetup } from '#lib/types/board-setup.js';
+	import { gamemodes } from '#lib/data/gamemodes.data.js';
 	import { Clock, FolderOpen, Dices } from '@lucide/svelte';
 	import LoadSavedSetup from './LoadSavedSetup.svelte';
 	import AiPlayerSelector from './AiPlayerSelector.svelte';

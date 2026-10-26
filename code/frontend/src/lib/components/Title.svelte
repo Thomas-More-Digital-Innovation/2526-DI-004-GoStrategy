@@ -1,5 +1,5 @@
 <script lang="ts">
-	import goLogo from '$lib/assets/go.svg';
+	import goLogo from '#lib/assets/go.svg';
 
 	type size = 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 

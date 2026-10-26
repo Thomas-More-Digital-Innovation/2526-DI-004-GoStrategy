@@ -1,4 +1,4 @@
-import type { GameMode } from '$lib/types/game';
+import type { GameMode } from '#lib/types/game.js';
 
 const ai_vs_ai: GameMode = {
 	mode: 'ai_vs_ai',

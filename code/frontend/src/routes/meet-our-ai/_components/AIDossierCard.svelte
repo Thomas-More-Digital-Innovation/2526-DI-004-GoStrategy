@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { AIDossier } from '$lib/types/ai';
-	import Button from '$lib/components/ui/Button.svelte';
-	import Card from '$lib/components/ui/Card.svelte';
+	import type { AIDossier } from '#lib/types/ai.js';
+	import Button from '#lib/components/ui/Button.svelte';
+	import Card from '#lib/components/ui/Card.svelte';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 
@@ -36,7 +36,7 @@
 		<div class="sm:shrink-0">
 			<Button
 				onclick={() =>
-					goto(resolve(`/select-ai?mode=human_vs_ai&ai=${encodeURIComponent(dossier.name)}`))}
+					goto(resolve(`select-ai?mode=human_vs_ai&ai=${encodeURIComponent(dossier.name)}`))}
 				variant="primary"
 				size="sm"
 			>
@@ -118,8 +118,7 @@
 			type="button"
 			class="hover:text-white transition-colors cursor-pointer"
 			onclick={() => (expanded = !expanded)}
+			>{expanded ? 'Hide specs' : 'Show technical specs'}</button
 		>
-			{expanded ? 'Hide specs' : 'Show technical specs'}
-		</button>
 	</div>
 </Card>

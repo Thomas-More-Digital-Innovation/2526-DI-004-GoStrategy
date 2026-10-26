@@ -1,5 +1,5 @@
-import type { PieceData } from '$lib/replayEngine';
-import { PIECE_INVENTORY, type PieceInfo } from '$lib/types/board-setup';
+import type { PieceData } from '#lib/replayEngine.js';
+import { PIECE_INVENTORY, type PieceInfo } from '#lib/types/board-setup.js';
 
 export const getPieceIcon = (piece: PieceData | undefined) => {
 	if (!piece || !piece.rank || piece.rank === '') return null;

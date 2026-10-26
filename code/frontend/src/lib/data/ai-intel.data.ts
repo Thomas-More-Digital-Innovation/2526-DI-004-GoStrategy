@@ -1,11 +1,11 @@
 // TODO: source of truth should eventually be loaded from documents/files/ai-data/*.json
 
-import type { AIDossier, AITournamentBenchmark } from '$lib/types/ai';
-import fafoImage from '$lib/assets/ai/fafo.webp';
-import fatoImage from '$lib/assets/ai/fato.webp';
-import heuristicImage from '$lib/assets/ai/heuristic.webp';
-import minimaxImage from '$lib/assets/ai/minimax.webp';
-import mctsImage from '$lib/assets/ai/mcts.webp';
+import type { AIDossier, AITournamentBenchmark } from '#lib/types/ai.js';
+import fafoImage from '#lib/assets/ai/fafo.webp';
+import fatoImage from '#lib/assets/ai/fato.webp';
+import heuristicImage from '#lib/assets/ai/heuristic.webp';
+import minimaxImage from '#lib/assets/ai/minimax.webp';
+import mctsImage from '#lib/assets/ai/mcts.webp';
 
 export const aiDossiers: AIDossier[] = [
 	{

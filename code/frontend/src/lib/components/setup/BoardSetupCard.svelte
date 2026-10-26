@@ -1,11 +1,11 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import { decodeSetup } from '$lib/utils/board-binary';
-	import { PIECE_INVENTORY } from '$lib/types/board-setup';
-	import type { BoardSetup } from '$lib/types/board-setup';
-	import type { Piece as PieceType } from '$lib/types/game';
-	import Board from '$lib/components/game/Board.svelte';
-	import Card from '$lib/components/ui/Card.svelte';
+	import { decodeSetup } from '#lib/utils/board-binary.js';
+	import { PIECE_INVENTORY } from '#lib/types/board-setup.js';
+	import type { BoardSetup } from '#lib/types/board-setup.js';
+	import type { Piece as PieceType } from '#lib/types/game.js';
+	import Board from '#lib/components/game/Board.svelte';
+	import Card from '#lib/components/ui/Card.svelte';
 
 	interface Props {
 		setup: BoardSetup;

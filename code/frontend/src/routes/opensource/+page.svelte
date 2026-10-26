@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { FileText, Bug } from '@lucide/svelte';
-	import Button from '$lib/components/ui/Button.svelte';
+	import Button from '#lib/components/ui/Button.svelte';
 	import PillarsGrid from './_components/PillarsGrid.svelte';
 	import ArchitectureStack from './_components/ArchitectureStack.svelte';
 	import DeploymentCTA from './_components/DeploymentCTA.svelte';

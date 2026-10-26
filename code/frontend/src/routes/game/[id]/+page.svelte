@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import { page } from '$app/state';
-	import { gamemodes } from '$lib/data/gamemodes.data';
-	import Board from '$lib/components/game/Board.svelte';
-	import Loading from '$lib/components/ui/Loading.svelte';
+	import { gamemodes } from '#lib/data/gamemodes.data.js';
+	import Board from '#lib/components/game/Board.svelte';
+	import Loading from '#lib/components/ui/Loading.svelte';
 	import { GameSessionController } from './_state/game-session.svelte';
 	import { setGameSession } from './_state/context';
 	import ConnectionOverlay from './_components/ConnectionOverlay.svelte';

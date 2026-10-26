@@ -1,5 +1,5 @@
-import type { User } from '$lib/types/game';
-import { auth } from '$lib/api/client';
+import type { User } from '#lib/types/game.js';
+import { auth } from '#lib/api/client.js';
 
 class AuthStore {
 	user = $state<User | null>(null);

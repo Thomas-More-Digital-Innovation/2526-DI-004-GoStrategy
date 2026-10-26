@@ -1,4 +1,4 @@
-import type { Piece } from '$lib/types/game';
+import type { Piece } from '#lib/types/game.js';
 
 // Binary format: 8 bits per square
 // Bit 7: Occupied | Bits 6-2: Piece type | Bit 1: Color | Bit 0: Moved

@@ -1,4 +1,4 @@
-import type { HistoricalMove, Piece } from '$lib/types/game';
+import type { HistoricalMove, Piece } from '#lib/types/game.js';
 
 export const lakePositions = [
 	{ x: 2, y: 4 },

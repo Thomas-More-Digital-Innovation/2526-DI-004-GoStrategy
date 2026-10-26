@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { serverStore } from '$lib/state/server.svelte';
+	import { serverStore } from '#lib/state/server-status.svelte.js';
 
 	onMount(() => {
 		serverStore.startPolling(5000);

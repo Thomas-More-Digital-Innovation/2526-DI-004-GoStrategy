@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { AITournamentBenchmark } from '$lib/types/ai';
-	import Card from '$lib/components/ui/Card.svelte';
+	import type { AITournamentBenchmark } from '#lib/types/ai.js';
+	import Card from '#lib/components/ui/Card.svelte';
 
 	let { benchmarks }: { benchmarks: AITournamentBenchmark[] } = $props();
 

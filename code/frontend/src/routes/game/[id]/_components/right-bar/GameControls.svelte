@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Button from '$lib/components/ui/Button.svelte';
-	import { gamemodes } from '$lib/data/gamemodes.data';
+	import Button from '#lib/components/ui/Button.svelte';
+	import { gamemodes } from '#lib/data/gamemodes.data.js';
 	import { Play, Pause, StepForward } from '@lucide/svelte';
 	import { useGameSession } from '../../_state/context';
 

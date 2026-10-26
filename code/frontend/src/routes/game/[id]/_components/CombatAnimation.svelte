@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { Piece } from '$lib/types/game';
-	import PieceDisplay from '$lib/components/game/Piece.svelte';
+	import type { Piece } from '#lib/types/game.js';
+	import PieceDisplay from '#lib/components/game/Piece.svelte';
 
 	interface Props {
 		attacker: Piece | null;

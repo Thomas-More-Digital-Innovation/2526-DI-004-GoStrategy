@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Card from '$lib/components/ui/Card.svelte';
-	import Input from '$lib/components/ui/Input.svelte';
+	import Card from '#lib/components/ui/Card.svelte';
+	import Input from '#lib/components/ui/Input.svelte';
 
 	interface Props {
 		name: string;

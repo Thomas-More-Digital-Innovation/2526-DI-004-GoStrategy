@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { authStore } from '$lib/state/auth.svelte';
-	import Button from '$lib/components/ui/Button.svelte';
-	import { games as gamesApi } from '$lib/api/client';
-	import { toastStore } from '$lib/state/toast.svelte';
+	import { authStore } from '#lib/state/auth.svelte.js';
+	import Button from '#lib/components/ui/Button.svelte';
+	import { games as gamesApi } from '#lib/api/client.js';
+	import { toastStore } from '#lib/state/toast.svelte.js';
 	import { AlertTriangle } from '@lucide/svelte';
 
 	interface ReconnectableResponse {
@@ -77,7 +77,7 @@
 				if (reconnectableGame != null && res.hasGame && res.gameId === reconnectableGame?.gameId) {
 					goto(
 						resolve(
-							`/game/${reconnectableGame.gameId}?mode=${reconnectableGame.gameType}&seat=${reconnectableGame.seatIndex}`
+							`game/${reconnectableGame.gameId}?mode=${reconnectableGame.gameType}&seat=${reconnectableGame.seatIndex}`
 						)
 					);
 				} else {

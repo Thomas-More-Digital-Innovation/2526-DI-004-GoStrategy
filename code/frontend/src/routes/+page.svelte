@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { authStore } from '$lib/state/auth.svelte';
-	import Button from '$lib/components/ui/Button.svelte';
-	import Card from '$lib/components/ui/Card.svelte';
-	import Alert from '$lib/components/ui/Alert.svelte';
-	import type { GameMode } from '$lib/types/game';
-	import { allGamemodes, gamemodes } from '$lib/data/gamemodes.data';
-	import ChangelogButton from '$lib/components/changelog/ChangelogButton.svelte';
-	import ReconnectBanner from '$lib/components/ReconnectBanner.svelte';
+	import { authStore } from '#lib/state/auth.svelte.js';
+	import Button from '#lib/components/ui/Button.svelte';
+	import Card from '#lib/components/ui/Card.svelte';
+	import Alert from '#lib/components/ui/Alert.svelte';
+	import type { GameMode } from '#lib/types/game.js';
+	import { allGamemodes, gamemodes } from '#lib/data/gamemodes.data.js';
+	import ChangelogButton from '#lib/components/changelog/ChangelogButton.svelte';
+	import ReconnectBanner from '#lib/components/ReconnectBanner.svelte';
 
 	let selectedMode = $state<GameMode>(gamemodes.human_vs_ai);
 	let error = $state('');
@@ -19,7 +19,7 @@
 			error = 'Coming Soon';
 			return;
 		}
-		goto(resolve(`/select-ai?mode=${selectedMode.mode}`));
+		goto(resolve(`select-ai?mode=${selectedMode.mode}`));
 	}
 </script>
 
@@ -35,7 +35,9 @@
 				Welcome back, <span class="text-brand-accent font-semibold">{authStore.user.username}</span
 				>.
 			{:else}
-				<a href={resolve('/login')} class="text-brand-primary hover:underline">Sign in</a> to start playing.
+				<a href={resolve('login')} class="text-brand-primary hover:underline">Sign in</a>
+
+				to start playing.
 			{/if}
 		</p>
 	</header>
@@ -77,7 +79,7 @@
 			class="w-full"
 			onclick={() => {
 				if (!authStore.user) {
-					goto(resolve('/login'));
+					goto(resolve('login'));
 				} else {
 					startFlow();
 				}

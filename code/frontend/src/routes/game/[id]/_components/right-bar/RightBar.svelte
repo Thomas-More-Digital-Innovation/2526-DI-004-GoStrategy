@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Card from '$lib/components/ui/Card.svelte';
+	import Card from '#lib/components/ui/Card.svelte';
 	import GameControls from './GameControls.svelte';
 	import GameHistory from './GameHistory.svelte';
 </script>

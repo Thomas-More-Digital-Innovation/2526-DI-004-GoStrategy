@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { AIs } from '$lib/data/AI.data';
-	import { gamemodes } from '$lib/data/gamemodes.data';
-	import type { GameMode } from '$lib/types/game';
-	import Card from '$lib/components/ui/Card.svelte';
+	import { AIs } from '#lib/data/AI.data.js';
+	import { gamemodes } from '#lib/data/gamemodes.data.js';
+	import type { GameMode } from '#lib/types/game.js';
+	import Card from '#lib/components/ui/Card.svelte';
 
 	interface Props {
 		gameMode: GameMode;

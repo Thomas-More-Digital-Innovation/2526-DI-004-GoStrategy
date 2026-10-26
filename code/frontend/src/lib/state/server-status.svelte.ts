@@ -1,4 +1,4 @@
-import { monitoring } from '$lib/api/client';
+import { monitoring } from '#lib/api/client.js';
 
 class ServerState {
 	#isOnline = $state(true);

@@ -2,25 +2,25 @@
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
 	import { onMount } from 'svelte';
-	import { authStore } from '$lib/state/auth.svelte';
+	import { authStore } from '#lib/state/auth.svelte.js';
 	import LoggedOut from './_components/LoggedOut.svelte';
 	import LoggedIn from './_components/LoggedIn.svelte';
 	import Title from '../Title.svelte';
-	import favicon from '$lib/assets/favicon.webp';
-	import TacticalPattern from '$lib/components/TacticalPattern.svelte';
+	import favicon from '#lib/assets/favicon.webp';
+	import TacticalPattern from '#lib/components/TacticalPattern.svelte';
 	import Connecting from './_components/Connecting.svelte';
 	import { ExternalLink } from '@lucide/svelte';
 
 	const navItems = [
 		[
 			{ name: 'Command Center', href: resolve('/') },
-			{ name: 'Meet our AI', href: resolve('/meet-our-ai') },
-			{ name: 'Profile', href: resolve('/profile') },
-			{ name: 'Board Setups', href: resolve('/board-setups') }
+			{ name: 'Meet our AI', href: resolve('meet-our-ai') },
+			{ name: 'Profile', href: resolve('profile') },
+			{ name: 'Board Setups', href: resolve('board-setups') }
 		],
 		[
-			{ name: 'Open Source', href: resolve('/opensource') },
-			{ name: 'Documentation', href: resolve('/docs') },
+			{ name: 'Open Source', href: resolve('opensource') },
+			{ name: 'Documentation', href: resolve('docs') },
 			{
 				name: 'Github',
 				href: 'https://github.com/Thomas-More-Digital-Innovation/2526-DI-004-GoStrategy',

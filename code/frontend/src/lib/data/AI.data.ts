@@ -1,9 +1,9 @@
-import type { AI } from '$lib/types/game';
-import fafoImage from '$lib/assets/ai/fafo.webp';
-import fatoImage from '$lib/assets/ai/fato.webp';
-import heuristicImage from '$lib/assets/ai/heuristic.webp';
-import minimaxImage from '$lib/assets/ai/minimax.webp';
-import mctsImage from '$lib/assets/ai/mcts.webp';
+import type { AI } from '#lib/types/game.js';
+import fafoImage from '#lib/assets/ai/fafo.webp';
+import fatoImage from '#lib/assets/ai/fato.webp';
+import heuristicImage from '#lib/assets/ai/heuristic.webp';
+import minimaxImage from '#lib/assets/ai/minimax.webp';
+import mctsImage from '#lib/assets/ai/mcts.webp';
 
 export const AIs: AI[] = [
 	{

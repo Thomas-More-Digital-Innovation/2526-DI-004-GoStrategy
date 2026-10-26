@@ -1,3 +1,5 @@
+import adapter from '@sveltejs/adapter-static';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
@@ -18,7 +20,13 @@ const repoName =
 	process.env.VITE_REPO_NAME || 'Thomas-More-Digital-Innovation/2526-DI-004-Stratego';
 
 export default defineConfig({
-	plugins: [tailwindcss(), sveltekit()],
+	plugins: [
+		tailwindcss(),
+		sveltekit({
+			preprocess: vitePreprocess(),
+			adapter: adapter({ fallback: 'index.html' })
+		})
+	],
 	define: {
 		__VERSION__: JSON.stringify(pkg.version),
 		__COMMIT_SHA__: JSON.stringify(commitSha),

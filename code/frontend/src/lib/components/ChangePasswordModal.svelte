@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { authStore } from '$lib/state/auth.svelte';
-	import { toastStore } from '$lib/state/toast.svelte';
+	import { authStore } from '#lib/state/auth.svelte.js';
+	import { toastStore } from '#lib/state/toast.svelte.js';
 	import Button from './ui/Button.svelte';
 	import Input from './ui/Input.svelte';
 	import Modal from './ui/Modal.svelte';

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import CommanderBlue from '$lib/assets/pieces/blue/10.webp';
-	import CommanderRed from '$lib/assets/pieces/red/10.webp';
+	import CommanderBlue from '#lib/assets/pieces/blue/10.webp';
+	import CommanderRed from '#lib/assets/pieces/red/10.webp';
 
 	let { isBlueCommander = $bindable(true) } = $props();
 

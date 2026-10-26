@@ -4,7 +4,7 @@
 </script>
 
 <a
-	href={resolve('/login')}
+	href={resolve('login')}
 	class="flex items-center gap-3 px-4 py-2 text-white/50 hover:text-white transition-colors"
 >
 	<div

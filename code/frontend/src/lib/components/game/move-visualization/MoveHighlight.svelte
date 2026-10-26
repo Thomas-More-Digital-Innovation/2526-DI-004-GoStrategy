@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { MoveVisualizationHighlightState } from '$lib/types/game';
+	import type { MoveVisualizationHighlightState } from '#lib/types/game.js';
 	import { fade } from 'svelte/transition';
 
 	interface Props {

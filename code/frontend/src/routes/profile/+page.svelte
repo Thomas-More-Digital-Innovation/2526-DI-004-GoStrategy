@@ -2,13 +2,13 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { authStore } from '$lib/state/auth.svelte';
-	import { stats } from '$lib/api/client';
-	import Card from '$lib/components/ui/Card.svelte';
-	import Button from '$lib/components/ui/Button.svelte';
-	import { toastStore } from '$lib/state/toast.svelte';
-	import ChangePasswordModal from '$lib/components/ChangePasswordModal.svelte';
-	import type { UserStats } from '$lib/types/game';
+	import { authStore } from '#lib/state/auth.svelte.js';
+	import { stats } from '#lib/api/client.js';
+	import Card from '#lib/components/ui/Card.svelte';
+	import Button from '#lib/components/ui/Button.svelte';
+	import { toastStore } from '#lib/state/toast.svelte.js';
+	import ChangePasswordModal from '#lib/components/ChangePasswordModal.svelte';
+	import type { UserStats } from '#lib/types/game.js';
 
 	let userStats = $state<UserStats | null>(null);
 	let isChangePasswordOpen = $state(false);
@@ -16,7 +16,7 @@
 	onMount(async () => {
 		await authStore.check();
 		if (!authStore.user) {
-			goto(resolve('/login'));
+			goto(resolve('login'));
 			return;
 		}
 		try {
@@ -39,7 +39,7 @@
 
 	async function handleLogout() {
 		await authStore.logout();
-		goto(resolve('/login'));
+		goto(resolve('login'));
 	}
 
 	function handleChangePassword() {
