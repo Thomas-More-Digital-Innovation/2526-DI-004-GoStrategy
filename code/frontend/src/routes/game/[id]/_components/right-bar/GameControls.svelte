@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onDestroy } from 'svelte';
 	import Button from '#lib/components/ui/Button.svelte';
 	import { gamemodes } from '#lib/data/gamemodes.data.js';
 	import { Play, Pause, StepForward } from '@lucide/svelte';
@@ -7,12 +8,63 @@
 	const session = useGameSession();
 
 	let speedMs = $state(1000);
+	let isReplayPlaying = $state(false);
+	let replayInterval: ReturnType<typeof setInterval> | null = null;
+
+	const isReplayMode = $derived(
+		session.isStaticReplay || session.store.isGameOver || session.store.isReplaying
+	);
+
+	function toggleReplayPlayback() {
+		if (isReplayPlaying) {
+			stopReplayPlayback();
+		} else {
+			startReplayPlayback();
+		}
+	}
+
+	function startReplayPlayback() {
+		if (session.store.currentHistoryIndex >= session.store.history.length - 1) {
+			session.store.goToMove(0);
+		}
+		isReplayPlaying = true;
+		if (replayInterval) clearInterval(replayInterval);
+		replayInterval = setInterval(() => {
+			if (session.store.currentHistoryIndex < session.store.history.length - 1) {
+				session.handleNextMove();
+			} else {
+				stopReplayPlayback();
+			}
+		}, speedMs);
+	}
+
+	function stopReplayPlayback() {
+		isReplayPlaying = false;
+		if (replayInterval) {
+			clearInterval(replayInterval);
+			replayInterval = null;
+		}
+	}
+
+	function handleSpeedChange(newSpeed: number) {
+		speedMs = newSpeed;
+		if (isReplayPlaying) {
+			startReplayPlayback();
+		}
+		if (!session.isStaticReplay) {
+			session.handleSetSpeed(speedMs);
+		}
+	}
+
+	onDestroy(() => {
+		stopReplayPlayback();
+	});
 </script>
 
 <h3 class="text-sm font-bold text-brand-accent uppercase tracking-wider">Controls</h3>
 <div class="flex flex-col gap-2">
 	<div class="flex gap-2">
-		{#if session.store.isReplaying && !session.store.isGameOver}
+		{#if session.store.isReplaying && !session.store.isGameOver && !session.isStaticReplay}
 			<Button
 				variant="secondary"
 				size="sm"
@@ -20,6 +72,25 @@
 				onclick={() => session.handleExitReplay()}
 			>
 				Exit Replay
+			</Button>
+		{:else if isReplayMode}
+			<Button variant="outline" size="sm" onclick={toggleReplayPlayback} class="flex-1">
+				{#if isReplayPlaying}
+					<Pause class="mr-1.5 size-3.5" />
+					Pause Replay
+				{:else}
+					<Play class="mr-1.5 size-3.5" />
+					Play Replay
+				{/if}
+			</Button>
+			<Button
+				variant="ghost"
+				size="sm"
+				onclick={() => session.handleNextMove()}
+				disabled={session.store.currentHistoryIndex >= session.store.history.length - 1}
+			>
+				<StepForward class="mr-1.5 size-3.5" />
+				Step
 			</Button>
 		{:else if !session.store.isGameOver}
 			<Button
@@ -59,11 +130,11 @@
 		</div>
 		<input
 			type="range"
-			min="500"
-			max="5000"
+			min="300"
+			max="3000"
 			step="100"
 			bind:value={speedMs}
-			onchange={() => session.handleSetSpeed(speedMs)}
+			onchange={() => handleSpeedChange(speedMs)}
 			class="w-full accent-brand-primary h-1 bg-white/10 rounded-lg appearance-none cursor-pointer"
 		/>
 	</div>

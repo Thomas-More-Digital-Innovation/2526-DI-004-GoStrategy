@@ -8,6 +8,7 @@
 	import Button from '#lib/components/ui/Button.svelte';
 	import { toastStore } from '#lib/state/toast.svelte.js';
 	import ChangePasswordModal from '#lib/components/ChangePasswordModal.svelte';
+	import MatchHistory from './_components/MatchHistory.svelte';
 	import type { UserStats } from '#lib/types/game.js';
 
 	let userStats = $state<UserStats | null>(null);
@@ -129,5 +130,7 @@
 				</Card>
 			</div>
 		{/if}
+
+		<MatchHistory currentUserId={authStore.user.id} />
 	</div>
 {/if}

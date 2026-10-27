@@ -9,7 +9,16 @@
 
 <div class="grid grid-cols-[1fr_auto_1fr] items-center mb-6">
 	<div class="flex justify-start">
-		{#if session.store.isGameOver}
+		{#if session.isStaticReplay}
+			<Button
+				onclick={() => {
+					window.history.back();
+				}}
+				variant="secondary"
+			>
+				Back to Profile
+			</Button>
+		{:else if session.store.isGameOver}
 			<Button
 				onclick={() => {
 					window.location.href = '/';

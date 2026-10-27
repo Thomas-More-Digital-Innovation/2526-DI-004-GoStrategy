@@ -1,4 +1,10 @@
-import type { GameInfo, User, UserStats } from '#lib/types/game.js';
+import type {
+	GameHistoryResponse,
+	GameInfo,
+	GameRecord,
+	User,
+	UserStats
+} from '#lib/types/game.js';
 import type { BoardSetup, ExportedBoardSetup } from '#lib/types/board-setup.js';
 import { parseApiMessage } from '#lib/utils/api.js';
 
@@ -133,7 +139,12 @@ export const games = {
 			'/users/me/reconnectable'
 		),
 
-	abandon: (gameId: string) => requestVoid(`/games/${gameId}`, { method: 'DELETE' })
+	abandon: (gameId: string) => requestVoid(`/games/${gameId}`, { method: 'DELETE' }),
+	getHistory: (gameId: string) => request<GameHistoryResponse>(`/games/${gameId}/history`),
+	listMine: (limit: number = 50, offset: number = 0) =>
+		request<{ games: GameRecord[]; total: number }>(
+			`/users/me/games?limit=${limit}&offset=${offset}`
+		)
 };
 
 // Stats

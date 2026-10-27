@@ -5,19 +5,21 @@ import type { Position } from '#lib/types/game.js';
 import { GameConnectionManager } from './game-connection.svelte';
 import { getDisabledRows, getHighlightedRows, getHighlightColor } from './setup-helpers';
 import { handlePieceCellClick, handleSetupPieceSwap } from './board-interaction';
+import { initStaticReplay } from './static-replay';
 
 export class GameSessionController {
 	readonly store = new GameStore();
 	readonly connection = new GameConnectionManager();
 	gameId = $state('');
 	seatIndex = $state(-1);
+	isStaticReplay = $state(false);
 
 	validMoves = $state<Position[]>([]);
 	setupSwapPos1 = $state<Position | null>(null);
 	setupSelectedPlayer = $state(0);
 
 	get connected() {
-		return this.connection.connected;
+		return this.isStaticReplay || this.connection.connected;
 	}
 	get isReconnecting() {
 		return this.connection.isReconnecting;
@@ -63,6 +65,11 @@ export class GameSessionController {
 
 	async init(id: string, params: URLSearchParams) {
 		this.gameId = id;
+		if (params.get('replay') === 'true') {
+			await initStaticReplay(this, id);
+			return;
+		}
+
 		this.store.gameMode = gamemodes.fromString(params.get('mode') || '');
 
 		const seatParam = params.get('seat');
@@ -74,7 +81,9 @@ export class GameSessionController {
 	}
 
 	destroy() {
-		this.connection.disconnect();
+		if (!this.isStaticReplay) {
+			this.connection.disconnect();
+		}
 		this.store.reset();
 	}
 
@@ -224,7 +233,7 @@ export class GameSessionController {
 	}
 
 	handlePreviousMove() {
-		if (!this.store.isPaused) this.connection.socket.sendPause();
+		if (!this.isStaticReplay && !this.store.isPaused) this.connection.socket.sendPause();
 		this.store.previousMove();
 	}
 
@@ -236,7 +245,7 @@ export class GameSessionController {
 			this.handleExitReplay(false);
 			return;
 		}
-		if (!this.store.isPaused) this.connection.socket.sendPause();
+		if (!this.isStaticReplay && !this.store.isPaused) this.connection.socket.sendPause();
 		this.store.nextMove();
 	}
 
@@ -245,7 +254,7 @@ export class GameSessionController {
 			this.handleExitReplay(false);
 			return;
 		}
-		if (!this.store.isPaused) this.connection.socket.sendPause();
+		if (!this.isStaticReplay && !this.store.isPaused) this.connection.socket.sendPause();
 		this.store.goToMove(index);
 	}
 
