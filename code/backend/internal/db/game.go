@@ -12,7 +12,7 @@ func GetGamesForUserPaged(ctx context.Context, userID int, limit, offset int) ([
 	var games []models.Game
 	err := DB.WithContext(ctx).
 		Model(&models.Game{}).
-		Select("games.*, EXISTS(SELECT 1 FROM game_moves WHERE game_moves.game_id = games.id) AS has_replay").
+		Select("games.*, EXISTS(SELECT 1 FROM game_moves WHERE game_moves.game_id = games.id AND game_moves.deleted_at IS NULL) AS has_replay").
 		Where("player1_user_id = ? OR player2_user_id = ?", userID, userID).
 		Order("created_at DESC").
 		Limit(limit).

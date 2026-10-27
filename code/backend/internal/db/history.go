@@ -146,7 +146,7 @@ func PruneGameHistory(ctx context.Context, userGameTTL, anonymousGameTTL time.Du
 			Where("(game_type = ? AND created_at < ?) OR (player1_user_id IS NULL AND player2_user_id IS NULL AND created_at < ?) OR (created_at < ?)",
 				models.AiVsAi, anonCutoff, anonCutoff, userCutoff)
 
-		if err := tx.Where("game_id IN (?)", subQuery).Delete(&models.GameMove{}).Error; err != nil {
+		if err := tx.Unscoped().Where("game_id IN (?)", subQuery).Delete(&models.GameMove{}).Error; err != nil {
 			return fmt.Errorf("failed to prune game moves: %w", err)
 		}
 
