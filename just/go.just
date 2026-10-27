@@ -46,7 +46,7 @@ migrate:
 
 # update Swagger documentation
 swagger:
-    go run github.com/swaggo/swag/cmd/swag init -g cmd/server/main.go
+    go run github.com/swaggo/swag/cmd/swag init -g cmd/server
 
 # update AsyncAPI documentation
 asyncapi:

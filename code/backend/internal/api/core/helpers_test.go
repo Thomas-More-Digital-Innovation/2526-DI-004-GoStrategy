@@ -64,4 +64,38 @@ func TestHelpers(t *testing.T) {
 			assert.Equal(t, 456, id)
 		})
 	})
+
+	t.Run("ParsePagination", func(t *testing.T) {
+		t.Run("DefaultValues", func(t *testing.T) {
+			c, _ := gin.CreateTestContext(httptest.NewRecorder())
+			c.Request, _ = http.NewRequest("GET", "/test", nil)
+			limit, offset := core.ParsePagination(c, 10, 50)
+			assert.Equal(t, 10, limit)
+			assert.Equal(t, 0, offset)
+		})
+
+		t.Run("CustomValidValues", func(t *testing.T) {
+			c, _ := gin.CreateTestContext(httptest.NewRecorder())
+			c.Request, _ = http.NewRequest("GET", "/test?limit=25&offset=50", nil)
+			limit, offset := core.ParsePagination(c, 10, 50)
+			assert.Equal(t, 25, limit)
+			assert.Equal(t, 50, offset)
+		})
+
+		t.Run("ClampsExceedingMaxLimit", func(t *testing.T) {
+			c, _ := gin.CreateTestContext(httptest.NewRecorder())
+			c.Request, _ = http.NewRequest("GET", "/test?limit=100&offset=0", nil)
+			limit, offset := core.ParsePagination(c, 10, 50)
+			assert.Equal(t, 50, limit)
+			assert.Equal(t, 0, offset)
+		})
+
+		t.Run("RejectsNegativeOffsetAndZeroLimit", func(t *testing.T) {
+			c, _ := gin.CreateTestContext(httptest.NewRecorder())
+			c.Request, _ = http.NewRequest("GET", "/test?limit=0&offset=-10", nil)
+			limit, offset := core.ParsePagination(c, 10, 50)
+			assert.Equal(t, 10, limit)
+			assert.Equal(t, 0, offset)
+		})
+	})
 }
