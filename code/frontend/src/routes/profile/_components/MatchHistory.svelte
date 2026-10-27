@@ -8,6 +8,7 @@
 	import Button from '#lib/components/ui/Button.svelte';
 	import { Play, Swords } from '@lucide/svelte';
 	import type { GameRecord } from '#lib/types/game.js';
+	import PaginationControlls from './PaginationControlls.svelte';
 
 	interface Props {
 		currentUserId: number;
@@ -15,20 +16,32 @@
 
 	let { currentUserId }: Props = $props();
 
+	const PAGE_SIZE = 30;
 	let matchHistory = $state<GameRecord[]>([]);
 	let totalGames = $state(0);
+	let currentPage = $state(0);
 	let isLoading = $state(true);
 
-	onMount(async () => {
+	const totalPages = $derived(Math.max(1, Math.ceil(totalGames / PAGE_SIZE)));
+
+	async function loadPage(page: number) {
+		if (page < 0 || (totalGames > 0 && page >= totalPages)) return;
+		isLoading = true;
 		try {
-			const res = await games.listMine(20, 0);
+			const res = await games.listMine(PAGE_SIZE, page * PAGE_SIZE);
 			matchHistory = res.games || [];
+			console.log(matchHistory);
 			totalGames = res.total || 0;
+			currentPage = page;
 		} catch (e) {
 			toastStore.handleApiMessage(e, 'Failed to load match history');
 		} finally {
 			isLoading = false;
 		}
+	}
+
+	onMount(() => {
+		loadPage(0);
 	});
 
 	function getOutcome(game: GameRecord): { label: string; class: string } {
@@ -75,7 +88,7 @@
 </script>
 
 <Card class="space-y-4">
-	<div class="flex items-center justify-between border-b border-white/10 pb-4">
+	<div class="flex items-center justify-between border-b border-white/10 pb-4 mb-0">
 		<h2 class="text-lg font-bold text-white tracking-wide">Game History</h2>
 		<span class="text-xs text-white/40">
 			{totalGames}
@@ -93,6 +106,7 @@
 		</div>
 	{:else}
 		<div class="divide-y divide-white/5">
+			<PaginationControlls {totalPages} {currentPage} {isLoading} {loadPage} />
 			{#each matchHistory as game (game.id)}
 				{@const outcome = getOutcome(game)}
 				<div
@@ -114,12 +128,25 @@
 						</div>
 					</div>
 
-					<Button variant="outline" size="sm" onclick={() => handleWatchReplay(game.id)}>
-						<Play class="mr-1.5 size-3.5" />
-						Watch Replay
-					</Button>
+					{#if game.has_replay}
+						<Button variant="outline" size="sm" onclick={() => handleWatchReplay(game.id)}>
+							<Play class="mr-1.5 size-3.5" />
+							Watch Replay
+						</Button>
+					{:else}
+						<span class="text-xs text-white/30 italic px-2 py-1 select-none">
+							No replay available
+						</span>
+					{/if}
 				</div>
 			{/each}
+
+			<PaginationControlls {totalPages} {currentPage} {isLoading} {loadPage} />
+
+			<p class="text-xs text-white/40 mt-4">
+				Note: AI vs AI game replays are kept for approximately 24 hours due to storage constraints.
+				Other game replays are kept for 30 days.
+			</p>
 		</div>
 	{/if}
 </Card>

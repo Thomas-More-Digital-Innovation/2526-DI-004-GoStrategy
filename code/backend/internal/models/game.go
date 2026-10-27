@@ -19,6 +19,7 @@ type Game struct {
 	CreatedAt     time.Time      `json:"created_at"`
 	FinishedAt    *time.Time     `json:"finished_at"`
 	DeletedAt     gorm.DeletedAt `json:"-" gorm:"index"`
+	HasReplay     bool           `json:"has_replay" gorm:"->"`
 	Moves         []GameMove     `json:"moves,omitempty" gorm:"foreignKey:GameID;references:ID"`
 }
 

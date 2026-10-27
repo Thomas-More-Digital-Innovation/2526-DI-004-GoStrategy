@@ -18,13 +18,19 @@ func (s *GameServer) SaveGameResult(ctx context.Context, session *game.Session, 
 	g := session.GetGame()
 	now := time.Now()
 
-	if err := db.SaveGame(ctx, session.ID, session.Player1UserID, session.Player2UserID, gameType, g.InitialState, state.WinnerID, session.StartTime, now); err != nil {
+	if err := db.SaveGameHistory(ctx, db.SaveHistoryParams{
+		GameID:       session.ID,
+		Player1ID:    session.Player1UserID,
+		Player2ID:    session.Player2UserID,
+		GameType:     gameType,
+		InitialState: g.InitialState,
+		WinnerID:     state.WinnerID,
+		StartTime:    session.StartTime,
+		FinishedAt:   now,
+		Moves:        g.HistoricalHistory,
+	}); err != nil {
 		logging.Error("Failed to save game to database", err)
 		return err
-	}
-
-	if err := db.SaveMoves(ctx, session.ID, g.HistoricalHistory); err != nil {
-		logging.Error("Failed to save game moves to database", err)
 	}
 
 	if gameType != models.AiVsAi {

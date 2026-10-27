@@ -63,7 +63,7 @@ lefthook run pre-commit
 **Backend:**
 ```bash
 cd code/backend
-go run cmd/server/main.go
+go run cmd/server
 ```
 
 **Frontend:**

@@ -41,12 +41,15 @@ func (h *Handler) HandleGetGameHistory(c *gin.Context) {
 // @Tags games
 // @Produce json
 // @Param id path int true "User ID"
+// @Param limit query int false "Number of games to return (default 10, max 50)"
+// @Param offset query int false "Offset for pagination (default 0)"
 // @Success 200 {object} map[string]interface{}
 // @Failure 500 {object} map[string]string "Failed to retrieve games"
 // @Router /users/{id}/games [get]
 func (h *Handler) HandleListUserGames(c *gin.Context) {
 	userID, _ := core.ParseID(c, "id")
-	games, err := db.GetGamesForUserPaged(c.Request.Context(), userID, 50, 0)
+	limit, offset := core.ParsePagination(c, 10, 50)
+	games, err := db.GetGamesForUserPaged(c.Request.Context(), userID, limit, offset)
 	if err != nil {
 		core.SendError(c, "Failed to retrieve games", http.StatusInternalServerError)
 		return
@@ -65,6 +68,8 @@ func (h *Handler) HandleListUserGames(c *gin.Context) {
 // @Description Retrieve a list of games played by the currently logged-in user
 // @Tags games
 // @Produce json
+// @Param limit query int false "Number of games to return (default 10, max 50)"
+// @Param offset query int false "Offset for pagination (default 0)"
 // @Success 200 {object} map[string]interface{}
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Failure 500 {object} map[string]string "Failed to retrieve games"
@@ -74,7 +79,8 @@ func (h *Handler) HandleListMyGames(c *gin.Context) {
 	if user == nil {
 		return
 	}
-	games, err := db.GetGamesForUserPaged(c.Request.Context(), user.ID, 50, 0)
+	limit, offset := core.ParsePagination(c, 10, 50)
+	games, err := db.GetGamesForUserPaged(c.Request.Context(), user.ID, limit, offset)
 	if err != nil {
 		core.SendError(c, "Failed to retrieve games", http.StatusInternalServerError)
 		return

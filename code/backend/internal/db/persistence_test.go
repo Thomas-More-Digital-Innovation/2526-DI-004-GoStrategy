@@ -19,7 +19,15 @@ func TestGamePagination(t *testing.T) {
 	// Create 15 games
 	for i := range 15 {
 		gameID := fmt.Sprintf("paged-game-%d", i)
-		err := SaveGame(ctx, gameID, &user.ID, nil, "ranked", map[string]string{"test": "data"}, nil, time.Now(), time.Now())
+		err := SaveGameHistory(ctx, SaveHistoryParams{
+			GameID:       gameID,
+			Player1ID:    &user.ID,
+			Player2ID:    nil,
+			GameType:     "ranked",
+			InitialState: map[string]any{"test": "data"},
+			StartTime:    time.Now(),
+			FinishedAt:   time.Now(),
+		})
 		assert.NoError(t, err)
 	}
 
@@ -49,12 +57,6 @@ func TestComplexJSONSerialization(t *testing.T) {
 	gameID := "json-complex-test"
 
 	t.Run("Special Characters in Piece Data", func(t *testing.T) {
-		err := SaveGame(ctx, gameID, nil, nil, "funky", map[string]any{
-			"metadata": "some \"quoted\" text and \n newlines",
-			"unicode":  "🚀 Stratego!",
-		}, nil, time.Now(), time.Now())
-		assert.NoError(t, err)
-
 		move := models.HistoricalMove{
 			MoveIndex: 1,
 			PlayerID:  0,
@@ -65,8 +67,19 @@ func TestComplexJSONSerialization(t *testing.T) {
 			},
 			Result: models.ResultMove,
 		}
-
-		err = SaveMove(ctx, gameID, move)
+		err := SaveGameHistory(ctx, SaveHistoryParams{
+			GameID:    gameID,
+			Player1ID: nil,
+			Player2ID: nil,
+			GameType:  "funky",
+			InitialState: map[string]any{
+				"metadata": "some \"quoted\" text and \n newlines",
+				"unicode":  "🚀 Stratego!",
+			},
+			StartTime:  time.Now(),
+			FinishedAt: time.Now(),
+			Moves:      []models.HistoricalMove{move},
+		})
 		assert.NoError(t, err)
 
 		history, err := GetGameHistory(ctx, gameID)
@@ -76,7 +89,6 @@ func TestComplexJSONSerialization(t *testing.T) {
 
 	t.Run("Empty and Nil Data", func(t *testing.T) {
 		gameID2 := "json-nil-test"
-		_ = SaveGame(ctx, gameID2, nil, nil, "test", map[string]any{}, nil, time.Now(), time.Now())
 
 		move := models.HistoricalMove{
 			MoveIndex: 1,
@@ -85,7 +97,17 @@ func TestComplexJSONSerialization(t *testing.T) {
 			Defender:  nil,
 		}
 
-		err := SaveMove(ctx, gameID2, move)
+		err := SaveGameHistory(ctx, SaveHistoryParams{
+			GameID:       gameID2,
+			Player1ID:    nil,
+			Player2ID:    nil,
+			GameType:     "test",
+			InitialState: map[string]any{},
+			StartTime:    time.Now(),
+			FinishedAt:   time.Now(),
+			Moves:        []models.HistoricalMove{move},
+		})
+
 		assert.NoError(t, err)
 
 		history, err := GetGameHistory(ctx, gameID2)

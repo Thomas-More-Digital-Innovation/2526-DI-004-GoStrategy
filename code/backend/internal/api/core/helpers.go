@@ -6,9 +6,10 @@ import (
 	"digital-innovation/gostrategy/internal/auth"
 	"digital-innovation/gostrategy/internal/db"
 	"digital-innovation/gostrategy/internal/models"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 // SendError helper to be used when shifting from net/http to Gin
@@ -46,4 +47,22 @@ func ParseID(c *gin.Context, key string) (int, error) {
 		return 0, nil
 	}
 	return strconv.Atoi(idStr)
+}
+
+// ParsePagination extracts limit and offset query parameters with defaults and bounds
+func ParsePagination(c *gin.Context, defaultLimit, maxLimit int) (int, int) {
+	limitStr := c.Query("limit")
+	offsetStr := c.Query("offset")
+
+	limit := defaultLimit
+	if l, err := strconv.Atoi(limitStr); err == nil && l > 0 {
+		limit = min(l, maxLimit)
+	}
+
+	offset := 0
+	if o, err := strconv.Atoi(offsetStr); err == nil && o >= 0 {
+		offset = o
+	}
+
+	return limit, offset
 }

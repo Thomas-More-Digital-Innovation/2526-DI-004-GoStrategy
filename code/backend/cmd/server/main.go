@@ -2,12 +2,14 @@
 package main
 
 import (
+	"context"
 	"digital-innovation/gostrategy/internal/api"
 	"digital-innovation/gostrategy/internal/db"
 	"digital-innovation/gostrategy/internal/logging"
 	"digital-innovation/gostrategy/internal/utils"
 	"flag"
 	"fmt"
+	"time"
 )
 
 // @title GoStrategy API
@@ -47,6 +49,7 @@ func run() error {
 		}
 	}()
 
+	startPruneWorker(context.Background(), 1*time.Hour)
 	return startServer(*addr)
 }
 
