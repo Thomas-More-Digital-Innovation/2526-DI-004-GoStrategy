@@ -24,7 +24,7 @@ ENV VITE_COMMIT_SHA=$VITE_COMMIT_SHA
 ENV VITE_REPO_NAME=$VITE_REPO_NAME
 RUN pnpm build
 
-FROM nginxinc/nginx-unprivileged:1.30-alpine AS runtime
+FROM nginxinc/nginx-unprivileged:1.31-alpine AS runtime
 COPY --from=build /app/build /usr/share/nginx/html
 # Fix nginx config path for root context
 COPY code/frontend/nginx.conf /etc/nginx/conf.d/default.conf
