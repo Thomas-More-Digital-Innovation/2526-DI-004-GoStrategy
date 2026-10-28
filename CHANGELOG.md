@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.7.0] - 28-10-2026
+
+### Added
+- **Match History & Replay System**: Introduced match history tracking on user profiles with paged review of completed matches, match outcomes, and direct launch into the Game Theater for full replay review.
+- **Client-Side Replay File Upload**: Added the ability to upload and validate local game replay JSON files directly in the browser for inspection in the Game Theater without sending data to the server, with session storage resilience across page reloads.
+- **Move Retention & Lifecycle Pruning**: Implemented scheduled background pruning of detailed turn moves (`game_moves`) to manage database storage (retaining user matches for 30 days and AI vs AI / anonymous matches for 24 hours) while preserving game metadata records indefinitely.
+
+### Changed
+- **Dependency & Base Image Updates**: Upgraded Nginx unprivileged base image to 1.31-alpine, `@lucide/svelte` to 1.60.0, and `typescript-eslint` to 8.72.0.
+
+### Fixed
+- **Replay Metadata Preservation**: Fixed missing match context in exported replay files by bundling player usernames, game mode, win cause, and creation timestamp into the downloaded JSON and properly restoring them in the Game Theater.
+
 ## [0.6.0] - 26-10-2026
 
 ### Changed
