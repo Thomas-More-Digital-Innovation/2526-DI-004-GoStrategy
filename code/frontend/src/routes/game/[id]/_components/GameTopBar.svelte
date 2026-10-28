@@ -12,6 +12,9 @@
 		{#if session.isStaticReplay}
 			<Button
 				onclick={() => {
+					if (session.gameId === 'local') {
+						sessionStorage.removeItem('gostrategy_local_replay');
+					}
 					window.history.back();
 				}}
 				variant="secondary"

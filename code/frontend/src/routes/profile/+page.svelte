@@ -25,6 +25,7 @@
 		} catch (e) {
 			toastStore.handleApiMessage(e, 'Failed to load stats');
 		}
+		sessionStorage.removeItem('gostrategy_local_replay');
 	});
 
 	function formatDuration(seconds: number): string {
