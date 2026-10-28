@@ -6,8 +6,9 @@
 	import { toastStore } from '#lib/state/toast.svelte.js';
 	import Card from '#lib/components/ui/Card.svelte';
 	import Button from '#lib/components/ui/Button.svelte';
-	import { Play, Swords } from '@lucide/svelte';
+	import { Play, Swords, Upload } from '@lucide/svelte';
 	import type { GameRecord } from '#lib/types/game.js';
+	import { validateReplayJson } from '#lib/replayEngine.js';
 	import PaginationControlls from './PaginationControlls.svelte';
 
 	interface Props {
@@ -82,19 +83,62 @@
 		});
 	}
 
+	let fileInput = $state<HTMLInputElement | null>(null);
+
 	function handleWatchReplay(gameId: string) {
 		goto(resolve(`game/${gameId}?replay=true`));
+	}
+
+	function handleUploadClick() {
+		fileInput?.click();
+	}
+
+	async function handleFileSelected(event: Event) {
+		const target = event.target as HTMLInputElement;
+		const file = target.files?.[0];
+		if (!file) return;
+
+		try {
+			const text = await file.text();
+			const raw = JSON.parse(text);
+			const result = validateReplayJson(raw);
+
+			if (!result.valid || !result.data) {
+				toastStore.error(result.error ?? 'Invalid replay format');
+				return;
+			}
+
+			sessionStorage.setItem('gostrategy_local_replay', JSON.stringify(result.data));
+			goto(resolve('game/local?replay=true'));
+		} catch {
+			toastStore.error('Failed to parse replay file as JSON');
+		} finally {
+			target.value = '';
+		}
 	}
 </script>
 
 <Card class="space-y-4">
 	<div class="flex items-center justify-between border-b border-white/10 pb-4 mb-0">
-		<h2 class="text-lg font-bold text-white tracking-wide">Game History</h2>
-		<span class="text-xs text-white/40">
-			{totalGames}
-			{totalGames === 1 ? 'match' : 'matches'} recorded
-		</span>
+		<div class="flex items-center gap-3">
+			<h2 class="text-lg font-bold text-white tracking-wide">Game History</h2>
+			<span class="text-xs text-white/40">
+				{totalGames}
+				{totalGames === 1 ? 'match' : 'matches'}
+			</span>
+		</div>
+		<Button variant="ghost" size="sm" onclick={handleUploadClick}>
+			<Upload class="mr-1.5 size-3.5" />
+			Upload Replay
+		</Button>
 	</div>
+	<input
+		bind:this={fileInput}
+		type="file"
+		accept=".json,application/json"
+		class="hidden"
+		onchange={handleFileSelected}
+	/>
 
 	{#if isLoading}
 		<div class="py-8 text-center text-sm text-white/40">Loading recent matches...</div>

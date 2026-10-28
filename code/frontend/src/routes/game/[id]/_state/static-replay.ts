@@ -2,6 +2,7 @@ import { goto } from '$app/navigation';
 import { games } from '#lib/api/client.js';
 import { toastStore } from '#lib/state/toast.svelte.js';
 import { gamemodes } from '#lib/data/gamemodes.data.js';
+import type { GameHistoryResponse } from '#lib/types/game.js';
 import type { GameSessionController } from './game-session.svelte';
 import { resolve } from '$app/paths';
 
@@ -13,7 +14,25 @@ export async function initStaticReplay(
 	session.store.gameMode = gamemodes.ai_vs_ai;
 
 	try {
-		const history = await games.getHistory(gameId);
+		let history: GameHistoryResponse;
+
+		if (gameId === 'local') {
+			const stored = sessionStorage.getItem('gostrategy_local_replay');
+			if (!stored) {
+				toastStore.warning('No local replay found in session');
+				goto(resolve('profile'), { replaceState: true });
+				return;
+			}
+			const parsed = JSON.parse(stored);
+			history = {
+				gameId: parsed.gameId || 'local',
+				initialState: parsed.initialState,
+				moves: parsed.moves,
+				winnerId: parsed.winnerId ?? null
+			};
+		} else {
+			history = await games.getHistory(gameId);
+		}
 
 		session.store.loadMoveHistory(
 			{
@@ -34,14 +53,16 @@ export async function initStaticReplay(
 				history.moves.length > 0 ? history.moves[history.moves.length - 1].playerId : 0,
 			currentPlayerName: '',
 			isGameOver: true,
-			winnerId: history.winnerId !== null ? history.winnerId : undefined,
+			winnerId:
+				history.winnerId !== null && history.winnerId !== undefined ? history.winnerId : undefined,
 			winnerName:
 				history.winnerId === 0
 					? 'Player 1 (Blue)'
 					: history.winnerId === 1
 						? 'Player 2 (Red)'
 						: 'Draw',
-			winCause: history.winnerId !== null ? 'Victory achieved' : 'Draw',
+			winCause:
+				history.winnerId !== null && history.winnerId !== undefined ? 'Victory achieved' : 'Draw',
 			player1Score: 0,
 			player2Score: 0,
 			waitingForInput: false,
@@ -62,6 +83,6 @@ export async function initStaticReplay(
 		}
 	} catch (err) {
 		toastStore.handleApiMessage(err, 'Failed to load game replay');
-		goto(resolve(`game/${gameId}`), { replaceState: true });
+		goto(resolve(gameId === 'local' ? 'profile' : `game/${gameId}`), { replaceState: true });
 	}
 }

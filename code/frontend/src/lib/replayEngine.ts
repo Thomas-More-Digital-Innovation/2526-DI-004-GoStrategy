@@ -68,3 +68,49 @@ function applyMove(board: (PieceData | null)[][], move: HistoricalMove) {
 			break;
 	}
 }
+
+export interface ValidationResult {
+	valid: boolean;
+	error?: string;
+	data?: GameHistory;
+}
+
+export function validateReplayJson(data: unknown): ValidationResult {
+	if (!data || typeof data !== 'object') {
+		return { valid: false, error: 'Replay file is empty or not a valid JSON object' };
+	}
+
+	const candidate = data as Partial<GameHistory>;
+
+	if (!Array.isArray(candidate.initialState) || candidate.initialState.length === 0) {
+		return { valid: false, error: 'Replay missing valid initialState grid' };
+	}
+
+	if (!Array.isArray(candidate.moves)) {
+		return { valid: false, error: 'Replay missing valid moves list' };
+	}
+
+	for (let i = 0; i < candidate.moves.length; i++) {
+		const m = candidate.moves[i];
+		if (
+			!m ||
+			typeof m.fromX !== 'number' ||
+			typeof m.fromY !== 'number' ||
+			typeof m.toX !== 'number' ||
+			typeof m.toY !== 'number' ||
+			typeof m.playerId !== 'number'
+		) {
+			return { valid: false, error: `Move #${i + 1} contains invalid coordinates or player ID` };
+		}
+	}
+
+	return {
+		valid: true,
+		data: {
+			gameId: typeof candidate.gameId === 'string' ? candidate.gameId : 'local-replay',
+			initialState: candidate.initialState,
+			moves: candidate.moves,
+			winnerId: candidate.winnerId ?? null
+		}
+	};
+}
