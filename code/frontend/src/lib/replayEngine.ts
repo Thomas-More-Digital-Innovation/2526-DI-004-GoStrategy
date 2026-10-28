@@ -21,6 +21,11 @@ export interface GameHistory {
 	initialState: (PieceData | null)[][];
 	moves: HistoricalMove[];
 	winnerId?: number | null;
+	gameType?: string;
+	player1Username?: string;
+	player2Username?: string;
+	winCause?: string;
+	createdAt?: string;
 }
 
 /**
@@ -110,7 +115,14 @@ export function validateReplayJson(data: unknown): ValidationResult {
 			gameId: typeof candidate.gameId === 'string' ? candidate.gameId : 'local-replay',
 			initialState: candidate.initialState,
 			moves: candidate.moves,
-			winnerId: candidate.winnerId ?? null
+			winnerId: candidate.winnerId ?? null,
+			gameType: typeof candidate.gameType === 'string' ? candidate.gameType : undefined,
+			player1Username:
+				typeof candidate.player1Username === 'string' ? candidate.player1Username : undefined,
+			player2Username:
+				typeof candidate.player2Username === 'string' ? candidate.player2Username : undefined,
+			winCause: typeof candidate.winCause === 'string' ? candidate.winCause : undefined,
+			createdAt: typeof candidate.createdAt === 'string' ? candidate.createdAt : undefined
 		}
 	};
 }

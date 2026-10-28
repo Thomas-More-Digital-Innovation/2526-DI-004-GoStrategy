@@ -13,6 +13,7 @@ import {
 	type HistoricalMove
 } from '#lib/replayEngine.js';
 import { gamemodes } from '#lib/data/gamemodes.data.js';
+import { SvelteDate } from 'svelte/reactivity';
 
 export class GameStore {
 	gameState = $state<GameState | null>(null);
@@ -264,6 +265,15 @@ export class GameStore {
 
 	exportGame() {
 		if (!this.rawHistory) return null;
-		return JSON.stringify(this.rawHistory, null, 2);
+		const payload: GameHistory = {
+			...this.rawHistory,
+			gameType: this.gameMode?.mode,
+			player1Username: this.gameState?.player1Username || 'Player 1',
+			player2Username: this.gameState?.player2Username || 'Player 2',
+			winCause: this.gameState?.winCause,
+			winnerId: this.rawHistory.winnerId ?? this.gameState?.winnerId ?? null,
+			createdAt: new SvelteDate().toISOString()
+		};
+		return JSON.stringify(payload, null, 2);
 	}
 }

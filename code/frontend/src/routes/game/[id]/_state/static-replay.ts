@@ -28,10 +28,21 @@ export async function initStaticReplay(
 				gameId: parsed.gameId || 'local',
 				initialState: parsed.initialState,
 				moves: parsed.moves,
-				winnerId: parsed.winnerId ?? null
+				winnerId: parsed.winnerId ?? null,
+				gameType: parsed.gameType,
+				player1Username: parsed.player1Username,
+				player2Username: parsed.player2Username,
+				winCause: parsed.winCause,
+				createdAt: parsed.createdAt
 			};
 		} else {
 			history = await games.getHistory(gameId);
+		}
+
+		if (history.gameType) {
+			session.store.gameMode = gamemodes.fromString(history.gameType);
+		} else {
+			session.store.gameMode = gamemodes.ai_vs_ai;
 		}
 
 		session.store.loadMoveHistory(
@@ -47,6 +58,15 @@ export async function initStaticReplay(
 			-1
 		);
 
+		const p1Name = history.player1Username || 'Player 1';
+		const p2Name = history.player2Username || 'Player 2';
+		const winnerName =
+			history.winnerId === 0
+				? `${p1Name} (Blue)`
+				: history.winnerId === 1
+					? `${p2Name} (Red)`
+					: 'Draw';
+
 		session.store.gameState = {
 			round: Math.ceil(history.moves.length / 2) || 1,
 			currentPlayerId:
@@ -55,14 +75,10 @@ export async function initStaticReplay(
 			isGameOver: true,
 			winnerId:
 				history.winnerId !== null && history.winnerId !== undefined ? history.winnerId : undefined,
-			winnerName:
-				history.winnerId === 0
-					? 'Player 1 (Blue)'
-					: history.winnerId === 1
-						? 'Player 2 (Red)'
-						: 'Draw',
+			winnerName,
 			winCause:
-				history.winnerId !== null && history.winnerId !== undefined ? 'Victory achieved' : 'Draw',
+				history.winCause ||
+				(history.winnerId !== null && history.winnerId !== undefined ? 'Victory achieved' : 'Draw'),
 			player1Score: 0,
 			player2Score: 0,
 			waitingForInput: false,
@@ -72,8 +88,8 @@ export async function initStaticReplay(
 			player2AlivePieces: 0,
 			isSetupPhase: false,
 			headless: false,
-			player1Username: 'Player 1',
-			player2Username: 'Player 2'
+			player1Username: p1Name,
+			player2Username: p2Name
 		};
 
 		session.store.isReplaying = true;
