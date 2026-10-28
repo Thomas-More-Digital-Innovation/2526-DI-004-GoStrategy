@@ -139,4 +139,9 @@ export interface GameHistoryResponse {
 	initialState: (PieceData | null)[][];
 	moves: HistoricalMove[];
 	winnerId: number | null;
+	gameType?: string;
+	player1Username?: string;
+	player2Username?: string;
+	winCause?: string;
+	createdAt?: string;
 }
