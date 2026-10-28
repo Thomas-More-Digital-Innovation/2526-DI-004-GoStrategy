@@ -8,9 +8,9 @@ This document outlines the planned improvements and future directions for the Go
 *Focus: Storing and viewing past games.*
 
 ### Replay System
-- [ ] **Game Theater**: View replays of previous games with full playback controls.
-- [ ] **External Loading**: Support for uploading and viewing replay files.
-- [ ] **Lifecycle**: Automated cleanup cycles to manage storage (keep last X games per user).
+- [x] **Game Theater**: View replays of previous games with full playback controls.
+- [x] **External Loading**: Support for uploading and viewing replay files.
+- [x] **Lifecycle**: Automated cleanup cycles to manage storage (keep last X games per user).
 
 ---
 
