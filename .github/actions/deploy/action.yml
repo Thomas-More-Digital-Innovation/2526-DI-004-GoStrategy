@@ -17,6 +17,10 @@ inputs:
     description: "IMAGE_TAG value to write to .env for docker compose"
     required: false
     default: ""
+  fail-on-vulnerability:
+    description: "Whether Trivy vulnerability scan should exit 1 on findings"
+    required: false
+    default: "false"
   github-token:
     description: "GitHub token for GHCR authentication"
     required: false
@@ -102,11 +106,12 @@ runs:
       run: |
         echo "repo_lower=${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
 
-    - name: Build and push Backend
+    - name: Build Backend (local)
       uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc
       with:
         context: ./code/backend
-        push: true
+        load: true
+        push: false
         tags: |
           ghcr.io/${{ steps.prep.outputs.repo_lower }}/backend:${{ inputs.tag }}
           ${{ inputs.push-latest == 'true' && format('ghcr.io/{0}/backend:latest', steps.prep.outputs.repo_lower) || '' }}
@@ -120,12 +125,13 @@ runs:
         mkdir -p code/frontend/static
         [ -f CHANGELOG.md ] && cp CHANGELOG.md code/frontend/static/CHANGELOG.md || touch code/frontend/static/CHANGELOG.md
 
-    - name: Build and push Frontend
+    - name: Build Frontend (local)
       uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc
       with:
         context: .
         file: ./code/frontend/Dockerfile
-        push: true
+        load: true
+        push: false
         tags: |
           ghcr.io/${{ steps.prep.outputs.repo_lower }}/frontend:${{ inputs.tag }}
           ${{ inputs.push-latest == 'true' && format('ghcr.io/{0}/frontend:latest', steps.prep.outputs.repo_lower) || '' }}
@@ -143,7 +149,7 @@ runs:
       with:
         image-ref: ghcr.io/${{ steps.prep.outputs.repo_lower }}/backend:${{ inputs.tag }}
         format: "table"
-        exit-code: "1"
+        exit-code: ${{ inputs.fail-on-vulnerability == 'true' && '1' || '0' }}
         ignore-unfixed: true
         severity: "CRITICAL"
 
@@ -152,9 +158,33 @@ runs:
       with:
         image-ref: ghcr.io/${{ steps.prep.outputs.repo_lower }}/frontend:${{ inputs.tag }}
         format: "table"
-        exit-code: "1"
+        exit-code: ${{ inputs.fail-on-vulnerability == 'true' && '1' || '0' }}
         ignore-unfixed: true
         severity: "CRITICAL"
+
+    - name: Push Backend and Frontend to GHCR
+      shell: bash
+      env:
+        PUSH_LATEST: ${{ inputs.push-latest }}
+        ADDITIONAL_TAG: ${{ inputs.additional-tag }}
+        REPO_LOWER: ${{ steps.prep.outputs.repo_lower }}
+        TAG: ${{ inputs.tag }}
+      run: |
+        docker push "ghcr.io/${REPO_LOWER}/backend:${TAG}"
+        if [ "${PUSH_LATEST}" = "true" ]; then
+          docker push "ghcr.io/${REPO_LOWER}/backend:latest"
+        fi
+        if [ -n "${ADDITIONAL_TAG}" ]; then
+          docker push "ghcr.io/${REPO_LOWER}/backend:${ADDITIONAL_TAG}"
+        fi
+
+        docker push "ghcr.io/${REPO_LOWER}/frontend:${TAG}"
+        if [ "${PUSH_LATEST}" = "true" ]; then
+          docker push "ghcr.io/${REPO_LOWER}/frontend:latest"
+        fi
+        if [ -n "${ADDITIONAL_TAG}" ]; then
+          docker push "ghcr.io/${REPO_LOWER}/frontend:${ADDITIONAL_TAG}"
+        fi
 
     - name: Connect to Tailscale
       uses: tailscale/github-action@d1b6cd204f8dceda5b3eaad7f1f767be390056cd

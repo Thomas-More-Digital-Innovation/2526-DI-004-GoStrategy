@@ -48,6 +48,7 @@ jobs:
           tag: ${{ steps.prep.outputs.tag }}
           push-latest: "true"
           image-tag: ${{ steps.prep.outputs.tag }}
+          fail-on-vulnerability: "true"
           github-token: ${{ secrets.GITHUB_TOKEN }}
           app-env: ${{ vars.APP_ENV }}
           allowed-origins: ${{ vars.ALLOWED_ORIGINS }}
