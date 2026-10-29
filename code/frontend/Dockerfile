@@ -1,11 +1,11 @@
-FROM node:26.12.0-alpine AS deps
+FROM node:26.12.1-alpine AS deps
 WORKDIR /app
 RUN npm install -g pnpm@11.26.0
 COPY code/frontend/package.json code/frontend/pnpm-lock.yaml code/frontend/pnpm-workspace.yaml* ./
 ENV NODE_ENV=development
 RUN pnpm install --frozen-lockfile
 
-FROM node:26.12.0-alpine AS build
+FROM node:26.12.1-alpine AS build
 WORKDIR /app
 RUN npm install -g pnpm@11.26.0
 COPY --from=deps /app/node_modules ./node_modules
