@@ -164,21 +164,26 @@ runs:
 
     - name: Push Backend and Frontend to GHCR
       shell: bash
+      env:
+        PUSH_LATEST: ${{ inputs.push-latest }}
+        ADDITIONAL_TAG: ${{ inputs.additional-tag }}
+        REPO_LOWER: ${{ steps.prep.outputs.repo_lower }}
+        TAG: ${{ inputs.tag }}
       run: |
-        docker push "ghcr.io/${{ steps.prep.outputs.repo_lower }}/backend:${{ inputs.tag }}"
-        if [ "${{ inputs.push-latest }}" = "true" ]; then
-          docker push "ghcr.io/${{ steps.prep.outputs.repo_lower }}/backend:latest"
+        docker push "ghcr.io/${REPO_LOWER}/backend:${TAG}"
+        if [ "${PUSH_LATEST}" = "true" ]; then
+          docker push "ghcr.io/${REPO_LOWER}/backend:latest"
         fi
-        if [ -n "${{ inputs.additional-tag }}" ]; then
-          docker push "ghcr.io/${{ steps.prep.outputs.repo_lower }}/backend:${{ inputs.additional-tag }}"
+        if [ -n "${ADDITIONAL_TAG}" ]; then
+          docker push "ghcr.io/${REPO_LOWER}/backend:${ADDITIONAL_TAG}"
         fi
 
-        docker push "ghcr.io/${{ steps.prep.outputs.repo_lower }}/frontend:${{ inputs.tag }}"
-        if [ "${{ inputs.push-latest }}" = "true" ]; then
-          docker push "ghcr.io/${{ steps.prep.outputs.repo_lower }}/frontend:latest"
+        docker push "ghcr.io/${REPO_LOWER}/frontend:${TAG}"
+        if [ "${PUSH_LATEST}" = "true" ]; then
+          docker push "ghcr.io/${REPO_LOWER}/frontend:latest"
         fi
-        if [ -n "${{ inputs.additional-tag }}" ]; then
-          docker push "ghcr.io/${{ steps.prep.outputs.repo_lower }}/frontend:${{ inputs.additional-tag }}"
+        if [ -n "${ADDITIONAL_TAG}" ]; then
+          docker push "ghcr.io/${REPO_LOWER}/frontend:${ADDITIONAL_TAG}"
         fi
 
     - name: Connect to Tailscale
