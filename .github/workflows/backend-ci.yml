@@ -159,7 +159,7 @@ jobs:
       # --- Test & Coverage Analysis ---
       - name: check test coverage
         id: coverage
-        uses: vladopajic/go-test-coverage@239670d50ed072bfce8b9ab1765227a53429d664
+        uses: vladopajic/go-test-coverage@249eda999ac7e91238727277beec9b32b28a19b0
         continue-on-error: true
         with:
           config: ./.github/.testcoverage.yml
