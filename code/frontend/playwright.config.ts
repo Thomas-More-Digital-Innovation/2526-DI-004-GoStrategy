@@ -1,11 +1,17 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const baseURL = 'http://localhost:4173';
+
 export default defineConfig({
-	webServer: {
-		command: 'pnpm run build && pnpm run preview -- --port 4173',
-		port: 4173,
-		reuseExistingServer: !process.env.CI
-	},
+	// why: in CI the production containers from docker-compose.e2e.yml already serve the app on :4173
+	webServer: process.env.CI
+		? undefined
+		: {
+				command: 'pnpm run build && pnpm run preview -- --port 4173',
+				url: baseURL,
+				reuseExistingServer: true
+			},
+	use: { baseURL },
 	testDir: 'tests',
 	testMatch: '**/*.e2e.{ts,js}',
 	projects: [

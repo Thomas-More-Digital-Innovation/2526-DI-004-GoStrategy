@@ -143,7 +143,7 @@ code/frontend/src/
 - **Naming:**
   - `*.spec.ts` -> Unit & state tests. Colocated next to the source file.
   - `*.svelte.spec.ts` -> Component tests (Vitest browser mode, Chromium via `vitest-browser-svelte`). Colocated.
-  - `*.e2e.ts` -> Playwright tests in `code/frontend/tests/`. These run against the real Go backend.
+  - `*.e2e.ts` -> Playwright tests in `code/frontend/tests/`. In CI (and `just e2e`) they run against the production Docker images via `docker-compose.e2e.yml`, behind a same-origin proxy like prod.
 - **Config:** Vitest lives in `vitest.config.ts` (merges `vite.config.ts`); Playwright in `playwright.config.ts`.
 - **Mirrored Rules:** Where the frontend mirrors a backend rule (validation, setup encoding, board geometry, piece counts), test it against the shared fixtures in `code/contracts/` that the Go `*contract_test.go` files also consume. Never hard-code expected values on one side only. Move legality stays backend-only: the frontend queries it (`requestValidMoves`), never computes it.
 - **Injectable Dependencies:** State classes take collaborators (e.g. `GameSocket`) as constructor defaults so tests pass fakes instead of `vi.mock`.
@@ -158,6 +158,7 @@ code/frontend/src/
 | :--- | :--- |
 | `just default` | List all available recipes and submodules (`just`) |
 | `just dev` | Start full local development stack with Docker Compose |
+| `just e2e` | Build the production images and run Playwright against them (`docker-compose.e2e.yml`) |
 
 ### Backend Submodule (`just go <cmd>`)
 
