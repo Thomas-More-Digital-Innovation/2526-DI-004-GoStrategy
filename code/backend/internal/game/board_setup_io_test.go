@@ -66,32 +66,9 @@ func TestValidateSetupRows(t *testing.T) {
 	})
 }
 
-func TestRowsAndSetupDataConversion(t *testing.T) {
-	rows := NormalizeSetupRows(validTestRows())
-	data := RowsToSetupData(rows)
-	assert.Len(t, data, 40)
-
-	recovered, err := SetupDataToRows(data)
-	require.NoError(t, err)
-	assert.Equal(t, rows, recovered)
-
-	_, err = SetupDataToRows("too_short")
+func TestSetupDataToRowsInvalidLength(t *testing.T) {
+	_, err := SetupDataToRows("too_short")
 	assert.Error(t, err)
-}
-
-func TestFlipSetupRows(t *testing.T) {
-	rows := []string{
-		"0123456789",
-		"abcdefghij",
-		"klmnopqrst",
-		"uvwxyzABCD",
-	}
-	flipped := FlipSetupRows(rows)
-	require.Len(t, flipped, 4)
-	assert.Equal(t, "DCBAzyxwvu", flipped[0])
-	assert.Equal(t, "tsrqponmlk", flipped[1])
-	assert.Equal(t, "jihgfedcba", flipped[2])
-	assert.Equal(t, "9876543210", flipped[3])
 }
 
 func TestLoadBoardSetupFromFile(t *testing.T) {

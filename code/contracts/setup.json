@@ -1,0 +1,31 @@
+{
+  "_comment": "Setup string format shared by frontend (board-binary.ts) and backend (board_setup_io.go). 4 rows x 10 chars: 0=Flag, B=Bomb, 1=Spy, 2-9=ranks, M=Marshal, '.'=empty.",
+  "pieceCounts": {
+    "0": 1,
+    "B": 6,
+    "1": 1,
+    "2": 8,
+    "3": 5,
+    "4": 4,
+    "5": 4,
+    "6": 4,
+    "7": 3,
+    "8": 2,
+    "9": 1,
+    "M": 1
+  },
+  "cases": [
+    {
+      "rows": ["0BB1222222", "22BBB33333", "B444455556", "666777889M"],
+      "setupData": "0BB122222222BBB33333B444455556666777889M",
+      "flippedRows": ["M988777666", "655554444B", "33333BBB22", "2222221BB0"],
+      "flippedSetupData": "M988777666655554444B33333BBB222222221BB0"
+    },
+    {
+      "rows": ["0B........", "..........", "..........", "........M1"],
+      "setupData": "0B....................................M1",
+      "flippedRows": ["1M........", "..........", "..........", "........B0"],
+      "flippedSetupData": "1M....................................B0"
+    }
+  ]
+}

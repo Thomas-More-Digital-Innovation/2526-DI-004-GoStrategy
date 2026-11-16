@@ -3,7 +3,6 @@ package handlers_test
 import (
 	"bytes"
 	"context"
-	"digital-innovation/gostrategy/internal/api/rest/handlers"
 	"digital-innovation/gostrategy/internal/db"
 	"digital-innovation/gostrategy/internal/models"
 	"digital-innovation/gostrategy/internal/testutils"
@@ -18,14 +17,6 @@ import (
 )
 
 const strongPassword = "StrongPassword1"
-
-func TestIsStrongPassword(t *testing.T) {
-	assert.True(t, handlers.IsStrongPassword("Strong123"))
-	assert.False(t, handlers.IsStrongPassword("weak"))
-	assert.False(t, handlers.IsStrongPassword("NoNumber"))
-	assert.False(t, handlers.IsStrongPassword("nonupper1"))
-	assert.False(t, handlers.IsStrongPassword("NOLOWER1"))
-}
 
 func TestRegisterUserHandler(t *testing.T) {
 	_, h, _ := testutils.SetupHandlerTest(t)

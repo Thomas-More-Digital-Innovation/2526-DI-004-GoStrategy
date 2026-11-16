@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+	"unicode"
 )
 
 var (
@@ -26,6 +27,23 @@ func ValidateUsername(username string) error {
 	return nil
 }
 
+// Username length bounds enforced on registration.
+const (
+	UsernameMinLen = 3
+	UsernameMaxLen = 50
+)
+
+// ValidateNewUsername validates characters and length of a username being registered
+func ValidateNewUsername(username string) error {
+	if err := ValidateUsername(username); err != nil {
+		return err
+	}
+	if len(username) < UsernameMinLen || len(username) > UsernameMaxLen {
+		return fmt.Errorf("username must be %d-%d characters", UsernameMinLen, UsernameMaxLen)
+	}
+	return nil
+}
+
 // ValidatePassword returns an error if the password contains invalid characters or edge spaces
 func ValidatePassword(password string) error {
 	if strings.HasPrefix(password, " ") || strings.HasSuffix(password, " ") {
@@ -33,6 +51,31 @@ func ValidatePassword(password string) error {
 	}
 	if passwordForbiddenRegex.MatchString(password) {
 		return fmt.Errorf(`password contains invalid characters (allowed: a-z, A-Z, 0-9, spaces, and !@#$%%^&*()_+=-.)`)
+	}
+	return nil
+}
+
+// PasswordMinLen is the minimum length of a newly set password.
+const PasswordMinLen = 8
+
+// ValidateNewPassword validates characters and complexity of a password being set
+func ValidateNewPassword(password string) error {
+	if err := ValidatePassword(password); err != nil {
+		return err
+	}
+	var hasNumber, hasUpper, hasLower bool
+	for _, char := range password {
+		switch {
+		case unicode.IsDigit(char):
+			hasNumber = true
+		case unicode.IsUpper(char):
+			hasUpper = true
+		case unicode.IsLower(char):
+			hasLower = true
+		}
+	}
+	if len(password) < PasswordMinLen || !hasNumber || !hasUpper || !hasLower {
+		return fmt.Errorf("password must be at least %d characters and contain at least one number, one uppercase and one lowercase letter", PasswordMinLen)
 	}
 	return nil
 }

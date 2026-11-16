@@ -111,8 +111,8 @@ func (h *Handler) ChangePasswordHandler(c *gin.Context) {
 		return
 	}
 
-	if !IsStrongPassword(req.NewPassword) {
-		core.SendError(c, "Password must be at least 8 characters and contain at least one number, one uppercase and one lowercase letter", http.StatusBadRequest)
+	if err := utils.ValidateNewPassword(req.NewPassword); err != nil {
+		core.SendError(c, err.Error(), http.StatusBadRequest)
 		return
 	}
 

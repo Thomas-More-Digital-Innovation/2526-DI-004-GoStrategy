@@ -1,0 +1,18 @@
+{
+  "_comment": "Board geometry shared by frontend and backend. setupRows are inclusive [start, end] per player id.",
+  "size": 10,
+  "lakes": [
+    [2, 4],
+    [3, 4],
+    [6, 4],
+    [7, 4],
+    [2, 5],
+    [3, 5],
+    [6, 5],
+    [7, 5]
+  ],
+  "setupRows": {
+    "0": [6, 9],
+    "1": [0, 3]
+  }
+}

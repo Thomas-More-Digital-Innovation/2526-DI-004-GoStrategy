@@ -68,6 +68,7 @@ Before writing any code, stop at the first rung that holds:
     - `/internal/auth` -> JWT issuance, verification, user sessions.
     - `/internal/logging` & `/internal/telemetry` -> slog-based logging and Prometheus metrics.
   - `/code/backend/pkg` -> Explicitly exportable, standalone utility libraries (keep minimal).
+  - `/code/contracts` -> JSON fixtures shared by Go and frontend tests for mirrored rules (see §3.3).
 
 ### 2.2 Structural Rules & Best Practices
 - **Implicit Interfaces:** Rely on Go's implicit interface satisfaction. Define interfaces at the consumer layer, never speculative producer interfaces.
@@ -144,7 +145,7 @@ code/frontend/src/
   - `*.svelte.spec.ts` -> Component tests (Vitest browser mode, Chromium via `vitest-browser-svelte`). Colocated.
   - `*.e2e.ts` -> Playwright tests in `code/frontend/tests/`. These run against the real Go backend.
 - **Config:** Vitest lives in `vitest.config.ts` (merges `vite.config.ts`); Playwright in `playwright.config.ts`.
-- **No Duplicate Rules:** Never re-test backend game rules (move legality, combat) in the frontend. Test only what the frontend owns: selection, socket calls, state transitions, replay reconstruction.
+- **Mirrored Rules:** Where the frontend mirrors a backend rule (validation, setup encoding, board geometry, piece counts), test it against the shared fixtures in `code/contracts/` that the Go `*contract_test.go` files also consume. Never hard-code expected values on one side only. Move legality stays backend-only: the frontend queries it (`requestValidMoves`), never computes it.
 - **Injectable Dependencies:** State classes take collaborators (e.g. `GameSocket`) as constructor defaults so tests pass fakes instead of `vi.mock`.
 
 ---
