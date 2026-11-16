@@ -20,7 +20,11 @@ lint:
 test:
     pnpm test:unit
 
-# run e2e tests (playwright)
+# run unit tests with coverage report
+coverage:
+    pnpm test:coverage
+
+# run e2e tests (playwright, needs backend on :8080)
 test-e2e:
     pnpm test:e2e
 

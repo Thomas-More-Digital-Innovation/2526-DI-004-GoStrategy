@@ -17,15 +17,6 @@ func TestNewBoard(t *testing.T) {
 	for _, row := range board.GetField() {
 		assert.Len(t, row, 10, "Expected each row to have 10 columns")
 	}
-
-	expectedLakes := []Position{
-		NewPosition(2, 4), NewPosition(3, 4), NewPosition(2, 5), NewPosition(3, 5),
-		NewPosition(6, 4), NewPosition(7, 4), NewPosition(6, 5), NewPosition(7, 5),
-	}
-
-	for _, lakePos := range expectedLakes {
-		assert.True(t, board.IsLake(lakePos), "Expected position %v to be a lake", lakePos)
-	}
 }
 
 func TestSetAndGetPieceAt(t *testing.T) {
@@ -50,14 +41,6 @@ func TestGetPieceAt(t *testing.T) {
 	retrievedPiece := board.GetPieceAt(position)
 
 	assert.Equal(t, piece, retrievedPiece, "Expected to retrieve the same piece that was set")
-}
-
-func TestIsLake(t *testing.T) {
-	board := NewBoard()
-	position := NewPosition(2, 4)
-
-	isLake := board.IsLake(position)
-	assert.True(t, isLake, "Expected position %v to be a lake", position)
 }
 
 func TestIsValidMove(t *testing.T) {

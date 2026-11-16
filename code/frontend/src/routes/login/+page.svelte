@@ -7,6 +7,11 @@
 	import Input from '#lib/components/ui/Input.svelte';
 	import TacticalBriefing from './_components/TacticalBriefing.svelte';
 	import PasswordChecker from './_components/PasswordChecker.svelte';
+	import {
+		USERNAME_RULES,
+		isUsernameFormatValid as isUsernameFormat,
+		isUsernameLengthValid as isUsernameLength
+	} from '#lib/utils/authValidation.js';
 	import { User, Lock } from '@lucide/svelte';
 
 	let username = $state('');
@@ -17,8 +22,8 @@
 	let passwordStrength = $state(0);
 	let isBlueCommander = $state(true);
 
-	const isUsernameFormatValid = $derived(/^[a-zA-Z0-9_]*$/.test(username));
-	const isUsernameLengthValid = $derived(username.length >= 3 && username.length <= 50);
+	const isUsernameFormatValid = $derived(isUsernameFormat(username));
+	const isUsernameLengthValid = $derived(isUsernameLength(username));
 	const isUsernameValid = $derived(isUsernameFormatValid && isUsernameLengthValid);
 
 	const usernameError = $derived.by(() => {
@@ -26,8 +31,8 @@
 		if (!isUsernameFormatValid) return 'Only letters, numbers, and underscores allowed';
 		if (!isLogin && !isUsernameLengthValid) {
 			return username.length < 3
-				? 'Username must be at least 3 characters'
-				: 'Username must be 50 characters or less';
+				? `Username must be at least ${USERNAME_RULES.minLength} characters`
+				: `Username must be ${USERNAME_RULES.maxLength} characters or less`;
 		}
 		return '';
 	});

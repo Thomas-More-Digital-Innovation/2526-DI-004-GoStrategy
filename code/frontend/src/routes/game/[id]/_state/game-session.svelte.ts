@@ -9,7 +9,7 @@ import { initStaticReplay } from './static-replay';
 
 export class GameSessionController {
 	readonly store = new GameStore();
-	readonly connection = new GameConnectionManager();
+	readonly connection: GameConnectionManager;
 	gameId = $state('');
 	seatIndex = $state(-1);
 	isStaticReplay = $state(false);
@@ -17,6 +17,10 @@ export class GameSessionController {
 	validMoves = $state<Position[]>([]);
 	setupSwapPos1 = $state<Position | null>(null);
 	setupSelectedPlayer = $state(0);
+
+	constructor(connection = new GameConnectionManager()) {
+		this.connection = connection;
+	}
 
 	get connected() {
 		return this.isStaticReplay || this.connection.connected;

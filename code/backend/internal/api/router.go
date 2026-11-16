@@ -64,6 +64,7 @@ func (s *GameServer) SetupRoutes() {
 
 	// Health & metrics
 	s.Router.GET("/health", h.HealthHandler)
+	s.Router.HEAD("/health", h.HealthHandler)
 	s.Router.GET("/csrf-token", h.GetCSRFToken)
 
 	metricsGroup := s.Router.Group("/metrics")

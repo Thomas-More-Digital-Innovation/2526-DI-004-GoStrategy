@@ -26,3 +26,5 @@ vite.config.ts.timestamp-*
 # Test
 test-results/
 playwright-report/
+coverage/
+.vitest/

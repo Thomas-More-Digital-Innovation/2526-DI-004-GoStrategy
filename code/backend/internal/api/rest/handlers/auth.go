@@ -12,31 +12,11 @@ import (
 	"net/http"
 	"strings"
 	"time"
-	"unicode"
 
 	"github.com/gin-gonic/gin"
 )
 
 // Handler wraps the GameServer to provide REST handlers
-
-// IsStrongPassword checks for password complexity
-func IsStrongPassword(password string) bool {
-	if len(password) < 8 {
-		return false
-	}
-	var hasNumber, hasUpper, hasLower bool
-	for _, char := range password {
-		switch {
-		case unicode.IsDigit(char):
-			hasNumber = true
-		case unicode.IsUpper(char):
-			hasUpper = true
-		case unicode.IsLower(char):
-			hasLower = true
-		}
-	}
-	return hasNumber && hasUpper && hasLower
-}
 
 // RegisterUserHandler handles user registration
 // @Summary Register a new user
@@ -57,21 +37,12 @@ func (h *Handler) RegisterUserHandler(c *gin.Context) {
 		return
 	}
 
-	if err := utils.ValidateUsername(req.Username); err != nil {
+	if err := utils.ValidateNewUsername(req.Username); err != nil {
 		core.SendError(c, err.Error(), http.StatusBadRequest)
 		return
 	}
-	if err := utils.ValidatePassword(req.Password); err != nil {
+	if err := utils.ValidateNewPassword(req.Password); err != nil {
 		core.SendError(c, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	if len(req.Username) < 3 || len(req.Username) > 50 {
-		core.SendError(c, "Username must be 3-50 characters", http.StatusBadRequest)
-		return
-	}
-	if !IsStrongPassword(req.Password) {
-		core.SendError(c, "Password must be at least 8 characters and contain at least one number, one uppercase and one lowercase letter", http.StatusBadRequest)
 		return
 	}
 
