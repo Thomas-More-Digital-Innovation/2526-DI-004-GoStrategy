@@ -58,6 +58,10 @@ jobs:
       - name: Setup frontend
         uses: ./.github/actions/setup-frontend
 
+      - name: Install Chromium for component tests
+        working-directory: code/frontend
+        run: pnpm exec playwright install --with-deps chromium
+
       - name: Run Unit Tests (Vitest)
         working-directory: code/frontend
         run: pnpm test:unit
