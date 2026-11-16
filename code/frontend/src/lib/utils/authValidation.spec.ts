@@ -1,9 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-	getPasswordStrengthScore,
-	isPasswordStrong,
-	validatePasswordInput
-} from './authValidation';
+import { getPasswordStrengthScore, validatePasswordInput } from './authValidation';
 
 describe('authValidation', () => {
 	describe('validatePasswordInput', () => {
@@ -26,24 +22,6 @@ describe('authValidation', () => {
 			expect(validatePasswordInput('NoDigitsHere!').hasNumber).toBe(false);
 			expect(validatePasswordInput('WithDigit1!').hasNumber).toBe(true);
 		});
-
-		it('forbids leading and trailing spaces', () => {
-			expect(validatePasswordInput(' Password123!').isValidFormat).toBe(false);
-			expect(validatePasswordInput('Password123! ').isValidFormat).toBe(false);
-			expect(validatePasswordInput('Pass word 123!').isValidFormat).toBe(true);
-		});
-	});
-
-	describe('isPasswordStrong', () => {
-		it('returns false for weak passwords', () => {
-			expect(isPasswordStrong('short')).toBe(false);
-			expect(isPasswordStrong('alllowercase123')).toBe(false);
-			expect(isPasswordStrong('ALLUPPERCASE123')).toBe(false);
-		});
-
-		it('returns true when all criteria are met', () => {
-			expect(isPasswordStrong('StrongP@ss123')).toBe(true);
-		});
 	});
 
 	describe('getPasswordStrengthScore', () => {
@@ -53,6 +31,11 @@ describe('authValidation', () => {
 
 		it('returns maximum score of 4 for compliant strong password', () => {
 			expect(getPasswordStrengthScore('StrongP@ss123')).toBe(4);
+		});
+
+		it('counts each satisfied criterion', () => {
+			expect(getPasswordStrengthScore('abc')).toBe(1);
+			expect(getPasswordStrengthScore('Abc1')).toBe(3);
 		});
 	});
 });

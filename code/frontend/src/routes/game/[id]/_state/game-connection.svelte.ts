@@ -4,11 +4,15 @@ import { toastStore } from '#lib/state/toast.svelte.js';
 import { serverStore } from '#lib/state/server-status.svelte.js';
 
 export class GameConnectionManager {
-	socket = new GameSocket();
+	readonly socket: GameSocket;
 	connected = $state(false);
 	isReconnecting = $state(false);
 	reconnectAttempts = $state(0);
 	maxReconnectAttempts = 5;
+
+	constructor(socket = new GameSocket()) {
+		this.socket = socket;
+	}
 
 	async connect(gameId: string, seatIndex: number) {
 		try {

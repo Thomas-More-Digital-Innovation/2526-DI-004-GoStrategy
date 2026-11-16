@@ -17,6 +17,20 @@ export const PASSWORD_RULES = {
 	forbiddenPattern: /[^a-zA-Z0-9!@#$%^&*()_+=\-. ]/
 };
 
+export const USERNAME_RULES = {
+	minLength: 3,
+	maxLength: 50,
+	forbiddenPattern: /[^a-zA-Z0-9_]/
+};
+
+export function isUsernameFormatValid(username: string): boolean {
+	return !USERNAME_RULES.forbiddenPattern.test(username);
+}
+
+export function isUsernameLengthValid(username: string): boolean {
+	return username.length >= USERNAME_RULES.minLength && username.length <= USERNAME_RULES.maxLength;
+}
+
 export interface PasswordChecks {
 	isMinLength: boolean;
 	hasUppercase: boolean;
