@@ -6,6 +6,7 @@ export default defineConfig({
 		port: 4173,
 		reuseExistingServer: !process.env.CI
 	},
+	testDir: 'tests',
 	testMatch: '**/*.e2e.{ts,js}',
 	projects: [
 		{

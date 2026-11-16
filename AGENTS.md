@@ -138,6 +138,15 @@ code/frontend/src/
 - **Universal State Modules:** Encapsulate state using `.svelte.ts` files with reactive classes or functions using runes.
 - **Styling:** Exclusively Tailwind CSS utility classes (Tailwind v4 via `@tailwindcss/vite`). No inline `style="..."` or unstructured raw CSS blocks.
 
+### 3.3 Testing
+- **Naming:**
+  - `*.spec.ts` -> Unit & state tests. Colocated next to the source file.
+  - `*.svelte.spec.ts` -> Component tests (Vitest browser mode, Chromium via `vitest-browser-svelte`). Colocated.
+  - `*.e2e.ts` -> Playwright tests in `code/frontend/tests/`. These run against the real Go backend.
+- **Config:** Vitest lives in `vitest.config.ts` (merges `vite.config.ts`); Playwright in `playwright.config.ts`.
+- **No Duplicate Rules:** Never re-test backend game rules (move legality, combat) in the frontend. Test only what the frontend owns: selection, socket calls, state transitions, replay reconstruction.
+- **Injectable Dependencies:** State classes take collaborators (e.g. `GameSocket`) as constructor defaults so tests pass fakes instead of `vi.mock`.
+
 ---
 
 ## 4. Verification Commands Reference
@@ -174,5 +183,8 @@ code/frontend/src/
 | `just web lint` | Alias to `check` |
 | `just web dev` | Run Vite development server (`pnpm dev`) |
 | `just web build` | Build static production assets (`pnpm build`) |
+| `just web test` | Run Vitest unit, state & component tests |
+| `just web coverage` | Run Vitest with v8 coverage over all `src/` files |
+| `just web test-e2e` | Run Playwright e2e (needs backend on `:8080`) |
 | `just web preview` | Preview production build locally (`pnpm preview`) |
 | `just web audit` | Audit frontend dependencies for security advisories |
