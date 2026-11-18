@@ -2,7 +2,6 @@ name: Backend CI
 
 permissions:
   contents: read
-  pull-requests: write
 
 concurrency:
   group: backend-ci-${{ github.ref }}
@@ -15,18 +14,18 @@ on:
       - "code/backend/**"
       - "code/contracts/**"
       - ".golangci.yaml"
-      - ".github/.testcoverage.yml"
       - ".github/workflows/backend-ci.yml"
       - ".github/actions/setup-backend/**"
+      - ".github/actions/coverage-badge/**"
   pull_request:
     branches: ["*"]
     paths:
       - "code/backend/**"
       - "code/contracts/**"
       - ".golangci.yaml"
-      - ".github/.testcoverage.yml"
       - ".github/workflows/backend-ci.yml"
       - ".github/actions/setup-backend/**"
+      - ".github/actions/coverage-badge/**"
 
 jobs:
   lint:
@@ -80,6 +79,13 @@ jobs:
     name: Build & Test
     runs-on: ubuntu-latest
     needs: lint
+    permissions:
+      contents: read
+      actions: read
+      pull-requests: write
+      statuses: write
+    outputs:
+      line-coverage: ${{ steps.coverage.outputs.line-coverage }}
 
     services:
       postgres:
@@ -136,19 +142,15 @@ jobs:
           # Run tests with gotestsum for a clear overview of failures in CI logs
           $(go env GOPATH)/bin/gotestsum --format pkgname-and-test-fails --junitfile unit-tests.xml -- -race ./... -coverprofile=coverage.out -covermode=atomic
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5
-        with:
-          file: code/backend/coverage.out
-          flags: backend
-          fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
+      # why: coverage.out uses module paths, but the PR diff uses repo paths, so patch coverage would match no files
+      - name: Make coverage paths repo-relative
+        run: sed -i 's#^digital-innovation/gostrategy/#code/backend/#' code/backend/coverage.out
 
       - name: Upload coverage report
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
-          name: backend-coverage-report
+          name: coverage-backend
           path: code/backend/coverage.out
 
       - name: Upload test results
@@ -158,76 +160,43 @@ jobs:
           name: backend-test-results
           path: code/backend/unit-tests.xml
 
-      # --- Test & Coverage Analysis ---
-      - name: check test coverage
+      - name: Report coverage
         id: coverage
-        uses: vladopajic/go-test-coverage@6890500b00a7e5862e54662c04ea9fa7c799ce1e
-        continue-on-error: true
+        uses: getsentry/coverage-action@b3db4e382bd9859c913a96093a3d369b67f59177 # 0.4.4
         with:
-          config: ./.github/.testcoverage.yml
-
-      - name: Generate Detailed Coverage Report
-        id: detailed_report
-        if: always()
-        run: |
-          REPORT=$(./code/backend/scripts/coverage_report.sh code/backend/coverage.out)
-          echo "table<<EOF" >> $GITHUB_OUTPUT
-          echo "$REPORT" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-      # --- Pull Request Interaction ---
-      - name: find pull request ID
-        id: find_pr
-        if: always()
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO: ${{ github.repository }}
-          OWNER: ${{ github.repository_owner }}
-          BRANCH: ${{ github.ref_name }}
-          EXISTING_PR: ${{ github.event.pull_request.number }}
-        run: |
-          PR_ID=$(./code/backend/scripts/find_pr.sh \
-            "$REPO" \
-            "$OWNER" \
-            "$BRANCH" \
-            "$GITHUB_TOKEN" \
-            "$EXISTING_PR")
-
-          if [ -n "$PR_ID" ]; then
-            echo "pull_request_id=$PR_ID" >> $GITHUB_OUTPUT
-          fi
-
-      - name: post coverage report
-        if: always() && steps.find_pr.outputs.pull_request_id
-        uses: thollander/actions-comment-pull-request@24bffb9b452ba05a4f3f77933840a6a841d1b32b
-        continue-on-error: true
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          comment-tag: coverage-report
-          pr-number: ${{ steps.find_pr.outputs.pull_request_id }}
-          message: |
-            ### Test Coverage Report
-
-            ${{ steps.coverage.outputs.report && fromJSON(steps.coverage.outputs.report) || 'No coverage report available' }}
-
-            <details>
-            <summary>View Detailed Package Coverage</summary>
-
-            ${{ steps.detailed_report.outputs.table }}
-
-            </details>
-
-      # --- Verification & Cleanup ---
-      - name: "finally check coverage"
-        if: always() && steps.coverage.outcome == 'failure'
-        shell: bash
-        run: |
-          echo "### ❌ Coverage Check Failed" >> $GITHUB_STEP_SUMMARY
-          echo "Test coverage does not meet the required thresholds. Check the PR comment for details." >> $GITHUB_STEP_SUMMARY
-          exit 1
+          token: ${{ secrets.GITHUB_TOKEN }}
+          files: code/backend/coverage.out
+          disable-search: "true"
+          coverage-format: go
+          flags: backend
+          comment-key: backend
+          status-key: backend
+          title: Backend coverage
+          post-pr-comment: "true"
+          enable-tests: "false"
+          informational-project: "true"
+          informational-patch: "true"
 
       - name: Final Status
-        if: failure() && steps.coverage.outcome != 'failure'
+        if: failure()
         run: |
           echo "### ❌ CI Failed" >> $GITHUB_STEP_SUMMARY
           echo "Backend CI failed. Review the logs above to see test/lint failures." >> $GITHUB_STEP_SUMMARY
+
+  badge:
+    name: Coverage badge
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Publish badge
+        uses: ./.github/actions/coverage-badge
+        with:
+          label: backend coverage
+          percentage: ${{ needs.test.outputs.line-coverage }}
+          file: backend.json
