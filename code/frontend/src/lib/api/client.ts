@@ -1,11 +1,14 @@
-import type {
-	GameHistoryResponse,
-	GameInfo,
-	GameRecord,
-	User,
-	UserStats
-} from '#lib/types/game.js';
+import type { GameHistoryResponse, GameInfo, User, UserStats } from '#lib/types/game.js';
 import type { BoardSetup, ExportedBoardSetup } from '#lib/types/board-setup.js';
+import type {
+	ChangePasswordRequest,
+	CreateBoardSetupRequest,
+	CreateUserRequest,
+	GameListResponse,
+	LoginRequest,
+	ReconnectableGameResponse,
+	UpdateBoardSetupRequest
+} from '#lib/types/generated/models.js';
 import { parseApiMessage } from '#lib/utils/api.js';
 
 interface ApiError extends Error {
@@ -97,13 +100,13 @@ export const auth = {
 	login: (username: string, password: string) =>
 		requestVoid('/users/login', {
 			method: 'POST',
-			body: JSON.stringify({ username, password })
+			body: JSON.stringify({ username, password } satisfies LoginRequest)
 		}),
 
 	register: (username: string, password: string) =>
 		requestVoid('/users/register', {
 			method: 'POST',
-			body: JSON.stringify({ username, password })
+			body: JSON.stringify({ username, password } satisfies CreateUserRequest)
 		}),
 
 	refresh: () => requestVoid('/users/refresh', { method: 'POST' }),
@@ -119,7 +122,7 @@ export const auth = {
 				old_password: oldPassword,
 				new_password: newPassword,
 				confirm_password: confirmPassword
-			})
+			} satisfies ChangePasswordRequest)
 		})
 };
 
@@ -134,17 +137,12 @@ export const games = {
 
 	list: () => request<GameInfo[]>('/games'),
 
-	getReconnectable: () =>
-		request<{ hasGame: boolean; gameId?: string; gameType?: string; seatIndex?: number }>(
-			'/users/me/reconnectable'
-		),
+	getReconnectable: () => request<ReconnectableGameResponse>('/users/me/reconnectable'),
 
 	abandon: (gameId: string) => requestVoid(`/games/${gameId}`, { method: 'DELETE' }),
 	getHistory: (gameId: string) => request<GameHistoryResponse>(`/games/${gameId}/history`),
 	listMine: (limit: number = 50, offset: number = 0) =>
-		request<{ games: GameRecord[]; total: number }>(
-			`/users/me/games?limit=${limit}&offset=${offset}`
-		)
+		request<GameListResponse>(`/users/me/games?limit=${limit}&offset=${offset}`)
 };
 
 // Stats
@@ -158,17 +156,14 @@ export const boardSetups = {
 
 	getOne: (id: number) => request<BoardSetup>(`/board-setups/${id}`),
 
-	create: (data: { name: string; description: string; setup_data: string; is_default: boolean }) =>
+	create: (data: CreateBoardSetupRequest) =>
 		requestVoid('/board-setups', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(data)
 		}),
 
-	update: (
-		id: number,
-		data: { name: string; description: string; setup_data: string; is_default: boolean }
-	) =>
+	update: (id: number, data: UpdateBoardSetupRequest) =>
 		requestVoid(`/board-setups/${id}`, {
 			method: 'PUT',
 			headers: { 'Content-Type': 'application/json' },

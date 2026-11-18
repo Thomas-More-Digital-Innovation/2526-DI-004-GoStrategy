@@ -72,10 +72,9 @@ func TestComplexJSONSerialization(t *testing.T) {
 			Player1ID: nil,
 			Player2ID: nil,
 			GameType:  "funky",
-			InitialState: map[string]any{
-				"metadata": "some \"quoted\" text and \n newlines",
-				"unicode":  "🚀 Stratego!",
-			},
+			InitialState: [][]models.PieceData{{
+				{Type: "some \"quoted\" text and \n newlines", Rank: "🚀 Stratego!", OwnerID: 1},
+			}},
 			StartTime:  time.Now(),
 			FinishedAt: time.Now(),
 			Moves:      []models.HistoricalMove{move},
@@ -102,7 +101,7 @@ func TestComplexJSONSerialization(t *testing.T) {
 			Player1ID:    nil,
 			Player2ID:    nil,
 			GameType:     "test",
-			InitialState: map[string]any{},
+			InitialState: [][]models.PieceData{},
 			StartTime:    time.Now(),
 			FinishedAt:   time.Now(),
 			Moves:        []models.HistoricalMove{move},

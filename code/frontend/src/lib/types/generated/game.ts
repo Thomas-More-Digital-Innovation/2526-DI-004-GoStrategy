@@ -158,7 +158,7 @@ export type MoveResultType =
  */
 export interface GameHistory {
 	gameId: string;
-	initialState: any; // Will be JSONB/Array
+	initialState: PieceData[][];
 	moves: HistoricalMove[];
 	winnerId?: number /* int */;
 }

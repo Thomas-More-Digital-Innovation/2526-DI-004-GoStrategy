@@ -205,7 +205,7 @@ func TestIntegration_GameHistory(t *testing.T) {
 		Player1ID:    &user.ID,
 		Player2ID:    nil,
 		GameType:     "ranked",
-		InitialState: map[string]any{"board": "state"},
+		InitialState: [][]models.PieceData{{{Type: "Flag", Rank: "0", OwnerID: 1}}},
 		StartTime:    time.Now(),
 		FinishedAt:   time.Now(),
 		Moves:        []models.HistoricalMove{move},

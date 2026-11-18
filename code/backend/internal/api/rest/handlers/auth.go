@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"digital-innovation/gostrategy/internal/api/core"
-	"digital-innovation/gostrategy/internal/api/dto"
 	"digital-innovation/gostrategy/internal/auth"
 	"digital-innovation/gostrategy/internal/db"
 	"digital-innovation/gostrategy/internal/logging"
@@ -140,7 +139,7 @@ func (h *Handler) LogoutHandler(c *gin.Context) {
 	}
 
 	auth.ClearSessionCookie(c)
-	core.SendJSON(c, gin.H{dto.MsgTypeMessage: "Logged out successfully"}, http.StatusOK)
+	core.SendJSON(c, models.MessageResponse{Message: "Logged out successfully"}, http.StatusOK)
 }
 
 // RefreshTokenHandler handles access token renewal
@@ -173,5 +172,5 @@ func (h *Handler) RefreshTokenHandler(c *gin.Context) {
 	auth.SetSessionCookie(c, accessToken)
 	auth.SetRefreshTokenCookie(c, newRefreshToken)
 
-	core.SendJSON(c, gin.H{dto.MsgTypeMessage: "Token refreshed"}, http.StatusOK)
+	core.SendJSON(c, models.MessageResponse{Message: "Token refreshed"}, http.StatusOK)
 }

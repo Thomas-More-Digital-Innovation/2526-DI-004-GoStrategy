@@ -18,7 +18,7 @@ func TestHistoryLogic(t *testing.T) {
 
 	t.Run("Save Game and Moves", func(t *testing.T) {
 		gameID := "game-123"
-		initialState := map[string]any{"board": "initial"}
+		initialState := [][]models.PieceData{{{Type: "Flag", Rank: "0", OwnerID: 1}}}
 		moves := []models.HistoricalMove{
 			{MoveIndex: 1, PlayerID: 1, FromX: 0, FromY: 0, ToX: 0, ToY: 1, Result: "moved"},
 			{MoveIndex: 2, PlayerID: 2, FromX: 9, FromY: 9, ToX: 9, ToY: 8, Result: "moved"},
@@ -77,7 +77,7 @@ func TestHistoryLogic(t *testing.T) {
 				Player1ID:    tc.p1,
 				Player2ID:    tc.p2,
 				GameType:     tc.gameType,
-				InitialState: map[string]any{"board": "state"},
+				InitialState: [][]models.PieceData{{{Type: "Flag", Rank: "0", OwnerID: 1}}},
 				StartTime:    gameTime,
 				FinishedAt:   gameTime,
 				Moves:        []models.HistoricalMove{sampleMove},

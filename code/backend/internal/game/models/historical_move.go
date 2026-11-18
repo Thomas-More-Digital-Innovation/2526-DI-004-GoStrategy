@@ -35,7 +35,7 @@ const (
 // GameHistory represents the full history of a game
 type GameHistory struct {
 	GameID       string           `json:"gameId"`
-	InitialState interface{}      `json:"initialState"` // Will be JSONB/Array
+	InitialState [][]PieceData    `json:"initialState"`
 	Moves        []HistoricalMove `json:"moves"`
 	WinnerID     *int             `json:"winnerId"`
 }

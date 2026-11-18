@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"digital-innovation/gostrategy/internal/api/core"
-	"digital-innovation/gostrategy/internal/api/dto"
 	"digital-innovation/gostrategy/internal/db"
+	"digital-innovation/gostrategy/internal/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -14,7 +14,7 @@ import (
 // @Description Check if the API server is up and running
 // @Tags health
 // @Produce json
-// @Success 200 {object} map[string]string
+// @Success 200 {object} models.HealthResponse
 // @Router /health [get]
 func (h *Handler) HealthHandler(c *gin.Context) {
 	// Check database connection
@@ -29,10 +29,7 @@ func (h *Handler) HealthHandler(c *gin.Context) {
 		return
 	}
 
-	core.SendJSON(c, gin.H{
-		"status": "ok",
-		"db":     "connected",
-	}, http.StatusOK)
+	core.SendJSON(c, models.HealthResponse{Status: "ok", DB: "connected"}, http.StatusOK)
 }
 
 // GetCSRFToken returns a message for CSRF token retrieval
@@ -40,9 +37,9 @@ func (h *Handler) HealthHandler(c *gin.Context) {
 // @Description Retrieve a CSRF token for subsequent state-changing requests
 // @Tags auth
 // @Produce json
-// @Success 200 {object} map[string]string
+// @Success 200 {object} models.MessageResponse
 // @Router /csrf [get]
 func (h *Handler) GetCSRFToken(c *gin.Context) {
 	// The CSRF token is already set in a cookie by the middleware
-	core.SendJSON(c, gin.H{dto.MsgTypeMessage: "CSRF cookie set"}, http.StatusOK)
+	core.SendJSON(c, models.MessageResponse{Message: "CSRF cookie set"}, http.StatusOK)
 }

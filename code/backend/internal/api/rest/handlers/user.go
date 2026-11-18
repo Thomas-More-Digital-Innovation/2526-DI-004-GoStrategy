@@ -124,5 +124,5 @@ func (h *Handler) ChangePasswordHandler(c *gin.Context) {
 	}
 
 	logging.Debug(logging.TagWeb, "Password updated successfully for user %d", user.ID)
-	core.SendJSON(c, gin.H{"message": "Password updated successfully"}, http.StatusOK)
+	core.SendJSON(c, models.MessageResponse{Message: "Password updated successfully"}, http.StatusOK)
 }

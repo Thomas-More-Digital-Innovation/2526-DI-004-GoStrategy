@@ -87,6 +87,28 @@ export interface ReconnectableGameResponse {
 export interface MessageResponse {
 	message: string;
 }
+/**
+ * ExportedBoardSetup represents a single board setup in standard export format.
+ */
+export interface ExportedBoardSetup {
+	name: string;
+	description?: string;
+	setup_data: string;
+	rows: string[];
+}
+/**
+ * CountResponse wraps a total count for monitoring endpoints.
+ */
+export interface CountResponse {
+	count: number /* int */;
+}
+/**
+ * HealthResponse reports service health.
+ */
+export interface HealthResponse {
+	status: string;
+	db: string;
+}
 
 //////////
 // source: user.go

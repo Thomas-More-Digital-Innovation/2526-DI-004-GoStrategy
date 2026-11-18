@@ -25,3 +25,22 @@ type ReconnectableGameResponse struct {
 type MessageResponse struct {
 	Message string `json:"message"`
 }
+
+// ExportedBoardSetup represents a single board setup in standard export format.
+type ExportedBoardSetup struct {
+	Name        string   `json:"name"`
+	Description string   `json:"description,omitempty"`
+	SetupData   string   `json:"setup_data"`
+	Rows        []string `json:"rows"`
+}
+
+// CountResponse wraps a total count for monitoring endpoints.
+type CountResponse struct {
+	Count int `json:"count"`
+}
+
+// HealthResponse reports service health.
+type HealthResponse struct {
+	Status string `json:"status"`
+	DB     string `json:"db"`
+}
