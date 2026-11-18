@@ -1,4 +1,3 @@
-# Dev Dockerfile for backend: includes Go, reflex watcher and netcat
 FROM golang:1.27-alpine
 
 # Install small extras
