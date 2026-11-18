@@ -16,7 +16,7 @@ import (
 // @Description Retrieve information about the currently logged-in user
 // @Tags users
 // @Produce json
-// @Success 200 {object} models.User
+// @Success 200 {object} models.UserDTO
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Router /users/me [get]
 func (h *Handler) GetCurrentUserHandler(c *gin.Context) {
@@ -31,7 +31,7 @@ func (h *Handler) GetCurrentUserHandler(c *gin.Context) {
 		return
 	}
 
-	core.SendJSON(c, fullUser, http.StatusOK)
+	core.SendJSON(c, fullUser.DTO(), http.StatusOK)
 }
 
 // GetUserHandler retrieves user information by ID
@@ -40,7 +40,7 @@ func (h *Handler) GetCurrentUserHandler(c *gin.Context) {
 // @Tags users
 // @Produce json
 // @Param id path int true "User ID"
-// @Success 200 {object} models.User
+// @Success 200 {object} models.UserDTO
 // @Failure 400 {object} map[string]string "Invalid or missing user ID"
 // @Failure 404 {object} map[string]string "User not found"
 // @Router /users/{id} [get]
@@ -57,7 +57,7 @@ func (h *Handler) GetUserHandler(c *gin.Context) {
 		return
 	}
 
-	core.SendJSON(c, user, http.StatusOK)
+	core.SendJSON(c, user.DTO(), http.StatusOK)
 }
 
 // ChangePasswordHandler handles password updates for the current user
@@ -124,5 +124,5 @@ func (h *Handler) ChangePasswordHandler(c *gin.Context) {
 	}
 
 	logging.Debug(logging.TagWeb, "Password updated successfully for user %d", user.ID)
-	core.SendJSON(c, gin.H{"message": "Password updated successfully"}, http.StatusOK)
+	core.SendJSON(c, models.MessageResponse{Message: "Password updated successfully"}, http.StatusOK)
 }

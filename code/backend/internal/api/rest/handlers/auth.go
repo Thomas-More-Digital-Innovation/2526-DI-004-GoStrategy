@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"digital-innovation/gostrategy/internal/api/core"
-	"digital-innovation/gostrategy/internal/api/dto"
 	"digital-innovation/gostrategy/internal/auth"
 	"digital-innovation/gostrategy/internal/db"
 	"digital-innovation/gostrategy/internal/logging"
@@ -25,7 +24,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param user body models.CreateUserRequest true "User registration details"
-// @Success 201 {object} models.User
+// @Success 201 {object} models.UserDTO
 // @Failure 400 {object} map[string]string "Invalid request body or validation error"
 // @Failure 409 {object} map[string]string "Username already exists"
 // @Failure 500 {object} map[string]string "Failed to create user"
@@ -73,7 +72,7 @@ func (h *Handler) RegisterUserHandler(c *gin.Context) {
 	auth.SetRefreshTokenCookie(c, refreshToken)
 
 	logging.UserRegistered(user.Username, user.ID)
-	core.SendJSON(c, user, http.StatusCreated)
+	core.SendJSON(c, user.DTO(), http.StatusCreated)
 }
 
 // LoginHandler handles user login
@@ -83,7 +82,7 @@ func (h *Handler) RegisterUserHandler(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param credentials body models.LoginRequest true "Login credentials"
-// @Success 200 {object} models.User
+// @Success 200 {object} models.UserDTO
 // @Failure 400 {object} map[string]string "Invalid request body"
 // @Failure 401 {object} map[string]string "Invalid username or password"
 // @Router /users/login [post]
@@ -124,7 +123,7 @@ func (h *Handler) LoginHandler(c *gin.Context) {
 	auth.SetRefreshTokenCookie(c, refreshToken)
 
 	logging.UserLoggedIn(user.Username, user.ID)
-	core.SendJSON(c, user, http.StatusOK)
+	core.SendJSON(c, user.DTO(), http.StatusOK)
 }
 
 // LogoutHandler handles user logout
@@ -140,7 +139,7 @@ func (h *Handler) LogoutHandler(c *gin.Context) {
 	}
 
 	auth.ClearSessionCookie(c)
-	core.SendJSON(c, gin.H{dto.MsgTypeMessage: "Logged out successfully"}, http.StatusOK)
+	core.SendJSON(c, models.MessageResponse{Message: "Logged out successfully"}, http.StatusOK)
 }
 
 // RefreshTokenHandler handles access token renewal
@@ -173,5 +172,5 @@ func (h *Handler) RefreshTokenHandler(c *gin.Context) {
 	auth.SetSessionCookie(c, accessToken)
 	auth.SetRefreshTokenCookie(c, newRefreshToken)
 
-	core.SendJSON(c, gin.H{dto.MsgTypeMessage: "Token refreshed"}, http.StatusOK)
+	core.SendJSON(c, models.MessageResponse{Message: "Token refreshed"}, http.StatusOK)
 }

@@ -1,80 +1,47 @@
-export interface Position {
-	x: number;
-	y: number;
+import type { GameHistory } from './generated/game';
+import type {
+	BoardStateMessage,
+	GameStateMessage,
+	MoveDTO,
+	PieceDTO,
+	PositionDTO
+} from './generated/dto';
+import type {
+	CreateGameResponse,
+	Game,
+	UserDTO,
+	UserStats as GeneratedUserStats
+} from './generated/models';
+
+export type { HistoricalMove, MoveResultType, PieceData } from './generated/game';
+import type { HistoricalMove } from './generated/game';
+
+export type Position = PositionDTO;
+export type Move = MoveDTO;
+export type GameState = GameStateMessage;
+export type User = UserDTO;
+export type UserStats = GeneratedUserStats;
+export type GameRecord = Game;
+export type GameInfo = CreateGameResponse;
+// why: static replays are assembled client-side from a game record, so they carry metadata the backend history lacks
+export interface GameHistoryResponse extends GameHistory {
+	gameType?: string;
+	player1Username?: string;
+	player2Username?: string;
+	winCause?: string;
+	createdAt?: string;
 }
 
-export interface Piece {
-	type?: string;
-	rank?: string;
-	ownerId: number;
-	ownerName?: string;
-	revealed: boolean;
+export interface Piece extends PieceDTO {
 	iconBlue?: string;
 	iconRed?: string;
-	position: Position;
 }
 
-export interface Move {
-	from: Position;
-	to: Position;
-}
-
-export interface GameState {
-	round: number;
-	currentPlayerId: number;
-	currentPlayerName: string;
-	isGameOver: boolean;
-	winnerId?: number;
-	winnerName?: string;
-	winCause?: string;
-	player1Score: number;
-	player2Score: number;
-	waitingForInput: boolean;
-	paused: boolean;
-	moveCount: number;
-	player1AlivePieces: number;
-	player2AlivePieces: number;
-	isSetupPhase: boolean;
-	headless: boolean;
-	setupRemainingSecs?: number;
-	player1Username: string;
-	player2Username: string;
+export interface BoardState extends Omit<BoardStateMessage, 'board'> {
+	board: Piece[][];
 }
 
 export type MoveVisualizationHighlightState = 'move' | 'win' | 'loss';
-
-export type MoveResultType = 'move' | 'win' | 'loss' | 'tie' | 'capture';
-
-export interface PieceData {
-	type: string;
-	rank: string;
-	ownerId: number;
-}
-
-export interface HistoricalMove {
-	moveIndex: number;
-	playerId: number;
-	fromX: number;
-	fromY: number;
-	toX: number;
-	toY: number;
-	attacker?: PieceData;
-	defender?: PieceData;
-	result: MoveResultType;
-}
-
-export interface BoardState {
-	board: Piece[][];
-	width: number;
-	height: number;
-	lastMove?: HistoricalMove;
-}
-
-export interface GameInfo {
-	gameId: string;
-	gameType: GameMode;
-	wsUrl: string;
-}
 
 export interface HistoryMove {
 	moveNumber: number;
@@ -103,45 +70,4 @@ export interface AI {
 	id: string;
 	description: string;
 	image?: string;
-}
-
-export interface User {
-	id: number;
-	username: string;
-	profile_picture?: string;
-	created_at: string;
-	updated_at: string;
-}
-
-export interface UserStats {
-	total_games: number;
-	wins: number;
-	losses: number;
-	draws: number;
-	total_moves: number;
-	avg_game_duration_seconds: number;
-}
-
-export interface GameRecord {
-	id: string;
-	player1_user_id: number | null;
-	player2_user_id: number | null;
-	winner_id: number | null;
-	game_type: string;
-	initial_state?: string;
-	created_at: string;
-	finished_at: string | null;
-	has_replay?: boolean;
-}
-
-export interface GameHistoryResponse {
-	gameId: string;
-	initialState: (PieceData | null)[][];
-	moves: HistoricalMove[];
-	winnerId: number | null;
-	gameType?: string;
-	player1Username?: string;
-	player2Username?: string;
-	winCause?: string;
-	createdAt?: string;
 }

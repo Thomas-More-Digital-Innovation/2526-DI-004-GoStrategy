@@ -1,13 +1,60 @@
 import type { Position } from '#lib/types/game.js';
+import {
+	MsgTypeAnimationComplete,
+	MsgTypeBoardState,
+	MsgTypeCombat,
+	MsgTypeError,
+	MsgTypeGameOver,
+	MsgTypeGameState,
+	MsgTypeGetValidMoves,
+	MsgTypeLoadSetup,
+	MsgTypeMove,
+	MsgTypeMoveHistory,
+	MsgTypeMoveResult,
+	MsgTypePause,
+	MsgTypeRandomizeSetup,
+	MsgTypeSetSpeed,
+	MsgTypeStartGame,
+	MsgTypeStep,
+	MsgTypeSwapPieces,
+	MsgTypeUnpause,
+	MsgTypeValidMoves,
+	type BoardStateMessage,
+	type CombatMessage,
+	type ErrorMessage,
+	type GameOverMessage,
+	type GameStateMessage,
+	type GetValidMovesMessage,
+	type LoadSetupMessage,
+	type MoveHistoryMessage,
+	type MoveMessage,
+	type MoveResultMessage,
+	type RandomizeSetupMessage,
+	type SetSpeedMessage,
+	type StartGameMessage,
+	type SwapPiecesMessage,
+	type ValidMovesMessage
+} from '#lib/types/generated/dto.js';
 
 const WS_BASE = import.meta.env.VITE_WS_BASE || 'ws://localhost:8080';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type MessageHandler = (data: any) => void;
+/** Payload of every server-to-client message, keyed by message type. */
+export interface ServerMessages {
+	[MsgTypeGameState]: GameStateMessage;
+	[MsgTypeBoardState]: BoardStateMessage;
+	[MsgTypeMoveHistory]: MoveHistoryMessage;
+	[MsgTypeMoveResult]: MoveResultMessage;
+	[MsgTypeValidMoves]: ValidMovesMessage;
+	[MsgTypeCombat]: CombatMessage;
+	[MsgTypeGameOver]: GameOverMessage;
+	[MsgTypeError]: ErrorMessage;
+}
+
+type MessageHandler<K extends keyof ServerMessages> = (data: ServerMessages[K]) => void;
 
 export class GameSocket {
 	private ws: WebSocket | null = null;
-	private handlers = new Map<string, MessageHandler>();
+	private handlers = new Map<string, (data: unknown) => void>();
 	private closeHandler: (() => void) | null = null;
 
 	connect(gameId: string, playerId: number = -1): Promise<void> {
@@ -38,57 +85,58 @@ export class GameSocket {
 		this.closeHandler = handler;
 	}
 
-	on(type: string, handler: MessageHandler) {
-		this.handlers.set(type, handler);
+	on<K extends keyof ServerMessages>(type: K, handler: MessageHandler<K>) {
+		// why: the server guarantees the payload shape per type, so the erased handler is safe to store
+		this.handlers.set(type, handler as (data: unknown) => void);
 	}
 
-	private send(type: string, data?: Record<string, unknown>) {
+	private send(type: string, data?: object) {
 		if (!this.ws) return;
 		this.ws.send(JSON.stringify({ type, data }));
 	}
 
 	sendMove(from: Position, to: Position) {
-		this.send('move', { from, to });
+		this.send(MsgTypeMove, { from, to } satisfies MoveMessage);
 	}
 
 	requestValidMoves(position: Position) {
-		this.send('getValidMoves', { position });
+		this.send(MsgTypeGetValidMoves, { position } satisfies GetValidMovesMessage);
 	}
 
 	sendSwapPieces(pos1: Position, pos2: Position) {
-		this.send('swapPieces', { pos1, pos2 });
+		this.send(MsgTypeSwapPieces, { pos1, pos2 } satisfies SwapPiecesMessage);
 	}
 
 	sendRandomizeSetup(playerId?: number) {
-		this.send('randomizeSetup', { playerId });
+		this.send(MsgTypeRandomizeSetup, { playerId } satisfies RandomizeSetupMessage);
 	}
 
 	sendStartGame(headless: boolean = false) {
-		this.send('startGame', { headless });
+		this.send(MsgTypeStartGame, { headless } satisfies StartGameMessage);
 	}
 
 	sendAnimationComplete() {
-		this.send('animationComplete');
+		this.send(MsgTypeAnimationComplete);
 	}
 
 	sendPause() {
-		this.send('pause');
+		this.send(MsgTypePause);
 	}
 
 	sendUnpause() {
-		this.send('unpause');
+		this.send(MsgTypeUnpause);
 	}
 
 	sendLoadSetup(setupData: string, playerId?: number) {
-		this.send('loadSetup', { setupData, playerId });
+		this.send(MsgTypeLoadSetup, { setupData, playerId } satisfies LoadSetupMessage);
 	}
 
 	sendSetSpeed(speedMs: number) {
-		this.send('setSpeed', { speedMs });
+		this.send(MsgTypeSetSpeed, { speedMs } satisfies SetSpeedMessage);
 	}
 
 	sendStep() {
-		this.send('step');
+		this.send(MsgTypeStep);
 	}
 
 	disconnect() {

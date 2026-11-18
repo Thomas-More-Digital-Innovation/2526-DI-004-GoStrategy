@@ -57,7 +57,7 @@ func (g *Game) MakeMove(move *Move, piece *Piece) []*Piece {
 		FromY:     move.GetFrom().Y,
 		ToX:       move.GetTo().X,
 		ToY:       move.GetTo().Y,
-		Result:    models.ResultMove,
+		Result:    models.MoveResultTypeMove,
 		Attacker: &models.PieceData{
 			Type:    piece.GetType().GetName(),
 			Rank:    string(piece.GetType().GetRank()),
@@ -85,15 +85,15 @@ func (g *Game) MakeMove(move *Move, piece *Piece) []*Piece {
 
 		if !attackerAlive {
 			if !defenderAlive {
-				histMove.Result = models.ResultTie
+				histMove.Result = models.MoveResultTypeTie
 			} else {
-				histMove.Result = models.ResultLoss
+				histMove.Result = models.MoveResultTypeLoss
 			}
 		} else {
 			if defenderType.GetName() == "Flag" {
-				histMove.Result = models.ResultCapture
+				histMove.Result = models.MoveResultTypeCapture
 			} else {
-				histMove.Result = models.ResultWin
+				histMove.Result = models.MoveResultTypeWin
 			}
 		}
 	}

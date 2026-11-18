@@ -14,16 +14,6 @@ const getIcon = (icons: Record<string, unknown>, name: string) => {
 	return (key ? (icons[key] as string) : '') as string;
 };
 
-export interface BoardSetup {
-	id: number;
-	name: string;
-	description: string;
-	created_at: string;
-	updated_at: string;
-	is_default: boolean;
-	setup_data: string;
-}
-
 export interface PieceInfo {
 	name: string;
 	icon_blue: string;
@@ -124,15 +114,4 @@ export const BOARD_ROWS = 4;
 export const BOARD_COLS = 10;
 export const BOARD_CELLS = BOARD_ROWS * BOARD_COLS;
 
-export interface ExportedBoardSetup {
-	name: string;
-	description?: string;
-	setup_data: string;
-	rows: string[];
-}
-
-export interface ExportedBoardSetupCollection {
-	version: string;
-	exported_at: string;
-	setups: ExportedBoardSetup[];
-}
+export type { BoardSetup, ExportedBoardSetup } from './generated/models';

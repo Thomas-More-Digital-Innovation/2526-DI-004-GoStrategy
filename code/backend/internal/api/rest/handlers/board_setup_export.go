@@ -11,6 +11,7 @@ import (
 	"digital-innovation/gostrategy/internal/api/core"
 	"digital-innovation/gostrategy/internal/db"
 	"digital-innovation/gostrategy/internal/game"
+	"digital-innovation/gostrategy/internal/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,7 +22,7 @@ import (
 // @Tags board-setups
 // @Produce json
 // @Param id path int true "Board Setup ID"
-// @Success 200 {object} game.ExportedBoardSetup
+// @Success 200 {object} models.ExportedBoardSetup
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Failure 404 {object} map[string]string "Board setup not found"
 // @Failure 500 {object} map[string]string "Internal Server Error"
@@ -48,7 +49,7 @@ func (h *Handler) ExportBoardSetupHandler(c *gin.Context) {
 		rows = []string{}
 	}
 
-	exported := game.ExportedBoardSetup{
+	exported := models.ExportedBoardSetup{
 		Name:        setup.Name,
 		Description: setup.Description,
 		SetupData:   setup.SetupData,
@@ -91,7 +92,7 @@ func (h *Handler) ExportAllBoardSetupsHandler(c *gin.Context) {
 			rows = []string{}
 		}
 
-		item := game.ExportedBoardSetup{
+		item := models.ExportedBoardSetup{
 			Name:        s.Name,
 			Description: s.Description,
 			SetupData:   s.SetupData,

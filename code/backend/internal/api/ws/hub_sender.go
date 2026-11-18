@@ -183,7 +183,7 @@ func (h *Hub) filterHistoricalMove(m models.HistoricalMove, seatIndex int, force
 
 	move := m
 	if move.Attacker != nil && move.Attacker.OwnerID != seatIndex {
-		if move.Result == models.ResultMove || forceFilterCombat {
+		if move.Result == models.MoveResultTypeMove || forceFilterCombat {
 			move.Attacker = &models.PieceData{
 				OwnerID: move.Attacker.OwnerID,
 				Type:    "",
@@ -192,7 +192,7 @@ func (h *Hub) filterHistoricalMove(m models.HistoricalMove, seatIndex int, force
 		}
 	}
 	if move.Defender != nil && move.Defender.OwnerID != seatIndex {
-		if move.Result == models.ResultMove || forceFilterCombat {
+		if move.Result == models.MoveResultTypeMove || forceFilterCombat {
 			move.Defender = &models.PieceData{
 				OwnerID: move.Defender.OwnerID,
 				Type:    "",

@@ -25,17 +25,17 @@ type MoveResultType string
 
 // Move result types
 const (
-	ResultMove    MoveResultType = "move"    // Normal move to empty cell
-	ResultWin     MoveResultType = "win"     // Attacker won combat
-	ResultLoss    MoveResultType = "loss"    // Attacker lost combat
-	ResultTie     MoveResultType = "tie"     // Both pieces died
-	ResultCapture MoveResultType = "capture" // Flag captured (game over)
+	MoveResultTypeMove    MoveResultType = "move"    // Normal move to empty cell
+	MoveResultTypeWin     MoveResultType = "win"     // Attacker won combat
+	MoveResultTypeLoss    MoveResultType = "loss"    // Attacker lost combat
+	MoveResultTypeTie     MoveResultType = "tie"     // Both pieces died
+	MoveResultTypeCapture MoveResultType = "capture" // Flag captured (game over)
 )
 
 // GameHistory represents the full history of a game
 type GameHistory struct {
 	GameID       string           `json:"gameId"`
-	InitialState interface{}      `json:"initialState"` // Will be JSONB/Array
+	InitialState [][]PieceData    `json:"initialState"`
 	Moves        []HistoricalMove `json:"moves"`
 	WinnerID     *int             `json:"winnerId"`
 }

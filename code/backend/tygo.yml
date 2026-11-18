@@ -1,0 +1,24 @@
+packages:
+  - path: digital-innovation/gostrategy/internal/game/models
+    output_path: ../frontend/src/lib/types/generated/game.ts
+    enum_style: union
+  - path: digital-innovation/gostrategy/internal/models
+    output_path: ../frontend/src/lib/types/generated/models.ts
+    exclude_files:
+      - ai.go
+      - auth.go
+      - game_bridge.go
+    type_mappings:
+      time.Time: string
+      gorm.DeletedAt: "string | null"
+      gamemodels.MoveResultType: "game.MoveResultType"
+    frontmatter: |
+      import type * as game from './game';
+  - path: digital-innovation/gostrategy/internal/api/dto
+    output_path: ../frontend/src/lib/types/generated/dto.ts
+    type_mappings:
+      gamemodels.GameState: "game.GameState"
+      models.HistoricalMove: "game.HistoricalMove"
+      models.PieceData: "game.PieceData"
+    frontmatter: |
+      import type * as game from './game';

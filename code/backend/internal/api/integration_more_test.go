@@ -199,13 +199,13 @@ func TestIntegration_GameHistory(t *testing.T) {
 	gameID := "hist-1"
 
 	move :=
-		models.HistoricalMove{MoveIndex: 1, PlayerID: 0, Result: models.ResultMove}
+		models.HistoricalMove{MoveIndex: 1, PlayerID: 0, Result: models.MoveResultTypeMove}
 	if err := db.SaveGameHistory(ctx, db.SaveHistoryParams{
 		GameID:       gameID,
 		Player1ID:    &user.ID,
 		Player2ID:    nil,
 		GameType:     "ranked",
-		InitialState: map[string]any{"board": "state"},
+		InitialState: [][]models.PieceData{{{Type: "Flag", Rank: "0", OwnerID: 1}}},
 		StartTime:    time.Now(),
 		FinishedAt:   time.Now(),
 		Moves:        []models.HistoricalMove{move},

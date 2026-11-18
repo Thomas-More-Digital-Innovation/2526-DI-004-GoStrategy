@@ -8,14 +8,6 @@ import (
 	"strings"
 )
 
-// ExportedBoardSetup represents a single board setup in standard export format.
-type ExportedBoardSetup struct {
-	Name        string   `json:"name"`
-	Description string   `json:"description,omitempty"`
-	SetupData   string   `json:"setup_data"`
-	Rows        []string `json:"rows"`
-}
-
 // NormalizeSetupString maps common notation aliases ('F'->'0', 'S'->'1') and normalizes chars.
 func NormalizeSetupString(raw string) string {
 	var sb strings.Builder

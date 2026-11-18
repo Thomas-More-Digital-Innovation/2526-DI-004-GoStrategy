@@ -3,6 +3,7 @@ package handlers
 import (
 	"digital-innovation/gostrategy/internal/api/core"
 	"digital-innovation/gostrategy/internal/db"
+	"digital-innovation/gostrategy/internal/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -13,7 +14,7 @@ import (
 // @Description Retrieve the total number of registered users
 // @Tags monitoring
 // @Produce json
-// @Success 200 {object} map[string]int64
+// @Success 200 {object} models.CountResponse
 // @Failure 500 {object} map[string]string "Internal Server Error"
 // @Router /monitoring/users/count [get]
 func (h *Handler) UserCountHandler(c *gin.Context) {
@@ -22,7 +23,7 @@ func (h *Handler) UserCountHandler(c *gin.Context) {
 		core.SendError(c, "Failed to retrieve user count", http.StatusInternalServerError)
 		return
 	}
-	core.SendJSON(c, gin.H{"count": count}, http.StatusOK)
+	core.SendJSON(c, models.CountResponse{Count: count}, http.StatusOK)
 }
 
 // GamesPlayedCountHandler returns the total number of games played
@@ -30,7 +31,7 @@ func (h *Handler) UserCountHandler(c *gin.Context) {
 // @Description Retrieve the total number of games played in the system
 // @Tags monitoring
 // @Produce json
-// @Success 200 {object} map[string]int64
+// @Success 200 {object} models.CountResponse
 // @Failure 500 {object} map[string]string "Internal Server Error"
 // @Router /monitoring/games/count [get]
 func (h *Handler) GamesPlayedCountHandler(c *gin.Context) {
@@ -39,5 +40,5 @@ func (h *Handler) GamesPlayedCountHandler(c *gin.Context) {
 		core.SendError(c, "Failed to retrieve games count", http.StatusInternalServerError)
 		return
 	}
-	core.SendJSON(c, gin.H{"count": count}, http.StatusOK)
+	core.SendJSON(c, models.CountResponse{Count: count}, http.StatusOK)
 }
