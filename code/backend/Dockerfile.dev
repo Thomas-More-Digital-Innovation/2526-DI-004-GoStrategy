@@ -1,4 +1,5 @@
-# Dev Dockerfile for backend: includes Go, reflex watcher and netcat
+# trivy:ignore:DS-0002
+# why: dev-only image, bind-mounted source needs host-uid file access; prod image runs as non-root
 FROM golang:1.27-alpine
 
 # Install small extras
