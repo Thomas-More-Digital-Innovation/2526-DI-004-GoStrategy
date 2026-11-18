@@ -4,6 +4,7 @@ import (
 	"digital-innovation/gostrategy/internal/api/core"
 	"digital-innovation/gostrategy/internal/db"
 	"digital-innovation/gostrategy/internal/logging"
+	"digital-innovation/gostrategy/internal/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,7 +16,7 @@ import (
 // @Tags games
 // @Produce json
 // @Param id path string true "Game ID"
-// @Success 200 {object} models.Game
+// @Success 200 {object} models.GameHistory
 // @Failure 400 {object} map[string]string "Game ID required"
 // @Failure 404 {object} map[string]string "Game history not found"
 // @Router /games/{id}/history [get]
@@ -43,7 +44,7 @@ func (h *Handler) HandleGetGameHistory(c *gin.Context) {
 // @Param id path int true "User ID"
 // @Param limit query int false "Number of games to return (default 10, max 50)"
 // @Param offset query int false "Offset for pagination (default 0)"
-// @Success 200 {object} map[string]interface{}
+// @Success 200 {object} models.GameListResponse
 // @Failure 500 {object} map[string]string "Failed to retrieve games"
 // @Router /users/{id}/games [get]
 func (h *Handler) HandleListUserGames(c *gin.Context) {
@@ -57,10 +58,7 @@ func (h *Handler) HandleListUserGames(c *gin.Context) {
 
 	total, _ := db.GetGamesCountForUser(c.Request.Context(), userID)
 
-	core.SendJSON(c, gin.H{
-		"games": games,
-		"total": total,
-	}, http.StatusOK)
+	core.SendJSON(c, models.GameListResponse{Games: games, Total: total}, http.StatusOK)
 }
 
 // HandleListMyGames returns a list of games for the authenticated user
@@ -70,7 +68,7 @@ func (h *Handler) HandleListUserGames(c *gin.Context) {
 // @Produce json
 // @Param limit query int false "Number of games to return (default 10, max 50)"
 // @Param offset query int false "Offset for pagination (default 0)"
-// @Success 200 {object} map[string]interface{}
+// @Success 200 {object} models.GameListResponse
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Failure 500 {object} map[string]string "Failed to retrieve games"
 // @Router /users/me/games [get]
@@ -90,10 +88,7 @@ func (h *Handler) HandleListMyGames(c *gin.Context) {
 
 	logging.Debug(logging.TagWeb, "Listing games for user %d: found %d games", user.ID, total)
 
-	core.SendJSON(c, gin.H{
-		"games": games,
-		"total": total,
-	}, http.StatusOK)
+	core.SendJSON(c, models.GameListResponse{Games: games, Total: total}, http.StatusOK)
 }
 
 // HandleGetReconnectableGame handles querying for a reconnectable game session.
@@ -101,7 +96,7 @@ func (h *Handler) HandleListMyGames(c *gin.Context) {
 // @Description Retrieve a game session in progress for the authenticated user
 // @Tags games
 // @Produce json
-// @Success 200 {object} map[string]interface{}
+// @Success 200 {object} models.ReconnectableGameResponse
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Router /users/me/reconnectable [get]
 //
@@ -114,25 +109,25 @@ func (h *Handler) HandleGetReconnectableGame(c *gin.Context) {
 
 	handler, seatIndex, found := h.GetUserActiveGameSeat(user.ID)
 	if !found {
-		core.SendJSON(c, gin.H{"hasGame": false}, http.StatusOK)
+		core.SendJSON(c, models.ReconnectableGameResponse{}, http.StatusOK)
 		return
 	}
 
 	if handler.Session.GetGameState().IsGameOver {
-		core.SendJSON(c, gin.H{"hasGame": false}, http.StatusOK)
+		core.SendJSON(c, models.ReconnectableGameResponse{}, http.StatusOK)
 		return
 	}
 
 	if handler.Hub != nil && handler.Hub.IsUserConnected(user.ID) {
-		core.SendJSON(c, gin.H{"hasGame": false}, http.StatusOK)
+		core.SendJSON(c, models.ReconnectableGameResponse{}, http.StatusOK)
 		return
 	}
 
-	core.SendJSON(c, gin.H{
-		"hasGame":   true,
-		"gameId":    handler.Session.ID,
-		"gameType":  handler.GameType,
-		"seatIndex": seatIndex,
+	core.SendJSON(c, models.ReconnectableGameResponse{
+		HasGame:   true,
+		GameID:    handler.Session.ID,
+		GameType:  handler.GameType,
+		SeatIndex: &seatIndex,
 	}, http.StatusOK)
 }
 
@@ -141,7 +136,7 @@ func (h *Handler) HandleGetReconnectableGame(c *gin.Context) {
 // @Description Terminate the active game session immediately and prevent further reconnection
 // @Tags games
 // @Param id path string true "Game ID"
-// @Success 200 {object} map[string]string "Success message"
+// @Success 200 {object} models.MessageResponse "Success message"
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Failure 404 {object} map[string]string "Active game session not found or user is not a participant"
 // @Router /games/{id} [delete]
@@ -175,5 +170,5 @@ func (h *Handler) HandleDeleteGame(c *gin.Context) {
 		return
 	}
 
-	core.SendJSON(c, gin.H{"message": "Game session abandoned successfully"}, http.StatusOK)
+	core.SendJSON(c, models.MessageResponse{Message: "Game session abandoned successfully"}, http.StatusOK)
 }

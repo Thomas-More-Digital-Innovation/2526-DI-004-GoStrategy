@@ -53,8 +53,12 @@ asyncapi:
     npx -y @asyncapi/cli@latest generate fromTemplate docs/asyncapi.yaml @asyncapi/html-template -o docs/asyncapi-docs --force-write
 
 # update Swagger and AsyncAPI documentation
-docs: swagger asyncapi
+docs: swagger asyncapi types
 
 # run simulation with custom args
 simulation *args:
     go run ./cmd/simulation {{args}}
+
+# generate frontend TypeScript types from Go structs
+types:
+    go tool tygo generate --config tygo.yml

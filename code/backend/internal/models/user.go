@@ -17,6 +17,26 @@ type User struct {
 	DeletedAt      gorm.DeletedAt `json:"-" gorm:"index"`
 }
 
+// UserDTO is the client-facing view of User; new User columns stay private until added here.
+type UserDTO struct {
+	ID             int       `json:"id"`
+	Username       string    `json:"username"`
+	ProfilePicture string    `json:"profile_picture,omitempty"`
+	CreatedAt      time.Time `json:"created_at"`
+	UpdatedAt      time.Time `json:"updated_at"`
+}
+
+// DTO converts the user to its client-facing representation.
+func (u *User) DTO() UserDTO {
+	return UserDTO{
+		ID:             u.ID,
+		Username:       u.Username,
+		ProfilePicture: u.ProfilePicture,
+		CreatedAt:      u.CreatedAt,
+		UpdatedAt:      u.UpdatedAt,
+	}
+}
+
 // UserStats represents game statistics for a user
 type UserStats struct {
 	ID                  int            `json:"id" gorm:"primaryKey"`

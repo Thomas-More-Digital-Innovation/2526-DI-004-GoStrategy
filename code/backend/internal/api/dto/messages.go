@@ -83,9 +83,9 @@ type SetSpeedMessage struct {
 
 // GameStateMessage contains the current state of the game
 type GameStateMessage struct {
-	gamemodels.GameState
-	WinnerName string `json:"winnerName,omitempty"`
-	WinCause   string `json:"winCause,omitempty"`
+	gamemodels.GameState `tstype:",extends"`
+	WinnerName           string `json:"winnerName,omitempty"`
+	WinCause             string `json:"winCause,omitempty"`
 }
 
 // BuildGameStateMessage creates a GameStateMessage from gamemodels.GameState and other info

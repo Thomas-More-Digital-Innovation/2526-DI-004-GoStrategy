@@ -25,7 +25,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param user body models.CreateUserRequest true "User registration details"
-// @Success 201 {object} models.User
+// @Success 201 {object} models.UserDTO
 // @Failure 400 {object} map[string]string "Invalid request body or validation error"
 // @Failure 409 {object} map[string]string "Username already exists"
 // @Failure 500 {object} map[string]string "Failed to create user"
@@ -73,7 +73,7 @@ func (h *Handler) RegisterUserHandler(c *gin.Context) {
 	auth.SetRefreshTokenCookie(c, refreshToken)
 
 	logging.UserRegistered(user.Username, user.ID)
-	core.SendJSON(c, user, http.StatusCreated)
+	core.SendJSON(c, user.DTO(), http.StatusCreated)
 }
 
 // LoginHandler handles user login
@@ -83,7 +83,7 @@ func (h *Handler) RegisterUserHandler(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param credentials body models.LoginRequest true "Login credentials"
-// @Success 200 {object} models.User
+// @Success 200 {object} models.UserDTO
 // @Failure 400 {object} map[string]string "Invalid request body"
 // @Failure 401 {object} map[string]string "Invalid username or password"
 // @Router /users/login [post]
@@ -124,7 +124,7 @@ func (h *Handler) LoginHandler(c *gin.Context) {
 	auth.SetRefreshTokenCookie(c, refreshToken)
 
 	logging.UserLoggedIn(user.Username, user.ID)
-	core.SendJSON(c, user, http.StatusOK)
+	core.SendJSON(c, user.DTO(), http.StatusOK)
 }
 
 // LogoutHandler handles user logout

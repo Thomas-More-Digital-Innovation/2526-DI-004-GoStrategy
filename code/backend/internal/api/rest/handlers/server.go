@@ -35,7 +35,7 @@ func NewHandler(s *core.GameServer) *Handler {
 // @Accept json
 // @Produce json
 // @Param request body object{gameId=string,gameType=string,ai1=string,ai2=string} true "Game creation parameters"
-// @Success 200 {object} map[string]string "Game created successfully"
+// @Success 200 {object} models.CreateGameResponse "Game created successfully"
 // @Failure 400 {object} map[string]string "Invalid request body or parameters"
 // @Router /games [post]
 func (h *Handler) HandleCreateGame(c *gin.Context) {
@@ -109,10 +109,10 @@ func (h *Handler) HandleCreateGame(c *gin.Context) {
 		}
 	}
 
-	core.SendJSON(c, gin.H{
-		"gameId":    req.GameID,
-		keyGameType: req.GameType,
-		"wsUrl":     fmt.Sprintf("/game/%s", req.GameID),
+	core.SendJSON(c, models.CreateGameResponse{
+		GameID:   req.GameID,
+		GameType: req.GameType,
+		WsURL:    fmt.Sprintf("/game/%s", req.GameID),
 	}, http.StatusOK)
 
 	logging.GameStarted(req.GameID, req.GameType, username, userID)
