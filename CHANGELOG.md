@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.8.0] - 18-11-2026
+
+### Added
+- **Frontend Unit & E2E Integration Tests**: Added Vitest unit tests and Playwright E2E integration tests for the frontend. (#219)
+
+### Changed
+- **Generated Frontend Types from Backend**: Refactored frontend to generate TypeScript types directly from the backend, eliminating manual type duplication. (#224)
+- **CI Overhaul**: Replaced Codecov with native coverage tools, migrated setup steps to composite dotactions, replaced the custom Playwright cache with the official Playwright container, and added caching to the E2E workflow. (#226, #227, #228, #230, #231)
+- **Dependency Updates**: Bumped Svelte ecosystem, Vite (8.3.5), and `golang.org/x/crypto`.
+
+### Fixed
+- **Staging Trivy Vulnerability**: Fixed failing staging deployment caused by a Trivy vulnerability scan. (#196)
+- **Removed Cookie PNPM Override**: Cleaned up lingering `pnpm` package override for `cookie`. (#225)
+
 ## [0.7.0] - 28-10-2026
 
 ### Added
