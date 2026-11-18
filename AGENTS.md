@@ -190,3 +190,19 @@ code/frontend/src/
 | `just web test-e2e` | Run Playwright e2e (needs backend on `:8080`) |
 | `just web preview` | Preview production build locally (`pnpm preview`) |
 | `just web audit` | Audit frontend dependencies for security advisories |
+
+---
+
+## 5. Coverage Analysis
+
+Coverage runs only in CI. To find untested code, read the CI artifacts; never run the test suites for it (see §1.4).
+
+```sh
+# latest completed run for a branch; swap workflow/artifact for the frontend
+id=$(gh run list -w backend-ci.yml -b <branch> -s completed -L1 --json databaseId -q '.[0].databaseId')
+gh run download "$id" -n coverage-backend -D <scratch>/cov-backend   # frontend: frontend-ci.yml, coverage-frontend
+```
+
+- **Backend** (`coverage.out`, paths already `code/backend/...`): `awk 'NR>1 && $NF==0' coverage.out` lists untested blocks as `file:startLine.col,endLine.col numStmts 0`.
+- **Frontend** (`lcov.info`, paths relative to `code/frontend/`): `awk -F'[:,]' '/^SF:/{f=$2} /^DA:/ && $3==0 {print f":"$2}' lcov.info` lists untested lines.
+- Use `-b main` for the whole-repo picture. PR comments only show changed files. Artifacts expire after 90 days.

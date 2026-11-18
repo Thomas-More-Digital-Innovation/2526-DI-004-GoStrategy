@@ -51,6 +51,13 @@ jobs:
   test-unit:
     name: Unit Tests (Vitest)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      pull-requests: write
+      statuses: write
+    outputs:
+      line-coverage: ${{ steps.coverage.outputs.line-coverage }}
 
     steps:
       - name: Checkout repository
@@ -68,7 +75,31 @@ jobs:
 
       - name: Run Unit Tests (Vitest)
         working-directory: code/frontend
-        run: pnpm test:unit
+        run: pnpm test:coverage
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: coverage-frontend
+          path: code/frontend/coverage/lcov.info
+
+      - name: Report coverage
+        id: coverage
+        uses: getsentry/coverage-action@b3db4e382bd9859c913a96093a3d369b67f59177 # 0.4.4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          files: code/frontend/coverage/lcov.info
+          disable-search: "true"
+          coverage-format: lcov
+          flags: frontend
+          comment-key: frontend
+          status-key: frontend
+          title: Frontend coverage
+          post-pr-comment: "true"
+          enable-tests: "false"
+          informational-project: "true"
+          informational-patch: "true"
 
       - name: Summary
         if: failure()
@@ -104,3 +135,21 @@ jobs:
         if: failure()
         run: |
           echo "Frontend build failed. Review the logs above to see errors."
+
+  badge:
+    name: Coverage badge
+    runs-on: ubuntu-latest
+    needs: test-unit
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Publish badge
+        uses: ./.github/actions/coverage-badge
+        with:
+          label: frontend coverage
+          percentage: ${{ needs.test-unit.outputs.line-coverage }}
+          file: frontend.json

@@ -10,6 +10,7 @@ export default mergeConfig(
 			expect: { requireAssertions: true },
 			coverage: {
 				provider: 'v8',
+				reporter: ['text', 'lcov'],
 				include: ['src/**/*.{ts,svelte}'],
 				exclude: [
 					'src/**/*.spec.ts',

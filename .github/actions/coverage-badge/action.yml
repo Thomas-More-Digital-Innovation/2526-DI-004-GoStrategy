@@ -1,0 +1,76 @@
+# TODO: find a better way to do this
+name: Coverage badge
+description: Publish a shields.io endpoint JSON for a coverage percentage to the badges branch
+
+inputs:
+  label:
+    description: Badge label, e.g. "backend coverage"
+    required: true
+  percentage:
+    description: Coverage percentage, 0-100
+    required: true
+  file:
+    description: Output file name on the badges branch, e.g. backend.json
+    required: true
+  branch:
+    description: Branch the JSON files live on
+    required: false
+    default: badges
+
+runs:
+  using: "composite"
+  steps:
+    - name: Publish badge
+      shell: bash
+      env:
+        LABEL: ${{ inputs.label }}
+        PERCENTAGE: ${{ inputs.percentage }}
+        FILE: ${{ inputs.file }}
+        BADGE_BRANCH: ${{ inputs.branch }}
+        REPO_URL: ${{ github.server_url }}/${{ github.repository }}.git
+        GITHUB_TOKEN: ${{ github.token }}
+      run: |
+        set -euo pipefail
+        RED_BELOW=50
+        YELLOW_BELOW=80
+        PUSH_ATTEMPTS=3
+
+        [[ "$PERCENTAGE" =~ ^[0-9]+(\.[0-9]+)?$ ]] || { echo "::error::percentage must be numeric, got '$PERCENTAGE'"; exit 1; }
+        [[ "$FILE" =~ ^[a-z0-9-]+\.json$ ]] || { echo "::error::file must match ^[a-z0-9-]+\.json$, got '$FILE'"; exit 1; }
+        [[ "$LABEL" =~ ^[A-Za-z0-9\ _-]+$ ]] || { echo "::error::label may only contain letters, digits, spaces, '_' and '-'"; exit 1; }
+        awk -v p="$PERCENTAGE" 'BEGIN { exit !(p <= 100) }' || { echo "::error::percentage must be <= 100, got '$PERCENTAGE'"; exit 1; }
+
+        COLOR=$(awk -v p="$PERCENTAGE" -v r="$RED_BELOW" -v y="$YELLOW_BELOW" \
+          'BEGIN { print (p < r) ? "red" : (p < y) ? "yellow" : "brightgreen" }')
+        MESSAGE=$(awk -v p="$PERCENTAGE" 'BEGIN { printf "%.1f%%", p }')
+
+        WORKDIR=$(mktemp -d)
+        cd "$WORKDIR"
+        git init -q
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git remote add origin "$REPO_URL"
+        # why: a header keeps the token out of the remote URL and the process list
+        AUTH="Authorization: basic $(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+        echo "::add-mask::${AUTH#Authorization: basic }"
+        git config http.extraheader "$AUTH"
+
+        if git fetch -q --depth 1 origin "$BADGE_BRANCH" 2>/dev/null; then
+          git checkout -q -B "$BADGE_BRANCH" FETCH_HEAD
+        else
+          git checkout -q --orphan "$BADGE_BRANCH"
+        fi
+
+        jq -n --arg label "$LABEL" --arg message "$MESSAGE" --arg color "$COLOR" \
+          '{schemaVersion: 1, label: $label, message: $message, color: $color}' > "$FILE"
+        git add "$FILE"
+        git diff --cached --quiet && { echo "Badge $FILE unchanged"; exit 0; }
+        git commit -q -m "chore(badges): update $FILE to $MESSAGE"
+
+        for attempt in $(seq "$PUSH_ATTEMPTS"); do
+          git push -q origin "HEAD:refs/heads/$BADGE_BRANCH" && exit 0
+          echo "push attempt $attempt failed, rebasing"
+          git pull -q --rebase origin "$BADGE_BRANCH"
+        done
+        echo "::error::could not push $BADGE_BRANCH after $PUSH_ATTEMPTS attempts"
+        exit 1
