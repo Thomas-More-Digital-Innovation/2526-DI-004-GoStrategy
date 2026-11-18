@@ -1,6 +1,7 @@
 packages:
   - path: digital-innovation/gostrategy/internal/game/models
     output_path: ../frontend/src/lib/types/generated/game.ts
+    enum_style: union
   - path: digital-innovation/gostrategy/internal/models
     output_path: ../frontend/src/lib/types/generated/models.ts
     exclude_files:

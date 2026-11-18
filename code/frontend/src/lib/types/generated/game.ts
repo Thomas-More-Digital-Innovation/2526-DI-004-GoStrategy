@@ -139,27 +139,20 @@ export interface PieceData {
 /**
  * MoveResultType defines the outcome of a move
  */
-export type MoveResultType = string;
+export const MoveResultTypeMove = 'move'; // Normal move to empty cell
+export const MoveResultTypeWin = 'win'; // Attacker won combat
+export const MoveResultTypeLoss = 'loss'; // Attacker lost combat
+export const MoveResultTypeTie = 'tie'; // Both pieces died
+export const MoveResultTypeCapture = 'capture'; // Flag captured (game over)
 /**
  * Move result types
  */
-export const ResultMove: MoveResultType = 'move'; // Normal move to empty cell
-/**
- * Move result types
- */
-export const ResultWin: MoveResultType = 'win'; // Attacker won combat
-/**
- * Move result types
- */
-export const ResultLoss: MoveResultType = 'loss'; // Attacker lost combat
-/**
- * Move result types
- */
-export const ResultTie: MoveResultType = 'tie'; // Both pieces died
-/**
- * Move result types
- */
-export const ResultCapture: MoveResultType = 'capture'; // Flag captured (game over)
+export type MoveResultType =
+	| typeof MoveResultTypeMove
+	| typeof MoveResultTypeWin
+	| typeof MoveResultTypeLoss
+	| typeof MoveResultTypeTie
+	| typeof MoveResultTypeCapture;
 /**
  * GameHistory represents the full history of a game
  */

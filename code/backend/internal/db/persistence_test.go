@@ -65,7 +65,7 @@ func TestComplexJSONSerialization(t *testing.T) {
 				Type: "Special \"Char\" Unit",
 				Rank: "Rank-10",
 			},
-			Result: models.ResultMove,
+			Result: models.MoveResultTypeMove,
 		}
 		err := SaveGameHistory(ctx, SaveHistoryParams{
 			GameID:    gameID,
@@ -92,7 +92,7 @@ func TestComplexJSONSerialization(t *testing.T) {
 
 		move := models.HistoricalMove{
 			MoveIndex: 1,
-			Result:    models.ResultMove,
+			Result:    models.MoveResultTypeMove,
 			Attacker:  nil,
 			Defender:  nil,
 		}

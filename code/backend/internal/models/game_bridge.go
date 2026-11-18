@@ -32,11 +32,11 @@ const (
 	HumanVsHuman = gamemodels.HumanVsHuman
 	AiVsAi       = gamemodels.AiVsAi
 
-	ResultMove    = gamemodels.ResultMove
-	ResultWin     = gamemodels.ResultWin
-	ResultLoss    = gamemodels.ResultLoss
-	ResultTie     = gamemodels.ResultTie
-	ResultCapture = gamemodels.ResultCapture
+	MoveResultTypeMove    = gamemodels.MoveResultTypeMove
+	MoveResultTypeWin     = gamemodels.MoveResultTypeWin
+	MoveResultTypeLoss    = gamemodels.MoveResultTypeLoss
+	MoveResultTypeTie     = gamemodels.MoveResultTypeTie
+	MoveResultTypeCapture = gamemodels.MoveResultTypeCapture
 
 	Fafo      = gamemodels.Fafo
 	Fato      = gamemodels.Fato
