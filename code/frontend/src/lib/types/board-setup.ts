@@ -14,15 +14,7 @@ const getIcon = (icons: Record<string, unknown>, name: string) => {
 	return (key ? (icons[key] as string) : '') as string;
 };
 
-export interface BoardSetup {
-	id: number;
-	name: string;
-	description: string;
-	created_at: string;
-	updated_at: string;
-	is_default: boolean;
-	setup_data: string;
-}
+export type { BoardSetup } from './generated/models';
 
 export interface PieceInfo {
 	name: string;

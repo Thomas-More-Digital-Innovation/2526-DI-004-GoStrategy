@@ -6,33 +6,48 @@ pre-commit:
         - security
       run: gitleaks protect --verbose --staged
 
-    - name: frontend
-      tags:
-        - frontend
-      root: code/frontend
-      glob: "*.{js,ts,svelte}"
+    - name: app
       group:
         parallel: false
         jobs:
-          - name: format
-            glob: "*.{js,ts,svelte,json,css,html}"
-            run: pnpm prettier --write {staged_files}
-            stage_fixed: true
-          - name: lint
-            run: pnpm eslint {staged_files}
-          - name: check
-            run: pnpm check
+          - name: types
+            tags:
+              - backend
+            root: code/backend
+            glob: "*.go"
+            run: just go types && git add ../frontend/src/lib/types/generated
 
-    - name: backend
-      tags:
-        - backend
-      root: code/backend
-      glob: "*.go"
-      group:
-        parallel: false
-        jobs:
-          - name: fmt
-            run: gofmt -w -s {staged_files}
-            stage_fixed: true
-          - name: lint
-            run: just go lint
+          - name: checks
+            group:
+              parallel: true
+              jobs:
+                - name: frontend
+                  tags:
+                    - frontend
+                  root: code/frontend
+                  glob: "*.{js,ts,svelte}"
+                  group:
+                    parallel: false
+                    jobs:
+                      - name: format
+                        glob: "*.{js,ts,svelte,json,css,html}"
+                        run: pnpm prettier --write {staged_files}
+                        stage_fixed: true
+                      - name: lint
+                        run: pnpm eslint {staged_files}
+                      - name: check
+                        run: pnpm check
+
+                - name: backend
+                  tags:
+                    - backend
+                  root: code/backend
+                  glob: "*.go"
+                  group:
+                    parallel: false
+                    jobs:
+                      - name: fmt
+                        run: gofmt -w -s {staged_files}
+                        stage_fixed: true
+                      - name: lint
+                        run: just go lint

@@ -62,3 +62,4 @@ simulation *args:
 # generate frontend TypeScript types from Go structs
 types:
     go tool tygo generate --config tygo.yml
+    cd ../frontend && pnpm exec prettier --write src/lib/types/generated
