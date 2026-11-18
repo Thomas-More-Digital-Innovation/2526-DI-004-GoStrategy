@@ -13,14 +13,12 @@ on:
     paths:
       - "code/frontend/**"
       - ".github/workflows/frontend-ci.yml"
-      - ".github/actions/setup-frontend/**"
       - "code/contracts/**"
   pull_request:
     branches: ["*"]
     paths:
       - "code/frontend/**"
       - ".github/workflows/frontend-ci.yml"
-      - ".github/actions/setup-frontend/**"
       - "code/contracts/**"
 
 jobs:
@@ -33,7 +31,10 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - name: Setup frontend
-        uses: ./.github/actions/setup-frontend
+        uses: dotactions/node/setup@b0c3e28364e85d1a9c29a3556779c046fd77918c # v0.1.1
+        with:
+          node-version: "22.x"
+          working-directory: code/frontend
 
       - name: Run Svelte type check
         working-directory: code/frontend
@@ -56,7 +57,10 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - name: Setup frontend
-        uses: ./.github/actions/setup-frontend
+        uses: dotactions/node/setup@b0c3e28364e85d1a9c29a3556779c046fd77918c # v0.1.1
+        with:
+          node-version: "22.x"
+          working-directory: code/frontend
 
       - name: Install Chromium for component tests
         working-directory: code/frontend
@@ -81,9 +85,16 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - name: Setup frontend
-        uses: ./.github/actions/setup-frontend
+        uses: dotactions/node/setup@b0c3e28364e85d1a9c29a3556779c046fd77918c # v0.1.1
         with:
-          prepare-changelog: "true"
+          node-version: "22.x"
+          working-directory: code/frontend
+
+      - name: Prepare static assets
+        run: |
+          mkdir -p code/frontend/static
+          [ -f CHANGELOG.md ] && cp CHANGELOG.md code/frontend/static/CHANGELOG.md || touch code/frontend/static/CHANGELOG.md
+          [ -d docs ] && rm -rf code/frontend/static/docs && cp -r docs code/frontend/static/docs || true
 
       - name: Build frontend
         working-directory: code/frontend
