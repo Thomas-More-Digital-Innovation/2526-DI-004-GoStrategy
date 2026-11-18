@@ -1,5 +1,5 @@
-mod go 'just/go.just'
-mod web 'just/web.just'
+mod go 'code/backend/justfile'
+mod web 'code/frontend/justfile'
 
 # list available recipes
 default:
