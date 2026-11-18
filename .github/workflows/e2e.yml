@@ -91,9 +91,32 @@ jobs:
           gunzip -c e2e-images.tar.gz | docker load
           $COMPOSE up -d --no-build --wait
 
+      # why: man-db reindexes after every apt install on ubuntu-24.04 runners, adding minutes
+      - name: Disable man-db triggers
+        run: sudo rm -f /var/lib/man-db/auto-update
+
+      - name: Get Playwright version
+        id: pw
+        working-directory: code/frontend
+        run: echo "version=$(pnpm exec playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browsers
+        id: pw-cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}-${{ matrix.browser }}
+
       - name: Install ${{ matrix.browser }} binary & OS dependencies
+        if: steps.pw-cache.outputs.cache-hit != 'true'
         working-directory: code/frontend
         run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
+
+      # why: apt packages live outside the cached dir, so they're needed even on a cache hit
+      - name: Install ${{ matrix.browser }} OS dependencies
+        if: steps.pw-cache.outputs.cache-hit == 'true'
+        working-directory: code/frontend
+        run: pnpm exec playwright install-deps ${{ matrix.browser }}
 
       - name: Run Playwright against ${{ matrix.browser }}
         working-directory: code/frontend
