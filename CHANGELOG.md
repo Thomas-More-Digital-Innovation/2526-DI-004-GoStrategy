@@ -2,7 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.8.0] - 18-11-2026
+## [0.7.2] - 19-11-2026
+
+### Changed
+- **Dependency & Base Image Updates**: Bumped Node from 26.12-alpine to 26.13-alpine and Prettier from 3.9.10 to 3.10.0. (#232, #233)
+
+### Fixed
+- **Security Vulnerability in Upstream nginx-unprivileged**: Resolved a CRITICAL CVE present in the upstream `nginx-unprivileged:1.31-alpine` image by running `apk upgrade` in the runtime build stage, ensuring Alpine security patches are applied regardless of upstream rebuild cadence. (#234)
+
+### CI
+- **Container Image Scanning**: Added a daily `image-audit` job to the Security Audit workflow that builds and scans both backend and frontend images with Trivy, reporting CRITICAL/HIGH findings via tracking issues and PR comments. (#235)
+
+## [0.7.1] - 18-11-2026
 
 ### Added
 - **Frontend Unit & E2E Integration Tests**: Added Vitest unit tests and Playwright E2E integration tests for the frontend. (#219)
