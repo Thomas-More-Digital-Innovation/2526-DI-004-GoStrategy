@@ -47,6 +47,7 @@ func (h *Hub) BroadcastMoveHistory() {
 	}
 }
 
+//nolint:gocognit // board DTO construction loop
 func (h *Hub) setupBoard() dto.BoardStateMessage {
 	session := h.Session
 

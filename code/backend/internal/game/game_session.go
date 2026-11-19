@@ -174,6 +174,32 @@ func (gs *Session) Start() error {
 	return nil
 }
 
+type stopArgs struct {
+	reason     string
+	operator   string
+	operatorID int
+}
+
+func parseStopArgs(args []any) stopArgs {
+	sa := stopArgs{reason: "Manual stop requested"}
+	if len(args) > 0 {
+		if r, ok := args[0].(string); ok && r != "" {
+			sa.reason = r
+		}
+	}
+	if len(args) > 1 {
+		if op, ok := args[1].(string); ok {
+			sa.operator = op
+		}
+	}
+	if len(args) > 2 {
+		if opID, ok := args[2].(int); ok {
+			sa.operatorID = opID
+		}
+	}
+	return sa
+}
+
 // Stop forcefully stops the game session with optional reason and operator details
 func (gs *Session) Stop(args ...any) {
 	gs.mutex.Lock()
@@ -184,41 +210,22 @@ func (gs *Session) Stop(args ...any) {
 	gs.aborted = true
 	gs.mutex.Unlock()
 
-	// always close stopChan to signal abortion to listeners
 	close(gs.stopChan)
 
-	reason := "Manual stop requested"
-	operator := ""
-	operatorID := 0
-
-	if len(args) > 0 {
-		if r, ok := args[0].(string); ok && r != "" {
-			reason = r
-		}
-	}
-	if len(args) > 1 {
-		if op, ok := args[1].(string); ok {
-			operator = op
-		}
-	}
-	if len(args) > 2 {
-		if opID, ok := args[2].(int); ok {
-			operatorID = opID
-		}
-	}
+	sa := parseStopArgs(args)
 
 	// infer operator if not explicitly provided and not a clean stop/timeout
-	if operator == "" && reason != "Game completed" && reason != "Inactivity timeout" && reason != "Server shutdown" {
+	if sa.operator == "" && sa.reason != "Game completed" && sa.reason != "Inactivity timeout" && sa.reason != "Server shutdown" {
 		if gs.Player1UserID != nil {
-			operator = gs.Player1Username
-			operatorID = *gs.Player1UserID
+			sa.operator = gs.Player1Username
+			sa.operatorID = *gs.Player1UserID
 		} else if gs.Player2UserID != nil {
-			operator = gs.Player2Username
-			operatorID = *gs.Player2UserID
+			sa.operator = gs.Player2Username
+			sa.operatorID = *gs.Player2UserID
 		}
 	}
 
-	logging.GameAborted(gs.ID, reason, operator, operatorID)
+	logging.GameAborted(gs.ID, sa.reason, sa.operator, sa.operatorID)
 
 	if gs.setupTimer != nil {
 		gs.setupTimer.Stop()

@@ -13,54 +13,14 @@ func (gr *Runner) RunToCompletion() *Player {
 	turnCount := 0
 	logging.Debug(logging.TagGame, "Runner: Starting RunToCompletion loop")
 
-	for {
-		var isGameOver bool
-		if gr.locker != nil {
-			gr.locker.Lock()
-			isGameOver = gr.game.IsGameOver()
-			gr.locker.Unlock()
-		} else {
-			isGameOver = gr.game.IsGameOver()
-		}
-
-		if isGameOver || turnCount >= gr.maxTurns || gr.IsStopped() {
-			break
-		}
-		// Check for stop signal
-		select {
-		case <-gr.stopChan:
+	for !gr.isGameOverSafe() && turnCount < gr.maxTurns && !gr.IsStopped() {
+		ok, executed := gr.runOneTurn()
+		if !ok {
 			logging.Debug(logging.TagGame, "Runner: Stop signal received, ending game")
 			return nil
-		default:
-			// No stop signal, continue
 		}
-
-		if gr.IsPaused() {
-			select {
-			case <-gr.stopChan:
-				logging.Debug(logging.TagGame, "Runner: Stop signal received during pause")
-				return nil
-			case <-time.After(100 * time.Millisecond):
-				continue
-			}
-		}
-
-		executed := gr.ExecuteTurn()
-
 		if executed {
 			turnCount++
-		} else {
-			if gr.isGameOverSafe() {
-				logging.Debug(logging.TagGame, "Runner: Game ended during ExecuteTurn")
-				break
-			}
-			select {
-			case <-gr.stopChan:
-				logging.Debug(logging.TagGame, "Runner: Stop signal received while waiting for turn")
-				return nil
-			case <-time.After(100 * time.Millisecond):
-				continue
-			}
 		}
 	}
 
@@ -69,20 +29,49 @@ func (gr *Runner) RunToCompletion() *Player {
 		return gr.calculateWinnerOnMaxTurnsExceeded()
 	}
 
-	if gr.locker != nil {
-		gr.locker.Lock()
-		defer gr.locker.Unlock()
-		return gr.game.GetWinner()
-	}
-
+	gr.lock()
+	defer gr.unlock()
 	return gr.game.GetWinner()
 }
 
-func (gr *Runner) calculateWinnerOnMaxTurnsExceeded() *Player {
-	if gr.locker != nil {
-		gr.locker.Lock()
-		defer gr.locker.Unlock()
+// runOneTurn attempts one game turn. Returns (continue, executed).
+// continue=false means a stop signal was received.
+func (gr *Runner) runOneTurn() (bool, bool) {
+	select {
+	case <-gr.stopChan:
+		return false, false
+	default:
 	}
+
+	if gr.IsPaused() {
+		select {
+		case <-gr.stopChan:
+			return false, false
+		case <-time.After(100 * time.Millisecond):
+			return true, false
+		}
+	}
+
+	if gr.ExecuteTurn() {
+		return true, true
+	}
+
+	if gr.isGameOverSafe() {
+		logging.Debug(logging.TagGame, "Runner: Game ended during ExecuteTurn")
+		return true, false
+	}
+
+	select {
+	case <-gr.stopChan:
+		return false, false
+	case <-time.After(100 * time.Millisecond):
+		return true, false
+	}
+}
+
+func (gr *Runner) calculateWinnerOnMaxTurnsExceeded() *Player {
+	gr.lock()
+	defer gr.unlock()
 	if float64(gr.game.Players[0].GetPieceScore())/float64(gr.game.Players[1].GetPieceScore()) > 1.15 {
 		gr.game.SetWinner(gr.game.Players[0], WinCauseMaxTurns)
 	} else if float64(gr.game.Players[1].GetPieceScore())/float64(gr.game.Players[0].GetPieceScore()) > 1.15 {
@@ -92,10 +81,8 @@ func (gr *Runner) calculateWinnerOnMaxTurnsExceeded() *Player {
 }
 
 func (gr *Runner) isGameOverSafe() bool {
-	if gr.locker != nil {
-		gr.locker.Lock()
-		defer gr.locker.Unlock()
-	}
+	gr.lock()
+	defer gr.unlock()
 	return gr.game.IsGameOver()
 }
 
@@ -105,162 +92,129 @@ func (gr *Runner) ExecuteTurn() bool {
 }
 
 func (gr *Runner) executeTurn(ignorePause bool) bool {
-	if gr.locker != nil {
-		gr.locker.Lock()
-	}
+	gr.lock()
 
 	if gr.game.IsGameOver() {
-		if gr.locker != nil {
-			gr.locker.Unlock()
-		}
+		gr.unlock()
 		return false
 	}
-
 	if !ignorePause && gr.paused {
-		if gr.locker != nil {
-			gr.locker.Unlock()
-		}
+		gr.unlock()
 		return false
 	}
 
 	controller := gr.game.GetCurrentController()
-
-	// Human controller - wait for input or handle move
 	if controller.GetControllerType() == HumanController {
-		humanController, ok := controller.(*HumanPlayerController)
-		if !ok || !humanController.HasPendingMove() {
-			gr.stateMu.Lock()
-			if !gr.waitingForHumanInput {
-				gr.waitingForHumanInput = true
-			}
-			gr.stateMu.Unlock()
+		return gr.executeHumanTurn(controller)
+	}
+	return gr.executeAITurn(controller, ignorePause)
+}
 
-			if gr.locker != nil {
-				gr.locker.Unlock()
-			}
-			return false
-		}
-
-		move := humanController.GetPendingMove()
-		if move == nil {
-			if gr.locker != nil {
-				gr.locker.Unlock()
-			}
-			return false
-		}
-
-		piece := gr.game.Board.GetPieceAt(move.GetFrom())
-		if piece == nil {
-			if gr.locker != nil {
-				gr.locker.Unlock()
-			}
-			return false
-		}
-
-		gr.game.MakeMove(move, piece)
+// executeHumanTurn handles a human player's turn. Caller must hold the lock.
+func (gr *Runner) executeHumanTurn(controller PlayerController) bool {
+	humanController, ok := controller.(*HumanPlayerController)
+	if !ok || !humanController.HasPendingMove() {
 		gr.stateMu.Lock()
-		gr.waitingForHumanInput = false
+		if !gr.waitingForHumanInput {
+			gr.waitingForHumanInput = true
+		}
 		gr.stateMu.Unlock()
-
-		if gr.locker != nil {
-			gr.locker.Unlock()
-		}
-
-		if gr.onMoveExecuted != nil {
-			gr.onMoveExecuted()
-		}
-		return true
-	}
-
-	// AI controller - make move
-	// Clone board for thread-safe calculation
-	boardCopy := gr.game.Board.Clone()
-	currentPlayer := gr.game.CurrentPlayer
-
-	// Release lock while AI thinks -> avoid blocking other goroutines
-	if gr.locker != nil {
-		gr.locker.Unlock()
-	}
-
-	start := time.Now()
-	move := controller.MakeMove(boardCopy)
-	elapsed := time.Since(start)
-
-	// Pacing delay (outside the lock)
-	if !ignorePause && gr.turnDelay > 0 {
-		delay := gr.turnDelay
-		if gr.turnDelay >= 100*time.Millisecond {
-			// #nosec G404 - weak random is sufficient for turn delay pacing
-			delay = time.Duration(float64(gr.turnDelay)*0.8 + float64(rand.Intn(int(gr.turnDelay)))*0.4)
-		}
-		sleepTime := delay - elapsed
-		if sleepTime > 0 {
-			select {
-			case <-gr.stopChan:
-				return false
-			case <-time.After(sleepTime):
-				// Continue
-			}
-		}
-
-		// Re-check pause after delay
-		if !ignorePause && gr.paused {
-			return false
-		}
-	}
-
-	// Re-acquire lock to apply the move
-	if gr.locker != nil {
-		gr.locker.Lock()
-	}
-
-	// Re-verify that the game is still on and it's still this AI's turn
-	if gr.game.IsGameOver() || gr.game.CurrentPlayer != currentPlayer {
-		if gr.locker != nil {
-			gr.locker.Unlock()
-		}
+		gr.unlock()
 		return false
 	}
 
-	// Check if game was stopped while AI was thinking
+	move := humanController.GetPendingMove()
+	if move == nil {
+		gr.unlock()
+		return false
+	}
+
+	piece := gr.game.Board.GetPieceAt(move.GetFrom())
+	if piece == nil {
+		gr.unlock()
+		return false
+	}
+
+	gr.game.MakeMove(move, piece)
+	gr.stateMu.Lock()
+	gr.waitingForHumanInput = false
+	gr.stateMu.Unlock()
+	gr.unlock()
+
+	if gr.onMoveExecuted != nil {
+		gr.onMoveExecuted()
+	}
+	return true
+}
+
+// executeAITurn handles an AI player's turn. Caller must hold the lock.
+func (gr *Runner) executeAITurn(controller PlayerController, ignorePause bool) bool {
+	boardCopy := gr.game.Board.Clone()
+	currentPlayer := gr.game.CurrentPlayer
+	gr.unlock()
+
+	start := time.Now()
+	move := controller.MakeMove(boardCopy)
+
+	if !ignorePause && !gr.applyTurnPacing(time.Since(start)) {
+		return false
+	}
+
+	gr.lock()
+
+	if gr.game.IsGameOver() || gr.game.CurrentPlayer != currentPlayer {
+		gr.unlock()
+		return false
+	}
+
 	select {
 	case <-gr.stopChan:
-		if gr.locker != nil {
-			gr.locker.Unlock()
-		}
+		gr.unlock()
 		return false
 	default:
 	}
 
 	piece := gr.game.Board.GetPieceAt(move.GetFrom())
 	if piece == nil || piece.GetOwner() != gr.game.CurrentPlayer {
-		opponent := gr.getOpponent(gr.game.CurrentPlayer)
-		gr.game.SetWinner(opponent, WinCauseNoMovablePieces)
-		if gr.locker != nil {
-			gr.locker.Unlock()
-		}
+		gr.game.SetWinner(gr.getOpponent(gr.game.CurrentPlayer), WinCauseNoMovablePieces)
+		gr.unlock()
 		return false
 	}
 
 	if !gr.game.Board.IsValidMove(&move) || gr.game.IsTwoSquareViolation(gr.game.CurrentPlayer.GetID(), move) {
-		opponent := gr.getOpponent(gr.game.CurrentPlayer)
-		gr.game.SetWinner(opponent, WinCauseNoMovablePieces)
-		if gr.locker != nil {
-			gr.locker.Unlock()
-		}
+		gr.game.SetWinner(gr.getOpponent(gr.game.CurrentPlayer), WinCauseNoMovablePieces)
+		gr.unlock()
 		return false
 	}
 
 	gr.game.MakeMove(&move, piece)
-
-	if gr.locker != nil {
-		gr.locker.Unlock()
-	}
+	gr.unlock()
 
 	if gr.onMoveExecuted != nil {
 		gr.onMoveExecuted()
 	}
 	return true
+}
+
+// applyTurnPacing sleeps for the configured turn delay minus elapsed time.
+// Returns false if stopped or paused during the wait.
+func (gr *Runner) applyTurnPacing(elapsed time.Duration) bool {
+	if gr.turnDelay <= 0 {
+		return true
+	}
+	delay := gr.turnDelay
+	if gr.turnDelay >= 100*time.Millisecond {
+		// #nosec G404 - weak random is sufficient for turn delay pacing
+		delay = time.Duration(float64(gr.turnDelay)*0.8 + float64(rand.Intn(int(gr.turnDelay)))*0.4)
+	}
+	if sleepTime := delay - elapsed; sleepTime > 0 {
+		select {
+		case <-gr.stopChan:
+			return false
+		case <-time.After(sleepTime):
+		}
+	}
+	return !gr.isPaused()
 }
 
 // Step executes a single turn even if the game is paused

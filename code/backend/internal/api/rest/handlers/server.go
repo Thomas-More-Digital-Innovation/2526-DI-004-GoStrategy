@@ -38,6 +38,25 @@ func NewHandler(s *core.GameServer) *Handler {
 // @Success 200 {object} models.CreateGameResponse "Game created successfully"
 // @Failure 400 {object} map[string]string "Invalid request body or parameters"
 // @Router /games [post]
+// cleanupStaleSession blocks a new game when the user has an active game, or force-resigns
+// a session that is waiting for cleanup so the user can start fresh.
+// Returns true if the caller should abort (user still has a live game).
+func (h *Handler) cleanupStaleSession(c *gin.Context, userID int) bool {
+	existing, found := h.IsUserInActiveGame(userID)
+	if !found {
+		return false
+	}
+	if !existing.IsWaitingForCleanup(userID) {
+		core.SendError(c, fmt.Sprintf("You are already in an active game (%s). Please finish it before starting a new one.", existing.Session.ID), http.StatusConflict)
+		return true
+	}
+	logging.Debug(logging.TagWeb, "User %d starting new game, force cleaning up stale session %s", userID, existing.Session.ID)
+	if err := h.ResignGame(existing.Session.ID, userID); err != nil {
+		logging.Error("Failed to resign stale session for user", err)
+	}
+	return false
+}
+
 func (h *Handler) HandleCreateGame(c *gin.Context) {
 	var req struct {
 		GameID   string `json:"gameId"`
@@ -62,25 +81,12 @@ func (h *Handler) HandleCreateGame(c *gin.Context) {
 	if req.GameID == "" {
 		req.GameID = utils.NewGameID()
 	}
-
 	if req.GameType == "" {
 		req.GameType = models.HumanVsAi
 	}
 
-	// Limiter: A player can only play one game at a time
-	if userID != -1 {
-		if existingHandler, found := h.IsUserInActiveGame(userID); found {
-			if !existingHandler.IsWaitingForCleanup(userID) {
-				core.SendError(c, fmt.Sprintf("You are already in an active game (%s). Please finish it before starting a new one.", existingHandler.Session.ID), http.StatusConflict)
-				return
-			}
-			logging.Debug(logging.TagWeb, "User %d starting new game, force cleaning up stale session %s", userID, existingHandler.Session.ID)
-
-			err := h.ResignGame(existingHandler.Session.ID, userID)
-			if err != nil {
-				logging.Error("Failed to resign stale session for user", err)
-			}
-		}
+	if userID != -1 && h.cleanupStaleSession(c, userID) {
+		return
 	}
 
 	name1 := username
@@ -101,12 +107,11 @@ func (h *Handler) HandleCreateGame(c *gin.Context) {
 	}
 
 	if userID != -1 {
-		if req.GameType != models.AiVsAi {
-			handler.Session.SetPlayer1Associate(userID, username)
-		} else {
-			// For AI vs AI, just set the ID without changing the AI name
-			handler.Session.SetPlayer1Associate(userID, name1)
+		associateName := username
+		if req.GameType == models.AiVsAi {
+			associateName = name1 // keep AI name, just attach user ID
 		}
+		handler.Session.SetPlayer1Associate(userID, associateName)
 	}
 
 	core.SendJSON(c, models.CreateGameResponse{

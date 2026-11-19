@@ -38,7 +38,7 @@ func SetupGame(game *Game, player1Pieces, player2Pieces []*Piece) error {
 func placePiecesInRows(board *Board, pieces []*Piece, startRow, endRow int) error {
 	pieceIndex := 0
 	for y := startRow; y <= endRow; y++ {
-		for x := 0; x < 10; x++ {
+		for x := range 10 {
 			if pieceIndex >= len(pieces) {
 				return nil
 			}
@@ -74,13 +74,40 @@ func CustomSetup(_ *Player, piecePositions map[Position]*Piece) ([]*Piece, error
 	return pieces, nil
 }
 
+func parseCell(cell byte, isBitpacked bool) (*models.PieceType, error) {
+	if isBitpacked {
+		if cell&BitOccupied == 0 {
+			return nil, fmt.Errorf("cell is empty, all 40 cells must be occupied")
+		}
+		return GetPieceTypeFromCell(cell), nil
+	}
+	if cell == '.' || cell == ' ' {
+		return nil, fmt.Errorf("cell is empty in rank string, all 40 cells must be occupied")
+	}
+	pieceID, ok := GetPieceIDFromRank(cell)
+	if !ok {
+		return nil, fmt.Errorf("invalid piece rank '%c'", cell)
+	}
+	return GetPieceTypeFromID(pieceID), nil
+}
+
+func validatePieceCounts(typeCounts map[string]int) error {
+	for _, pt := range pieceTypes {
+		expected := pt.GetCount()
+		got := typeCounts[pt.GetName()]
+		if got != expected {
+			return fmt.Errorf("invalid setup: incorrect count for %s (got %d, expected %d)", pt.GetName(), got, expected)
+		}
+	}
+	return nil
+}
+
 // ParseSetup converts 40-byte binary setup data or 40-character rank strings into pieces
 func ParseSetup(player *Player, data []byte) ([]*Piece, error) {
 	if len(data) != 40 {
 		return nil, fmt.Errorf("setup data must be 40 bytes, got %d", len(data))
 	}
 
-	// Detect format: bitpacked vs rank characters
 	isBitpacked := false
 	for _, b := range data {
 		if b&BitOccupied != 0 {
@@ -89,59 +116,23 @@ func ParseSetup(player *Player, data []byte) ([]*Piece, error) {
 		}
 	}
 
-	// Track counts of each piece type for validation
 	typeCounts := make(map[string]int)
-	expectedCounts := make(map[string]int)
-	for _, pt := range pieceTypes {
-		expectedCounts[pt.GetName()] = pt.GetCount()
-	}
-
 	pieces := make([]*Piece, 0, 40)
-	for i := 0; i < 40; i++ {
-		cell := data[i]
-		var pieceType *models.PieceType
-
-		if isBitpacked {
-			if cell&BitOccupied == 0 {
-				return nil, fmt.Errorf("cell %d is empty, all 40 cells must be occupied", i)
-			}
-			pieceType = GetPieceTypeFromCell(cell)
-		} else {
-			// Rank character format
-			if cell == '.' || cell == ' ' {
-				return nil, fmt.Errorf("cell %d is empty in rank string, all 40 cells must be occupied", i)
-			}
-			pieceID, ok := GetPieceIDFromRank(cell)
-			if !ok {
-				return nil, fmt.Errorf("invalid piece rank '%c' at position %d", cell, i)
-			}
-			pieceType = GetPieceTypeFromID(pieceID)
+	for i := range 40 {
+		pieceType, err := parseCell(data[i], isBitpacked)
+		if err != nil {
+			return nil, fmt.Errorf("cell %d: %w", i, err)
 		}
-
 		if pieceType == nil {
 			return nil, fmt.Errorf("unknown piece type at index %d", i)
 		}
-
 		typeCounts[pieceType.GetName()]++
 		pieces = append(pieces, NewPiece(*pieceType, player))
 	}
 
-	// Validate piece counts
-	for typeName, count := range typeCounts {
-		expected := expectedCounts[typeName]
-		if count > expected {
-			return nil, fmt.Errorf("invalid setup: too many pieces of type %s (got %d, max %d)", typeName, count, expected)
-		}
+	if err := validatePieceCounts(typeCounts); err != nil {
+		return nil, err
 	}
-
-	// Also ensure all required pieces are present
-	for typeName, expected := range expectedCounts {
-		got := typeCounts[typeName]
-		if got != expected {
-			return nil, fmt.Errorf("invalid setup: incorrect count for %s (got %d, expected %d)", typeName, got, expected)
-		}
-	}
-
 	return pieces, nil
 }
 

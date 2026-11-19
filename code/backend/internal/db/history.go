@@ -24,6 +24,8 @@ type SaveHistoryParams struct {
 }
 
 // SaveGameHistory persists the game metadata and initial state
+//
+//nolint:gocognit // complexity comes from optional piece data marshaling
 func SaveGameHistory(ctx context.Context, params SaveHistoryParams) error {
 	stateJSON, err := json.Marshal(params.InitialState)
 	if err != nil {

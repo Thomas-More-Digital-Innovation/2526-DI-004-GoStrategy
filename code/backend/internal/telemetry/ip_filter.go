@@ -17,16 +17,27 @@ var (
 	ginInvalidClientIPaddress = gin.H{"error": "invalid client ip"}
 )
 
+// isIPAllowed reports whether ip is covered by any entry in allowedIPs (plain IP or CIDR).
+func isIPAllowed(ip net.IP, rawIP string, allowedIPs []string) bool {
+	for _, entry := range allowedIPs {
+		if strings.Contains(entry, "/") {
+			_, ipNet, err := net.ParseCIDR(entry)
+			if err == nil && ipNet.Contains(ip) {
+				return true
+			}
+		} else if entry == rawIP {
+			return true
+		}
+	}
+	return false
+}
+
 // IPFilterMiddleware restricts endpoint access to whitelisted IPs/CIDRs from env.
 func IPFilterMiddleware() gin.HandlerFunc {
 	allowedIPsStr := utils.GetEnv("TELEMETRY_ALLOWED_IPS", "")
-
 	if allowedIPsStr == "" {
 		logging.Error("No allowed IPs configured. No one can access telemetry", nil)
-		return func(c *gin.Context) {
-			c.AbortWithStatusJSON(http.StatusForbidden, ginUnauthorizedIPaddress)
-		}
-
+		return func(c *gin.Context) { c.AbortWithStatusJSON(http.StatusForbidden, ginUnauthorizedIPaddress) }
 	}
 
 	allowedIPs := strings.Split(allowedIPsStr, ",")
@@ -41,26 +52,10 @@ func IPFilterMiddleware() gin.HandlerFunc {
 			c.AbortWithStatusJSON(http.StatusForbidden, ginInvalidClientIPaddress)
 			return
 		}
-
-		allowed := false
-		for _, allowedIP := range allowedIPs {
-			if strings.Contains(allowedIP, "/") {
-				_, ipNet, err := net.ParseCIDR(allowedIP)
-				if err == nil && ipNet.Contains(parsedClientIP) {
-					allowed = true
-					break
-				}
-			} else if allowedIP == clientIP {
-				allowed = true
-				break
-			}
-		}
-
-		if !allowed {
+		if !isIPAllowed(parsedClientIP, clientIP, allowedIPs) {
 			c.AbortWithStatusJSON(http.StatusForbidden, ginUnauthorizedIPaddress)
 			return
 		}
-
 		c.Next()
 	}
 }

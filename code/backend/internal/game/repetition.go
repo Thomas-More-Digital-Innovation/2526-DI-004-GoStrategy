@@ -102,6 +102,40 @@ func checkEndpointViolation(history []Move, playerID int, from, to Position) boo
 	return false
 }
 
+func checkBoundaryCrossings(history []Move, playerID int, from, to Position, b squareBoundary) bool {
+	propDir := boundaryDirection(from, to, b)
+	if propDir == 0 {
+		return false
+	}
+
+	expectedDir := -propDir
+	crossings := 0
+	lastPos := from
+
+	for _, hist := range slices.Backward(history) {
+		if hist.GetPlayer() == nil || hist.GetPlayer().GetID() != playerID {
+			continue
+		}
+		if hist.GetTo() != lastPos {
+			break
+		}
+		lastPos = hist.GetFrom()
+
+		histDir := boundaryDirection(hist.GetFrom(), hist.GetTo(), b)
+		if histDir == 0 || histDir != expectedDir {
+			break
+		}
+
+		crossings++
+		expectedDir = -expectedDir
+
+		if crossings >= MaxTwoSquareCycles*2 {
+			return true
+		}
+	}
+	return false
+}
+
 // IsTwoSquareViolation checks if proposing move (from -> to) for playerID
 // would violate the Two-Square Rule. It verifies:
 //   - Exact two-square endpoint oscillation (any piece).
@@ -114,6 +148,7 @@ func IsTwoSquareViolation(history []Move, playerID int, move Move) bool {
 	if checkEndpointViolation(history, playerID, from, to) {
 		return true
 	}
+
 	var proposedBuf [10]squareBoundary
 	numBoundaries := getBoundariesCrossed(from, to, &proposedBuf)
 	if numBoundaries <= 1 {
@@ -121,40 +156,10 @@ func IsTwoSquareViolation(history []Move, playerID int, move Move) bool {
 	}
 
 	for bIdx := range numBoundaries {
-		b := proposedBuf[bIdx]
-		propDir := boundaryDirection(from, to, b)
-		if propDir == 0 {
-			continue
-		}
-
-		expectedDir := -propDir
-		crossings := 0
-		lastPos := from
-
-		for _, hist := range slices.Backward(history) {
-			if hist.GetPlayer() == nil || hist.GetPlayer().GetID() != playerID {
-				continue
-			}
-
-			if hist.GetTo() != lastPos {
-				break
-			}
-			lastPos = hist.GetFrom()
-
-			histDir := boundaryDirection(hist.GetFrom(), hist.GetTo(), b)
-			if histDir == 0 || histDir != expectedDir {
-				break
-			}
-
-			crossings++
-			expectedDir = -expectedDir
-
-			if crossings >= MaxTwoSquareCycles*2 {
-				return true
-			}
+		if checkBoundaryCrossings(history, playerID, from, to, proposedBuf[bIdx]) {
+			return true
 		}
 	}
-
 	return false
 }
 

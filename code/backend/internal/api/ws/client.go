@@ -129,6 +129,8 @@ func (c *Client) Send(data []byte, timeout time.Duration) bool {
 }
 
 // readPump pumps messages from the websocket connection to the hub
+//
+//nolint:gocognit // websocket read pump pattern
 func (c *Client) readPump() {
 	middleware.WebSocketConnected()
 	defer func() {
@@ -180,6 +182,8 @@ func (c *Client) readPump() {
 }
 
 // writePump pumps messages from the hub to the websocket connection
+//
+//nolint:gocognit // websocket write pump pattern
 func (c *Client) writePump() {
 	ticker := time.NewTicker(54 * time.Second)
 	defer func() {

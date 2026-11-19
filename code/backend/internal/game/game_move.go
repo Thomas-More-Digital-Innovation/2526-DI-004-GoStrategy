@@ -5,51 +5,62 @@ import (
 )
 
 // MakeMove makes a move on the game board and resolves any combat that may occur.
-// If the move results in combat, the attacker and defender pieces are revealed.
-// The function returns a slice of two pieces: the attacker and defender pieces in the combat.
-// If no combat occurs, the slice will contain only the attacker piece.
-// The game state is updated after the move, and all observers (AI) are notified of the move.
-// The observers are given the opportunity to analyze the move and observe any combat that may have occurred.
+// Returns a slice of [attacker, defender] pieces after resolution.
 func (g *Game) MakeMove(move *Move, piece *Piece) []*Piece {
 	target := g.Board.GetPieceAt(move.GetTo())
-	if target != nil {
-		piece.Reveal()
-		target.Reveal()
+	piece, target = g.resolveCombat(move, piece, target)
 
-		g.LastCombat = &CombatResult{
-			Occurred:         true,
-			AttackerPiece:    piece,
-			DefenderPiece:    target,
-			AttackerPosition: move.GetFrom(),
-			DefenderPosition: move.GetTo(),
-		}
+	histMove := g.buildHistoricalMove(move, piece)
+	g.MoveHistory = append(g.MoveHistory, *move)
+	g.HistoricalHistory = append(g.HistoricalHistory, histMove)
 
-		result := piece.Attack(target)
-		piece, target = result[0], result[1]
-		if !piece.IsAlive() {
-			err := g.Board.RemovePieceAt(move.GetFrom())
-			if err != nil {
-				panic(err) // errors should not happen here if function is used correctly
-			}
+	g.notifyObservers(move)
+	g.NextTurn()
+	return []*Piece{piece, target}
+}
 
-			if target != nil && !target.IsAlive() {
-				err = g.Board.RemovePieceAt(move.GetTo())
-				if err != nil {
-					panic(err) // errors should not happen here if function is used correctly
-				}
-			}
-		} else {
-			g.Board.MovePiece(move, piece)
-			piece.GetOwner().UpdatePiecePosition(piece, move.GetTo())
-		}
-	} else {
-		// No combat - clear any previous combat result
+func (g *Game) resolveCombat(move *Move, piece, target *Piece) (*Piece, *Piece) {
+	if target == nil {
 		g.LastCombat = nil
 		g.Board.MovePiece(move, piece)
 		piece.GetOwner().UpdatePiecePosition(piece, move.GetTo())
+		return piece, nil
 	}
 
-	// Record historical move
+	piece.Reveal()
+	target.Reveal()
+
+	g.LastCombat = &CombatResult{
+		Occurred:         true,
+		AttackerPiece:    piece,
+		DefenderPiece:    target,
+		AttackerPosition: move.GetFrom(),
+		DefenderPosition: move.GetTo(),
+	}
+
+	result := piece.Attack(target)
+	piece, target = result[0], result[1]
+
+	if piece.IsAlive() {
+		g.Board.MovePiece(move, piece)
+		piece.GetOwner().UpdatePiecePosition(piece, move.GetTo())
+		return piece, target
+	}
+
+	g.mustRemovePieceAt(move.GetFrom())
+	if target != nil && !target.IsAlive() {
+		g.mustRemovePieceAt(move.GetTo())
+	}
+	return piece, target
+}
+
+func (g *Game) mustRemovePieceAt(pos Position) {
+	if err := g.Board.RemovePieceAt(pos); err != nil {
+		panic(err)
+	}
+}
+
+func (g *Game) buildHistoricalMove(move *Move, piece *Piece) models.HistoricalMove {
 	histMove := models.HistoricalMove{
 		MoveIndex: len(g.HistoricalHistory),
 		PlayerID:  move.GetPlayer().GetID(),
@@ -65,43 +76,41 @@ func (g *Game) MakeMove(move *Move, piece *Piece) []*Piece {
 		},
 	}
 
-	if g.LastCombat != nil && g.LastCombat.Occurred {
-		attackerType := g.LastCombat.AttackerPiece.GetType()
-		defenderType := g.LastCombat.DefenderPiece.GetType()
-
-		histMove.Attacker = &models.PieceData{
-			Type:    attackerType.GetName(),
-			Rank:    string(attackerType.GetRank()),
-			OwnerID: g.LastCombat.AttackerPiece.GetOwner().GetID(),
-		}
-		histMove.Defender = &models.PieceData{
-			Type:    defenderType.GetName(),
-			Rank:    string(defenderType.GetRank()),
-			OwnerID: g.LastCombat.DefenderPiece.GetOwner().GetID(),
-		}
-		// Determine result
-		attackerAlive := g.LastCombat.AttackerPiece.IsAlive()
-		defenderAlive := g.LastCombat.DefenderPiece.IsAlive()
-
-		if !attackerAlive {
-			if !defenderAlive {
-				histMove.Result = models.MoveResultTypeTie
-			} else {
-				histMove.Result = models.MoveResultTypeLoss
-			}
-		} else {
-			if defenderType.GetName() == "Flag" {
-				histMove.Result = models.MoveResultTypeCapture
-			} else {
-				histMove.Result = models.MoveResultTypeWin
-			}
-		}
+	if g.LastCombat == nil || !g.LastCombat.Occurred {
+		return histMove
 	}
 
-	g.MoveHistory = append(g.MoveHistory, *move)
-	g.HistoricalHistory = append(g.HistoricalHistory, histMove)
+	attackerType := g.LastCombat.AttackerPiece.GetType()
+	defenderType := g.LastCombat.DefenderPiece.GetType()
 
-	// Notify all observers (AI)
+	histMove.Attacker = &models.PieceData{
+		Type:    attackerType.GetName(),
+		Rank:    string(attackerType.GetRank()),
+		OwnerID: g.LastCombat.AttackerPiece.GetOwner().GetID(),
+	}
+	histMove.Defender = &models.PieceData{
+		Type:    defenderType.GetName(),
+		Rank:    string(defenderType.GetRank()),
+		OwnerID: g.LastCombat.DefenderPiece.GetOwner().GetID(),
+	}
+	histMove.Result = g.combatMoveResult()
+	return histMove
+}
+
+func (g *Game) combatMoveResult() models.MoveResultType {
+	if !g.LastCombat.AttackerPiece.IsAlive() {
+		if !g.LastCombat.DefenderPiece.IsAlive() {
+			return models.MoveResultTypeTie
+		}
+		return models.MoveResultTypeLoss
+	}
+	if g.LastCombat.DefenderPiece.GetType().GetName() == "Flag" {
+		return models.MoveResultTypeCapture
+	}
+	return models.MoveResultTypeWin
+}
+
+func (g *Game) notifyObservers(move *Move) {
 	round := g.GetRound()
 	for _, ctrl := range g.PlayerControllers {
 		if ctrl.GetPlayer().GetID() == move.GetPlayer().GetID() {
@@ -133,9 +142,6 @@ func (g *Game) MakeMove(move *Move, piece *Piece) []*Piece {
 			}
 		}
 	}
-
-	g.NextTurn()
-	return []*Piece{piece, target}
 }
 
 // GetInitialBoardState returns the full board state as PieceData (for history)
