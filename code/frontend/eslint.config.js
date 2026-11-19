@@ -5,6 +5,7 @@ import svelte from 'eslint-plugin-svelte';
 import { defineConfig, includeIgnoreFile } from 'eslint/config';
 import globals from 'globals';
 import ts from 'typescript-eslint';
+import sonarjs from 'eslint-plugin-sonarjs';
 
 const gitignorePath = path.resolve(import.meta.dirname, '.gitignore');
 
@@ -32,11 +33,26 @@ export default defineConfig(
 				extraFileExtensions: ['.svelte'],
 				parser: ts.parser
 			}
+		},
+		rules: {
+			// svelte-plugin injects synthetic disable comments for $bindable patterns; disable at source instead
+			'no-useless-assignment': 'off'
 		}
 	},
 	{
 		// Override or add rule settings here, such as:
 		// 'svelte/button-has-type': 'error'
 		rules: {}
+	},
+	{
+		plugins: { sonarjs },
+		rules: {
+			'max-lines': ['error', { max: 300, skipBlankLines: true, skipComments: true }],
+			'sonarjs/cognitive-complexity': ['error', 15],
+			'sonarjs/no-identical-functions': 'error',
+			'sonarjs/no-all-duplicated-branches': 'error',
+			'sonarjs/no-identical-conditions': 'error',
+			'sonarjs/no-identical-expressions': 'error'
+		}
 	}
 );

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Piece from './Piece.svelte';
 	import type {
 		BoardState,
 		Position,
@@ -7,14 +6,9 @@
 		HistoricalMove
 	} from '#lib/types/game.js';
 	import MoveVisualization from './move-visualization/MoveVisualization.svelte';
+	import BoardCell from './BoardCell.svelte';
 	import { BOARD_CONFIG } from '#lib/data/board.data.js';
-	import {
-		a11yStore,
-		getCellAriaLabel,
-		handleBoardKeyDown,
-		isLake,
-		announceMove
-	} from '#lib/utils/a11y.svelte.js';
+	import { a11yStore, getCellAriaLabel, isLake, announceMove } from '#lib/utils/a11y.svelte.js';
 
 	interface Props {
 		boardState?: BoardState | null;
@@ -148,69 +142,45 @@
 				<div role="row" style="display: contents;">
 					{#each { length: cols }, x (x)}
 						{@const piece = displayBoard[y]?.[x]}
-						<button
-							id="cell-{x}-{y}"
-							class="cell focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-black/50"
-							class:lake={isLake(x, y, rows, isLakeCell)}
-							class:interactive={isInteractive && !isLake(x, y, rows, isLakeCell)}
-							class:valid-move={isValidMove(x, y)}
-							class:visual-disabled={visualDisabledRows.includes(y)}
-							role="gridcell"
-							tabindex={isCellFocused(x, y) ? 0 : -1}
-							aria-disabled={isCellDisabled(x, y) ? 'true' : undefined}
-							aria-label={getCellAriaLabel({
+						{@const lake = isLake(x, y, rows, isLakeCell)}
+						<BoardCell
+							{x}
+							{y}
+							{piece}
+							isSelected={isSelected(x, y)}
+							isValidMove={isValidMove(x, y)}
+							isLake={lake}
+							interactive={isInteractive && !lake}
+							isFocused={isCellFocused(x, y)}
+							isDisabled={isCellDisabled(x, y)}
+							isVisualDisabled={visualDisabledRows.includes(y)}
+							{responsive}
+							draggable={isInteractive &&
+								!!piece &&
+								piece.ownerId !== undefined &&
+								piece.ownerId >= 0 &&
+								!lake &&
+								!disabledRows.includes(y)}
+							{viewerId}
+							{scale}
+							{cols}
+							{rows}
+							ariaLabel={getCellAriaLabel({
 								x,
 								y,
 								piece,
 								isSelected: isSelected(x, y),
 								isValidMove: isValidMove(x, y),
-								isLake: isLake(x, y, rows, isLakeCell),
+								isLake: lake,
 								viewerId,
 								isSetupPhase
 							})}
-							onclick={() => {
-								if (isCellDisabled(x, y)) return;
-								onCellClick?.(x, y);
-							}}
-							onkeydown={(e) => handleBoardKeyDown(e, { x, y, cols, rows })}
-							onfocus={() => {
-								a11yStore.focusedCell = { x, y };
-							}}
-							draggable={isInteractive &&
-								!!piece &&
-								piece.ownerId !== undefined &&
-								piece.ownerId >= 0 &&
-								!isLake(x, y, rows, isLakeCell) &&
-								!disabledRows.includes(y)}
-							ondragstart={(e) => {
-								if (isCellDisabled(x, y)) return;
-								onCellDragStart?.(e, x, y);
-							}}
-							ondragover={(e) => {
-								if (isCellDisabled(x, y)) return;
-								if (onCellDrop) {
-									e.preventDefault();
-									onCellDragOver?.(e, x, y);
-								}
-							}}
-							ondragleave={(e) => {
-								if (isCellDisabled(x, y)) return;
-								onCellDragLeave?.(e, x, y);
-							}}
-							ondrop={(e) => {
-								if (isCellDisabled(x, y)) return;
-								onCellDrop?.(e, x, y);
-							}}
-						>
-							<Piece
-								{piece}
-								isSelected={isSelected(x, y)}
-								isHighlighted={isValidMove(x, y)}
-								isLake={isLake(x, y, rows, isLakeCell)}
-								{viewerId}
-								{scale}
-							/>
-						</button>
+							{onCellClick}
+							{onCellDragStart}
+							{onCellDragOver}
+							{onCellDragLeave}
+							{onCellDrop}
+						/>
 					{/each}
 				</div>
 			{/each}
@@ -255,50 +225,6 @@
 		width: 100%;
 		gap: 2px;
 	}
-	.board.responsive .cell {
-		width: 100%;
-		height: auto;
-		aspect-ratio: 1;
-	}
-	.cell {
-		width: var(--cell-size);
-		height: var(--cell-size);
-		position: relative;
-		padding: 0;
-		border: none;
-		border-radius: 6px;
-		background: none;
-		cursor: default;
-	}
-	.cell.interactive {
-		cursor: pointer;
-	}
-	.cell.visual-disabled {
-		background-color: rgba(255, 0, 0, 0.1);
-	}
-	.cell.visual-disabled:not(.lake)::before {
-		content: '';
-		position: absolute;
-		inset: 0;
-		background: linear-gradient(
-			to top right,
-			transparent calc(50% - 1px),
-			rgba(255, 255, 255, 0.2) 50%,
-			transparent calc(50% + 1px)
-		);
-		border-radius: 6px;
-		pointer-events: none;
-		z-index: 1;
-	}
-	.cell.valid-move::after {
-		content: '';
-		position: absolute;
-		inset: 3px;
-		border: 2px solid oklch(0.75 0.18 145);
-		border-radius: 4px;
-		pointer-events: none;
-		animation: pulse 1.5s ease-in-out infinite;
-	}
 	.row-highlight {
 		position: absolute;
 		left: 6px;
@@ -335,14 +261,5 @@
 		box-shadow:
 			0 0 30px oklch(0.7113 0.1044 226.48 / 0.15),
 			inset 0 0 20px oklch(0.7113 0.1044 226.48 / 0.05);
-	}
-	@keyframes pulse {
-		0%,
-		100% {
-			opacity: 1;
-		}
-		50% {
-			opacity: 0.4;
-		}
 	}
 </style>
