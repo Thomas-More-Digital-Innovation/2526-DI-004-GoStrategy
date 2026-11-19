@@ -118,6 +118,7 @@ runs:
           ${{ inputs.additional-tag != '' && format('ghcr.io/{0}/backend:{1}', steps.prep.outputs.repo_lower, inputs.additional-tag) || '' }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
+        no-cache-filters: runtime
 
     - name: Prepare Static Changelog
       shell: bash
@@ -143,6 +144,7 @@ runs:
           VITE_REPO_NAME=${{ github.repository }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
+        no-cache-filters: runtime
 
     - name: Scan Backend image with Trivy
       uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25

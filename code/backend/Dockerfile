@@ -5,8 +5,9 @@ RUN go mod download
 COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags "-s -w" -o /gostrategy ./cmd/server
 
-FROM alpine:3.24
-RUN apk add --no-cache ca-certificates wget \
+FROM alpine:3.24 AS runtime
+# why: base tag lags alpine security fixes; deploy disables cache for this stage so it re-runs
+RUN apk upgrade --no-cache && apk add --no-cache ca-certificates wget \
     && addgroup -S app && adduser -S app -G app
 WORKDIR /
 COPY --from=builder /gostrategy /gostrategy

@@ -25,6 +25,9 @@ ENV VITE_REPO_NAME=$VITE_REPO_NAME
 RUN pnpm build
 
 FROM nginxinc/nginx-unprivileged:1.31-alpine AS runtime
+# why: upstream rebuilds lag alpine security fixes; deploy disables cache for this stage so it re-runs
+USER root
+RUN apk upgrade --no-cache
 COPY --from=build /app/build /usr/share/nginx/html
 # Fix nginx config path for root context
 COPY code/frontend/nginx.conf /etc/nginx/conf.d/default.conf
