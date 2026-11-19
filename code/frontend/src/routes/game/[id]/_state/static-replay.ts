@@ -2,9 +2,40 @@ import { goto } from '$app/navigation';
 import { games } from '#lib/api/client.js';
 import { toastStore } from '#lib/state/toast.svelte.js';
 import { gamemodes } from '#lib/data/gamemodes.data.js';
-import type { GameHistoryResponse } from '#lib/types/game.js';
+import type { GameHistoryResponse, GameState } from '#lib/types/game.js';
 import type { GameSessionController } from './game-session.svelte';
 import { resolve } from '$app/paths';
+
+function buildGameState(history: GameHistoryResponse, p1Name: string, p2Name: string): GameState {
+	const hasWinner = history.winnerId !== null && history.winnerId !== undefined;
+	const winnerName =
+		history.winnerId === 0
+			? `${p1Name} (Blue)`
+			: history.winnerId === 1
+				? `${p2Name} (Red)`
+				: 'Draw';
+	return {
+		round: Math.ceil(history.moves.length / 2) || 1,
+		currentPlayerId:
+			history.moves.length > 0 ? history.moves[history.moves.length - 1].playerId : 0,
+		currentPlayerName: '',
+		isGameOver: true,
+		winnerId: hasWinner ? history.winnerId : undefined,
+		winnerName,
+		winCause: history.winCause || (hasWinner ? 'Victory achieved' : 'Draw'),
+		player1Score: 0,
+		player2Score: 0,
+		waitingForInput: false,
+		paused: false,
+		moveCount: history.moves.length,
+		player1AlivePieces: 0,
+		player2AlivePieces: 0,
+		isSetupPhase: false,
+		headless: false,
+		player1Username: p1Name,
+		player2Username: p2Name
+	};
+}
 
 export async function initStaticReplay(
 	session: GameSessionController,
@@ -60,37 +91,7 @@ export async function initStaticReplay(
 
 		const p1Name = history.player1Username || 'Player 1';
 		const p2Name = history.player2Username || 'Player 2';
-		const winnerName =
-			history.winnerId === 0
-				? `${p1Name} (Blue)`
-				: history.winnerId === 1
-					? `${p2Name} (Red)`
-					: 'Draw';
-
-		session.store.gameState = {
-			round: Math.ceil(history.moves.length / 2) || 1,
-			currentPlayerId:
-				history.moves.length > 0 ? history.moves[history.moves.length - 1].playerId : 0,
-			currentPlayerName: '',
-			isGameOver: true,
-			winnerId:
-				history.winnerId !== null && history.winnerId !== undefined ? history.winnerId : undefined,
-			winnerName,
-			winCause:
-				history.winCause ||
-				(history.winnerId !== null && history.winnerId !== undefined ? 'Victory achieved' : 'Draw'),
-			player1Score: 0,
-			player2Score: 0,
-			waitingForInput: false,
-			paused: false,
-			moveCount: history.moves.length,
-			player1AlivePieces: 0,
-			player2AlivePieces: 0,
-			isSetupPhase: false,
-			headless: false,
-			player1Username: p1Name,
-			player2Username: p2Name
-		};
+		session.store.gameState = buildGameState(history, p1Name, p2Name);
 
 		session.store.isReplaying = true;
 

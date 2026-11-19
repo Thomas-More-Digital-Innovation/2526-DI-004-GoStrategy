@@ -77,38 +77,32 @@
 		return [lakeRow, ...setupRows];
 	});
 
+	function handleBoardCellClick(x: number, y: number, gridY: number, current: string) {
+		if (!selectedGridCell) {
+			if (current !== ' ') selectedGridCell = { x, y };
+			return;
+		}
+		if (selectedGridCell.x === x && selectedGridCell.y === y) {
+			grid[gridY][x] = ' ';
+		} else {
+			const sourceY = selectedGridCell.y - 1;
+			const temp = grid[gridY][x];
+			grid[gridY][x] = grid[sourceY][selectedGridCell.x];
+			grid[sourceY][selectedGridCell.x] = temp;
+		}
+		selectedGridCell = null;
+	}
+
 	function handleCellClick(x: number, y: number) {
-		if (y === 0) return; // Top row is context only
+		if (y === 0) return; // top row is context only
 		const gridY = y - 1;
 		const current = grid[gridY][x];
-
 		if (selectedPieceRank) {
-			// Place piece from inventory
 			if (remainingCounts[selectedPieceRank] > 0 || current === selectedPieceRank) {
 				grid[gridY][x] = selectedPieceRank;
 			}
 		} else {
-			// Board-to-board interaction
-			if (!selectedGridCell) {
-				// First click: select piece if not empty
-				if (current !== ' ') {
-					selectedGridCell = { x, y };
-				}
-			} else {
-				// Second click: swap or move
-				if (selectedGridCell.x === x && selectedGridCell.y === y) {
-					// Clicked same cell: remove/clear cell
-					grid[gridY][x] = ' ';
-					selectedGridCell = null;
-				} else {
-					// Swap contents
-					const sourceY = selectedGridCell.y - 1;
-					const temp = grid[gridY][x];
-					grid[gridY][x] = grid[sourceY][selectedGridCell.x];
-					grid[sourceY][selectedGridCell.x] = temp;
-					selectedGridCell = null;
-				}
-			}
+			handleBoardCellClick(x, y, gridY, current);
 		}
 	}
 

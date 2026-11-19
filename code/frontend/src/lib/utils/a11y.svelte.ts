@@ -165,34 +165,32 @@ export function handleBoardKeyDown(
 	}
 }
 
+function ownerStr(ownerId: number | undefined, viewerId: number): string {
+	return ownerId === viewerId ? 'Your' : ownerId === 0 ? 'Blue' : 'Red';
+}
+
+function combatSuffix(move: HistoricalMove, viewerId: number): string {
+	const attackerName = getFriendlyPieceName(move.attacker?.rank || move.attacker?.type);
+	const defenderName = getFriendlyPieceName(move.defender?.rank || move.defender?.type);
+	const aOwner = ownerStr(move.attacker?.ownerId, viewerId);
+	const dOwner = ownerStr(move.defender?.ownerId, viewerId);
+	let s = ` Combat! ${aOwner} ${attackerName} attacked ${dOwner} ${defenderName}.`;
+	if (move.result === 'tie') {
+		s += ' Both pieces were defeated!';
+	} else if (move.result === 'win' || move.result === 'capture') {
+		s += ` ${aOwner} ${attackerName} won and defeated the ${defenderName}!`;
+	} else if (move.result === 'loss') {
+		s += ` ${dOwner} ${defenderName} won and defeated the ${attackerName}!`;
+	}
+	return s;
+}
+
 export function announceMove(move: HistoricalMove, viewerId: number): string {
 	if (!move) return '';
 	const colFrom = String.fromCharCode(65 + move.fromX);
-	const rowFrom = move.fromY + 1;
 	const colTo = String.fromCharCode(65 + move.toX);
-	const rowTo = move.toY + 1;
-
 	const playerStr = move.playerId === viewerId ? 'You' : move.playerId === 0 ? 'Blue' : 'Red';
-	let msg = `${playerStr} moved from ${colFrom}${rowFrom} to ${colTo}${rowTo}.`;
-
-	if (move.result !== 'move' || move.attacker) {
-		const attackerName = getFriendlyPieceName(move.attacker?.rank || move.attacker?.type);
-		const defenderName = getFriendlyPieceName(move.defender?.rank || move.defender?.type);
-		const attackerOwner =
-			move.attacker?.ownerId === viewerId ? 'Your' : move.attacker?.ownerId === 0 ? 'Blue' : 'Red';
-		const defenderOwner =
-			move.defender?.ownerId === viewerId ? 'Your' : move.defender?.ownerId === 0 ? 'Blue' : 'Red';
-
-		msg += ` Combat! ${attackerOwner} ${attackerName} attacked ${defenderOwner} ${defenderName}.`;
-
-		if (move.result === 'tie') {
-			msg += ' Both pieces were defeated!';
-		} else if (move.result === 'win' || move.result === 'capture') {
-			msg += ` ${attackerOwner} ${attackerName} won and defeated the ${defenderName}!`;
-		} else if (move.result === 'loss') {
-			msg += ` ${defenderOwner} ${defenderName} won and defeated the ${attackerName}!`;
-		}
-	}
-
+	let msg = `${playerStr} moved from ${colFrom}${move.fromY + 1} to ${colTo}${move.toY + 1}.`;
+	if (move.result !== 'move' || move.attacker) msg += combatSuffix(move, viewerId);
 	return msg;
 }

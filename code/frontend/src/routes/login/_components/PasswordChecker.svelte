@@ -12,7 +12,6 @@
 		strength?: number;
 	}
 
-	// eslint-disable-next-line no-useless-assignment
 	let { password, isValid = $bindable(false), strength = $bindable(0) }: Props = $props();
 
 	const checks = $derived(validatePasswordInput(password));
