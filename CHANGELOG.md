@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.7.3] - 19-11-2026
+
+### Added
+**Sonarjs**: Added sonarjs plugin to eslint. (#236)
+
+### Changed
+**Strengthen rules in golangci-lint**: added gocognit & nestif. (#237)
+
+### Fixed
+**Tidied up code complexity**: enforced by rules in sonarjs & gocognit/nestif (#236, #237)
+
 ## [0.7.2] - 19-11-2026
 
 ### Changed
