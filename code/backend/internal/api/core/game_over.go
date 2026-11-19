@@ -169,6 +169,8 @@ func (s *GameServer) handleGameOver(session *game.Session, hub *ws.Hub) {
 }
 
 // monitorGame watches for game events and broadcasts them
+//
+//nolint:gocognit // game event loop; complexity is structural
 func (s *GameServer) monitorGame(handler *SessionHandler) {
 	session := handler.Session
 	hub := handler.Hub

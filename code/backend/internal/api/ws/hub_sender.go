@@ -115,6 +115,8 @@ func (h *Hub) sendSetupBoard(client *Client) {
 }
 
 // sendMoveHistory sends the move history to a specific client
+//
+//nolint:gocognit // history filtering has inherent branching
 func (h *Hub) sendMoveHistory(client *Client) {
 	g := h.Session.GetGame()
 	isGameOver := g.IsGameOver()

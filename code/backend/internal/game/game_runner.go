@@ -33,6 +33,18 @@ func NewRunner(game *Game, turnDelay time.Duration, maxTurns int) *Runner {
 	}
 }
 
+func (gr *Runner) lock() {
+	if gr.locker != nil {
+		gr.locker.Lock()
+	}
+}
+
+func (gr *Runner) unlock() {
+	if gr.locker != nil {
+		gr.locker.Unlock()
+	}
+}
+
 // SetMoveCallback sets the callback to be called when a move is executed
 func (gr *Runner) SetMoveCallback(callback func()) {
 	gr.onMoveExecuted = callback

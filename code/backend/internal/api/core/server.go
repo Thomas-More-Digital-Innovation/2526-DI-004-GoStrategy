@@ -173,6 +173,26 @@ func (sh *SessionHandler) IsWaitingForCleanup(userID int) bool {
 	return sh.Session.GetGameState().IsGameOver || !sh.Hub.IsUserConnected(userID)
 }
 
+// declareForfeitIfActive declares the opponent winner when a live game is force-removed.
+func (s *GameServer) declareForfeitIfActive(handler *SessionHandler) {
+	if handler.Session == nil || handler.Session.IsSetupPhase() || handler.Session.GetGameState().IsGameOver {
+		return
+	}
+	gameObj := handler.Session.GetGame()
+	if gameObj == nil || gameObj.IsGameOver() {
+		return
+	}
+	logging.Debug(logging.TagWeb, "Active game session %s terminated unexpectedly. Declaring opponent winner via forfeit.", handler.Session.ID)
+	var opponent *game.Player
+	if gameObj.CurrentPlayer == gameObj.Players[0] {
+		opponent = gameObj.Players[1]
+	} else {
+		opponent = gameObj.Players[0]
+	}
+	handler.Session.SetWinner(opponent, game.WinCause("resigned"))
+	s.handleGameOver(handler.Session, handler.Hub)
+}
+
 // RemoveSession removes a game session from the server and stops its resources
 func (s *GameServer) RemoveSession(gameID string, reason ...string) {
 	s.Mutex.Lock()
@@ -183,34 +203,22 @@ func (s *GameServer) RemoveSession(gameID string, reason ...string) {
 	}
 	s.Mutex.Unlock()
 
-	if exists && handler != nil {
-		logging.Debug(logging.TagWeb, "Removed session %s from GameServer and stopping resources", gameID)
+	if !exists || handler == nil {
+		return
+	}
 
-		if handler.Session != nil && !handler.Session.IsSetupPhase() && !handler.Session.GetGameState().IsGameOver {
-			logging.Debug(logging.TagWeb, "Active game session %s terminated unexpectedly. Declaring opponent winner via forfeit.", gameID)
-			gameObj := handler.Session.GetGame()
-			if gameObj != nil && !gameObj.IsGameOver() {
-				var opponent *game.Player
-				if gameObj.CurrentPlayer == gameObj.Players[0] {
-					opponent = gameObj.Players[1]
-				} else {
-					opponent = gameObj.Players[0]
-				}
-				handler.Session.SetWinner(opponent, game.WinCause("resigned"))
-				s.handleGameOver(handler.Session, handler.Hub)
-			}
-		}
+	logging.Debug(logging.TagWeb, "Removed session %s from GameServer and stopping resources", gameID)
+	s.declareForfeitIfActive(handler)
 
-		if handler.Hub != nil {
-			handler.Hub.Stop()
+	if handler.Hub != nil {
+		handler.Hub.Stop()
+	}
+	if handler.Session != nil {
+		r := "Manual stop requested"
+		if len(reason) > 0 {
+			r = reason[0]
 		}
-		if handler.Session != nil {
-			r := "Manual stop requested"
-			if len(reason) > 0 {
-				r = reason[0]
-			}
-			handler.Session.Stop(r)
-		}
+		handler.Session.Stop(r)
 	}
 }
 

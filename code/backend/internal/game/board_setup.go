@@ -59,28 +59,34 @@ var (
 	}
 )
 
+func concatSetupRows(rows []string) (string, error) {
+	if len(rows) == 0 {
+		return "", errors.New("no rows provided")
+	}
+	if len(rows) == 1 && len(rows[0]) == PlayerSetupCells {
+		return rows[0], nil
+	}
+	if len(rows) != PlayerSetupRows {
+		return "", fmt.Errorf("expected %d rows, got %d", PlayerSetupRows, len(rows))
+	}
+	var conc strings.Builder
+	for _, r := range rows {
+		if len(r) != PlayerSetupCols {
+			return "", fmt.Errorf("each row must be %d chars, got %d", PlayerSetupCols, len(r))
+		}
+		conc.WriteString(r)
+	}
+	return conc.String(), nil
+}
+
 // EncodeBoardSetup accepts either:
 // - rows: a slice of 4 strings each 10 chars long, or
 // - a single string of length 40 (concatenated rows)
 // It returns a compact base64 string representing the packed 4-bit ids.
 func EncodeBoardSetup(rows []string) (string, error) {
-	if len(rows) == 0 {
-		return "", errors.New("no rows provided")
-	}
-	// if a single long string provided, split it into rows of 10
-	var conc string
-	if len(rows) == 1 && len(rows[0]) == PlayerSetupCells {
-		conc = rows[0]
-	} else {
-		if len(rows) != PlayerSetupRows {
-			return "", fmt.Errorf("expected %d rows, got %d", PlayerSetupRows, len(rows))
-		}
-		for _, r := range rows {
-			if len(r) != PlayerSetupCols {
-				return "", fmt.Errorf("each row must be %d chars, got %d", PlayerSetupCols, len(r))
-			}
-			conc += r
-		}
+	conc, err := concatSetupRows(rows)
+	if err != nil {
+		return "", err
 	}
 	if len(conc) != PlayerSetupCells {
 		return "", fmt.Errorf("setup length must be %d chars, got %d", PlayerSetupCells, len(conc))
@@ -88,15 +94,13 @@ func EncodeBoardSetup(rows []string) (string, error) {
 
 	packed := make([]byte, PlayerSetupCells/2) // 40/2 = 20 bytes
 	for i := 0; i < PlayerSetupCells; i += 2 {
-		hiCh := conc[i]
-		loCh := conc[i+1]
-		hi, ok := charToID[hiCh]
+		hi, ok := charToID[conc[i]]
 		if !ok {
-			return "", fmt.Errorf("unknown piece char: %c", hiCh)
+			return "", fmt.Errorf("unknown piece char: %c", conc[i])
 		}
-		lo, ok := charToID[loCh]
+		lo, ok := charToID[conc[i+1]]
 		if !ok {
-			return "", fmt.Errorf("unknown piece char: %c", loCh)
+			return "", fmt.Errorf("unknown piece char: %c", conc[i+1])
 		}
 		packed[i/2] = (hi << 4) | (lo & 0x0F)
 	}
@@ -133,27 +137,26 @@ func DecodeBoardSetup(encoded string) ([]string, error) {
 // the human-readable rows. Use this when loading setups from DB/files.
 func ParseBoardSetupSmart(raw string) ([]string, error) {
 	raw = strings.TrimSpace(raw)
-	if strings.Contains(raw, "\n") || strings.Contains(raw, ",") || len(raw) == PlayerSetupCells {
-		sep := '\n'
-		if strings.Contains(raw, ",") {
-			sep = ','
-		}
-		parts := splitKeepNonEmpty(raw, sep)
-		if len(parts) == PlayerSetupRows {
-			for _, r := range parts {
-				if len(r) != PlayerSetupCols {
-					return nil, fmt.Errorf("expected row length %d", PlayerSetupCols)
-				}
+	if !strings.Contains(raw, "\n") && !strings.Contains(raw, ",") && len(raw) != PlayerSetupCells {
+		return nil, errors.New("unrecognized board setup format")
+	}
+
+	sep := '\n'
+	if strings.Contains(raw, ",") {
+		sep = ','
+	}
+	parts := splitKeepNonEmpty(raw, sep)
+
+	if len(parts) == PlayerSetupRows {
+		for _, r := range parts {
+			if len(r) != PlayerSetupCols {
+				return nil, fmt.Errorf("expected row length %d", PlayerSetupCols)
 			}
-			return parts, nil
 		}
-		if len(parts) == 1 && len(parts[0]) == PlayerSetupCells {
-			out := make([]string, PlayerSetupRows)
-			for i := range PlayerSetupRows {
-				out[i] = parts[0][i*PlayerSetupCols : (i+1)*PlayerSetupCols]
-			}
-			return out, nil
-		}
+		return parts, nil
+	}
+	if len(parts) == 1 && len(parts[0]) == PlayerSetupCells {
+		return SetupDataToRows(parts[0])
 	}
 	return nil, errors.New("unrecognized board setup format")
 }

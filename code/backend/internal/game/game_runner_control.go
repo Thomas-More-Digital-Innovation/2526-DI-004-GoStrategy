@@ -4,10 +4,8 @@ import "fmt"
 
 // IsWaitingForInput returns true if the game is waiting for human input
 func (gr *Runner) IsWaitingForInput() bool {
-	if gr.locker != nil {
-		gr.locker.Lock()
-		defer gr.locker.Unlock()
-	}
+	gr.lock()
+	defer gr.unlock()
 	return gr.isWaitingForInput()
 }
 
@@ -34,71 +32,51 @@ func (gr *Runner) Stop() {
 	select {
 	case gr.stopChan <- true:
 	default:
-		// Channel already has a stop signal
 	}
 }
 
 // SubmitHumanMove allows external code to submit a human player's move
 func (gr *Runner) SubmitHumanMove(move Move) error {
-	if gr.locker != nil {
-		gr.locker.Lock()
-	}
+	gr.lock()
 
 	if !gr.isWaitingForInput() {
-		if gr.locker != nil {
-			gr.locker.Unlock()
-		}
+		gr.unlock()
 		return fmt.Errorf("not waiting for input")
 	}
 
 	controller := gr.game.GetCurrentController()
 	if controller.GetControllerType() != HumanController {
-		if gr.locker != nil {
-			gr.locker.Unlock()
-		}
+		gr.unlock()
 		return fmt.Errorf("current player is not human")
 	}
 
 	humanController, ok := controller.(*HumanPlayerController)
 	if !ok {
-		if gr.locker != nil {
-			gr.locker.Unlock()
-		}
+		gr.unlock()
 		return fmt.Errorf("invalid controller type")
 	}
 
-	// Check that the move's player matches the current player
 	if move.GetPlayer() != gr.game.CurrentPlayer {
-		if gr.locker != nil {
-			gr.locker.Unlock()
-		}
+		gr.unlock()
 		return fmt.Errorf("move player does not match current player")
 	}
 
 	if !gr.game.Board.IsValidMove(&move) || gr.game.IsTwoSquareViolation(gr.game.CurrentPlayer.GetID(), move) {
-		if gr.locker != nil {
-			gr.locker.Unlock()
-		}
+		gr.unlock()
 		return fmt.Errorf("invalid move")
 	}
 
 	humanController.SetPendingMove(move)
-
-	if gr.locker != nil {
-		gr.locker.Unlock()
-	}
+	gr.unlock()
 
 	gr.ExecuteTurn()
-
 	return nil
 }
 
 // Pause pauses the game runner
 func (gr *Runner) Pause() {
-	if gr.locker != nil {
-		gr.locker.Lock()
-		defer gr.locker.Unlock()
-	}
+	gr.lock()
+	defer gr.unlock()
 	gr.setPaused(true)
 }
 
@@ -110,19 +88,15 @@ func (gr *Runner) setPaused(paused bool) {
 
 // Unpause unpauses the game runner
 func (gr *Runner) Unpause() {
-	if gr.locker != nil {
-		gr.locker.Lock()
-		defer gr.locker.Unlock()
-	}
+	gr.lock()
+	defer gr.unlock()
 	gr.setPaused(false)
 }
 
 // IsPaused returns whether the game runner is paused
 func (gr *Runner) IsPaused() bool {
-	if gr.locker != nil {
-		gr.locker.Lock()
-		defer gr.locker.Unlock()
-	}
+	gr.lock()
+	defer gr.unlock()
 	return gr.isPaused()
 }
 

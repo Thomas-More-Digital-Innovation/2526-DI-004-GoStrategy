@@ -15,6 +15,26 @@ import (
 
 const defaultName = "default"
 
+func optFloat64(opts map[string]any, key string, def float64) float64 {
+	if v, ok := opts[key].(float64); ok {
+		return v
+	}
+	return def
+}
+
+func optString(opts map[string]any, key string, def string) string {
+	if v, ok := opts[key].(string); ok {
+		return v
+	}
+	return def
+}
+
+func setOptFloat64(opts map[string]any, key string, target map[string]any) {
+	if v, ok := opts[key].(float64); ok {
+		target[key] = v
+	}
+}
+
 // CreateAI returns an AI instance based on the given type with default options.
 func CreateAI(aiType string, player *game.Player) (ai.AI, error) {
 	return CreateAIWithOptions(aiType, player, nil)
@@ -26,60 +46,20 @@ func CreateAIWithOptions(aiType string, player *game.Player, options map[string]
 	case models.Fafo:
 		return fafo.NewAI(player, false), nil
 	case models.Fato:
-		aggression := 0.5
-		if options != nil {
-			if val, ok := options["aggression"].(float64); ok {
-				aggression = val
-			}
-		}
-		return fato.NewAIWithAggression(player, true, aggression), nil
+		return fato.NewAIWithAggression(player, true, optFloat64(options, "aggression", 0.5)), nil
 	case models.Heuristic:
-		name := defaultName
-		if options != nil {
-			if val, ok := options["name"].(string); ok {
-				name = val
-			}
-		}
-		params, _ := ai.Load(models.Heuristic, name)
-		if options != nil {
-			if val, ok := options["aggression"].(float64); ok {
-				params.Aggression = val
-			}
-		}
+		params, _ := ai.Load(models.Heuristic, optString(options, "name", defaultName))
+		params.Aggression = optFloat64(options, "aggression", params.Aggression)
 		return heuristic.NewAIWithParams(player, true, params), nil
 	case models.Minimax:
-		name := defaultName
-		if options != nil {
-			if val, ok := options["name"].(string); ok {
-				name = val
-			}
-		}
-		params, _ := ai.Load(models.Minimax, name)
-		if options != nil {
-			if val, ok := options["aggression"].(float64); ok {
-				params.Aggression = val
-			}
-			if val, ok := options["depth"].(float64); ok {
-				params.Config["depth"] = val
-			}
-		}
+		params, _ := ai.Load(models.Minimax, optString(options, "name", defaultName))
+		params.Aggression = optFloat64(options, "aggression", params.Aggression)
+		setOptFloat64(options, "depth", params.Config)
 		return minimax.NewAIWithParams(player, true, params), nil
 	case models.Mcts:
-		name := defaultName
-		if options != nil {
-			if val, ok := options["name"].(string); ok {
-				name = val
-			}
-		}
-		params, _ := ai.Load(models.Mcts, name)
-		if options != nil {
-			if val, ok := options["aggression"].(float64); ok {
-				params.Aggression = val
-			}
-			if val, ok := options["iterations"].(float64); ok {
-				params.Config["iterations"] = val
-			}
-		}
+		params, _ := ai.Load(models.Mcts, optString(options, "name", defaultName))
+		params.Aggression = optFloat64(options, "aggression", params.Aggression)
+		setOptFloat64(options, "iterations", params.Config)
 		return mcts.NewAIWithParams(player, true, params), nil
 	default:
 		return nil, fmt.Errorf("i don't know that AI! %s", aiType)

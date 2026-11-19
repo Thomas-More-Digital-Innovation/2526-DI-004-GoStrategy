@@ -38,6 +38,22 @@ func NormalizeSetupRows(rows []string) []string {
 	return normalized
 }
 
+func countRowPieces(row string, y int, typeCounts map[string]int) error {
+	for x := 0; x < len(row); x++ {
+		c := row[x]
+		pieceID, ok := GetPieceIDFromRank(c)
+		if !ok {
+			return fmt.Errorf("invalid piece character '%c' at row %d col %d", c, y, x)
+		}
+		pieceType := GetPieceTypeFromID(pieceID)
+		if pieceType == nil {
+			return fmt.Errorf("unknown piece type for character '%c'", c)
+		}
+		typeCounts[pieceType.GetName()]++
+	}
+	return nil
+}
+
 // ValidateSetupRows checks if rows form a valid 4x10 setup with correct piece counts.
 func ValidateSetupRows(rows []string) error {
 	if len(rows) != PlayerSetupRows {
@@ -45,29 +61,19 @@ func ValidateSetupRows(rows []string) error {
 	}
 
 	typeCounts := make(map[string]int)
-	expectedCounts := make(map[string]int)
-	for _, pt := range pieceTypes {
-		expectedCounts[pt.GetName()] = pt.GetCount()
-	}
-
 	for y, row := range rows {
 		if len(row) != PlayerSetupCols {
 			return fmt.Errorf("row %d must be %d characters, got %d", y, PlayerSetupCols, len(row))
 		}
-		for x := 0; x < len(row); x++ {
-			c := row[x]
-			pieceID, ok := GetPieceIDFromRank(c)
-			if !ok {
-				return fmt.Errorf("invalid piece character '%c' at row %d col %d", c, y, x)
-			}
-			pieceType := GetPieceTypeFromID(pieceID)
-			if pieceType == nil {
-				return fmt.Errorf("unknown piece type for character '%c'", c)
-			}
-			typeCounts[pieceType.GetName()]++
+		if err := countRowPieces(row, y, typeCounts); err != nil {
+			return err
 		}
 	}
 
+	expectedCounts := make(map[string]int)
+	for _, pt := range pieceTypes {
+		expectedCounts[pt.GetName()] = pt.GetCount()
+	}
 	for typeName, expected := range expectedCounts {
 		got := typeCounts[typeName]
 		if got != expected {
@@ -154,29 +160,49 @@ func parseSetupBytes(data []byte) ([]string, error) {
 		return arr, nil
 	}
 
-	var rawMap map[string]any
-	if err := json.Unmarshal(data, &rawMap); err == nil && len(rawMap) > 0 {
-		for _, val := range rawMap {
-			switch v := val.(type) {
-			case []any:
-				rows := make([]string, 0, len(v))
-				for _, item := range v {
-					if str, ok := item.(string); ok {
-						rows = append(rows, str)
-					}
-				}
-				if len(rows) == PlayerSetupRows {
-					return rows, nil
-				}
-			case []string:
-				if len(v) == PlayerSetupRows {
-					return v, nil
-				}
-			case string:
-				return ParseBoardSetupSmart(v)
-			}
-		}
+	if rows, ok := tryParseMapSetup(data); ok {
+		return rows, nil
 	}
 
 	return ParseBoardSetupSmart(string(data))
+}
+
+// tryParseMapSetup attempts to find a valid setup inside an untyped JSON object.
+// why: map iteration order is nondeterministic in Go; in practice, setup files
+// contain exactly one array field so the order is irrelevant.
+func tryParseMapSetup(data []byte) ([]string, bool) {
+	var rawMap map[string]any
+	if err := json.Unmarshal(data, &rawMap); err != nil || len(rawMap) == 0 {
+		return nil, false
+	}
+	for _, val := range rawMap {
+		if rows, ok := tryParseMapValue(val); ok {
+			return rows, true
+		}
+	}
+	return nil, false
+}
+
+func tryParseMapValue(val any) ([]string, bool) {
+	switch v := val.(type) {
+	case []any:
+		rows := make([]string, 0, len(v))
+		for _, item := range v {
+			if str, ok := item.(string); ok {
+				rows = append(rows, str)
+			}
+		}
+		if len(rows) == PlayerSetupRows {
+			return rows, true
+		}
+	case []string:
+		if len(v) == PlayerSetupRows {
+			return v, true
+		}
+	case string:
+		if rows, err := ParseBoardSetupSmart(v); err == nil {
+			return rows, true
+		}
+	}
+	return nil, false
 }

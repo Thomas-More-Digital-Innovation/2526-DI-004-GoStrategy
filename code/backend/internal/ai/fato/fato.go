@@ -79,6 +79,8 @@ func (ai *AI) MakeMove(board *game.Board) game.Move {
 }
 
 // findAttackMove looks for moves that attack known/visible enemy pieces
+//
+//nolint:gocognit // heuristic scoring; splitting would scatter attack evaluation
 func (ai *AI) findAttackMove(board *game.Board) (game.Move, bool) {
 	memory := ai.GetMemory()
 	pieces := ai.GetPlayer().GetAlivePieces()
@@ -156,7 +158,7 @@ func getNumericalRank(rank byte) int {
 	}
 }
 
-// evaluateAttack scores an attack opportunity
+//nolint:gocognit,nestif // heuristic scoring tables; splitting would obscure ranking logic
 func (ai *AI) evaluateAttack(attacker *game.Piece, target *game.Piece, targetPos game.Position, memory *ai.Memory) float64 {
 	remembered := memory.Recall(targetPos)
 	var targetRank byte
@@ -224,7 +226,7 @@ func (ai *AI) evaluateAttack(attacker *game.Piece, target *game.Piece, targetPos
 	return score
 }
 
-// findExplorationMove moves toward enemy side
+//nolint:gocognit // heuristic exploration; splitting would scatter move evaluation
 func (ai *AI) findExplorationMove(board *game.Board) (game.Move, bool) {
 	enemyY := 0
 	if ai.GetPlayer().GetID() == 1 {

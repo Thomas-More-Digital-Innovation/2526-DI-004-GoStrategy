@@ -23,11 +23,17 @@ linters:
     rules:
       - path: _test\.go
         linters:
-          - dupl # Exclude duplicate check from tests
+          - dupl
           - goconst
+          - gocognit
+          - nestif
       - path: docs.go
         linters:
           - revive
+      - path: internal/ai/(minimax|mcts|AIvsAI)/|internal/ai/(evaluator|determinize)\.go
+        linters:
+          - gocognit
+          - nestif
   
   settings:
     gocognit:

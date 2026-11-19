@@ -59,6 +59,27 @@ func WithRLS(ctx context.Context, fn func(tx *gorm.DB) error) error {
 	})
 }
 
+// tryConnect opens a GORM connection, configures the pool, pings, and runs migrations.
+func tryConnect(dsn string) error {
+	var err error
+	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{Logger: logger.Default.LogMode(logger.Info)})
+	if err != nil {
+		return err
+	}
+	sqlDB, err := DB.DB()
+	if err != nil {
+		return err
+	}
+	sqlDB.SetMaxOpenConns(25)
+	sqlDB.SetMaxIdleConns(5)
+	sqlDB.SetConnMaxLifetime(time.Hour)
+	if err := sqlDB.Ping(); err != nil {
+		return err
+	}
+	logging.Debug(logging.TagAuth, "Database connection established")
+	return RunMigrations(context.Background())
+}
+
 // InitDB initializes the database connection
 func InitDB() error {
 	dbHost := utils.GetEnv("DB_HOST", "localhost")
@@ -73,40 +94,15 @@ func InitDB() error {
 		dbHost, dbUser, dbPassword, dbName, dbPort, sslMode,
 	)
 
-	var err error
-
-	// Test the connection with retries
 	maxRetries := 10
+	var err error
 	for i := range maxRetries {
-		DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
-			Logger: logger.Default.LogMode(logger.Info),
-		})
-
-		if err == nil {
-			sqlDB, err := DB.DB()
-			if err == nil {
-				// Set connection pool limits
-				sqlDB.SetMaxOpenConns(25)
-				sqlDB.SetMaxIdleConns(5)
-				sqlDB.SetConnMaxLifetime(time.Hour)
-
-				err = sqlDB.Ping()
-				if err == nil {
-					logging.Debug(logging.TagAuth, "Database connection established")
-
-					// Run migrations automatically on startup
-					if err := RunMigrations(context.Background()); err != nil {
-						return fmt.Errorf("failed to run migrations: %w", err)
-					}
-
-					return nil
-				}
-			}
+		if err = tryConnect(dsn); err == nil {
+			return nil
 		}
 		logging.Error(fmt.Sprintf("Failed to connect to database (attempt %d/%d)", i+1, maxRetries), err)
 		time.Sleep(2 * time.Second)
 	}
-
 	return fmt.Errorf("failed to ping database after %d attempts: %w", maxRetries, err)
 }
 

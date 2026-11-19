@@ -44,6 +44,8 @@ func NewHub(session *game.Session, gameType string) *Hub {
 }
 
 // Run starts the hub's main loop
+//
+//nolint:gocognit,nestif // fan-in event loop; complexity is structural
 func (h *Hub) Run() {
 	// Start an initial cleanup timer to prevent zombie sessions if no one ever connects
 	// We give 2 minutes for the initial connection (or double the custom period)

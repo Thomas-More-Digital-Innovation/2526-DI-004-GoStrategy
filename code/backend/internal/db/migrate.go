@@ -12,10 +12,35 @@ import (
 //go:embed migrations/*.sql
 var migrationsFS embed.FS
 
+// applyPendingSQLFiles runs each unapplied .sql file from migrationsFS in sorted order.
+func applyPendingSQLFiles(ctx context.Context, files []string) error {
+	for _, file := range files {
+		var exists bool
+		if err := DB.WithContext(ctx).Raw("SELECT EXISTS(SELECT 1 FROM schema_migrations WHERE version = ?)", file).Scan(&exists).Error; err != nil {
+			return fmt.Errorf("failed to check migration status for %s: %w", file, err)
+		}
+		if exists {
+			continue
+		}
+		logging.Debug(logging.TagAuth, "Applying migration: %s", file)
+		content, err := migrationsFS.ReadFile("migrations/" + file)
+		if err != nil {
+			return fmt.Errorf("failed to read migration file %s: %w", file, err)
+		}
+		if err := DB.WithContext(ctx).Exec(string(content)).Error; err != nil {
+			return fmt.Errorf("failed to apply migration %s: %w", file, err)
+		}
+		if err := DB.WithContext(ctx).Exec("INSERT INTO schema_migrations (version) VALUES (?)", file).Error; err != nil {
+			return fmt.Errorf("failed to record migration %s: %w", file, err)
+		}
+	}
+	return nil
+}
+
 // RunMigrations applies all pending SQL migrations to the database
 func RunMigrations(ctx context.Context) error {
-	// 0. Pre-migration: Drop old constraints that might conflict with GORM
-	// The manual schema.sql used 'UNIQUE', which Postgres names 'users_username_key'
+	// Pre-migration: drop old constraints that may conflict with GORM.
+	// The manual schema.sql used 'UNIQUE', which Postgres names 'users_username_key'.
 	if DB.Migrator().HasTable("users") {
 		_ = DB.WithContext(ctx).Exec("ALTER TABLE users DROP CONSTRAINT IF EXISTS users_username_key").Error
 		_ = DB.WithContext(ctx).Exec("ALTER TABLE users DROP CONSTRAINT IF EXISTS uni_users_username").Error
@@ -25,25 +50,21 @@ func RunMigrations(ctx context.Context) error {
 		_ = DB.WithContext(ctx).Exec("ALTER TABLE user_stats DROP CONSTRAINT IF EXISTS uni_user_stats_user_id").Error
 	}
 
-	// 1. AutoMigrate GORM models
-	err := DB.WithContext(ctx).AutoMigrate(AllModels...)
-	if err != nil {
+	if err := DB.WithContext(ctx).AutoMigrate(AllModels...); err != nil {
 		return fmt.Errorf("failed to auto-migrate models: %w", err)
 	}
 
-	// 2. Run manual SQL migrations (for RLS, etc.)
-	// Only run these on Postgres as they often contain dialect-specific SQL
+	// Manual SQL migrations (RLS, etc.) are Postgres-only.
 	if !isPostgresDialect() {
 		return nil
 	}
 
-	err = DB.WithContext(ctx).Exec(`
+	if err := DB.WithContext(ctx).Exec(`
 		CREATE TABLE IF NOT EXISTS schema_migrations (
 			version VARCHAR(255) PRIMARY KEY,
 			applied_at TIMESTAMPTZ DEFAULT now()
 		)
-	`).Error
-	if err != nil {
+	`).Error; err != nil {
 		return fmt.Errorf("failed to create migrations table: %w", err)
 	}
 
@@ -59,36 +80,5 @@ func RunMigrations(ctx context.Context) error {
 		}
 	}
 	sort.Strings(files)
-
-	for _, file := range files {
-		var exists bool
-		err := DB.WithContext(ctx).Raw("SELECT EXISTS(SELECT 1 FROM schema_migrations WHERE version = ?)", file).Scan(&exists).Error
-		if err != nil {
-			return fmt.Errorf("failed to check migration status for %s: %w", file, err)
-		}
-
-		if exists {
-			continue
-		}
-
-		logging.Debug(logging.TagAuth, "Applying migration: %s", file)
-		content, err := migrationsFS.ReadFile("migrations/" + file)
-		if err != nil {
-			return fmt.Errorf("failed to read migration file %s: %w", file, err)
-		}
-
-		// Execute the migration SQL
-		err = DB.WithContext(ctx).Exec(string(content)).Error
-		if err != nil {
-			return fmt.Errorf("failed to apply migration %s: %w", file, err)
-		}
-
-		// Record that this migration has been applied
-		err = DB.WithContext(ctx).Exec("INSERT INTO schema_migrations (version) VALUES (?)", file).Error
-		if err != nil {
-			return fmt.Errorf("failed to record migration %s: %w", file, err)
-		}
-	}
-
-	return nil
+	return applyPendingSQLFiles(ctx, files)
 }
