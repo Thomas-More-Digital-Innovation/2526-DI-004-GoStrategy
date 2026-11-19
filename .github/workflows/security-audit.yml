@@ -10,6 +10,8 @@ on:
       - "code/frontend/pnpm-lock.yaml"
       - "code/backend/go.mod"
       - "code/backend/go.sum"
+      - "code/backend/Dockerfile"
+      - "code/frontend/Dockerfile"
       - ".github/workflows/security-audit.yml"
   pull_request:
     branches: ["**"]
@@ -43,5 +45,54 @@ jobs:
           comment-tag: govulncheck
           title: Go Vulnerability Report
           issue-title: "[Security Audit] Go vulnerabilities detected"
+          fail-on-findings: false
+          manage-issue: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+
+  image-audit:
+    name: Container Image Audit (${{ matrix.name }})
+    runs-on: ubuntu-latest
+    permissions: { contents: read, pull-requests: write, issues: write }
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: backend, context: code/backend, file: code/backend/Dockerfile }
+          - { name: frontend, context: ., file: code/frontend/Dockerfile }
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069
+
+      - name: Build image
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.file }}
+          load: true
+          push: false
+          pull: true
+          no-cache: true
+          tags: gostrategy-${{ matrix.name }}:audit
+
+      - name: Scan image with Trivy
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: image
+          image-ref: gostrategy-${{ matrix.name }}:audit
+          format: sarif
+          output: trivy-image.sarif
+          ignore-unfixed: true
+          severity: "CRITICAL,HIGH"
+          limit-severities-for-sarif: true
+
+      - uses: dotactions/sarif-reporter@917c66712f17657e67d429895eade83a9543034d # v0.1.0
+        if: always() && hashFiles('trivy-image.sarif') != ''
+        with:
+          sarif-file: trivy-image.sarif
+          comment-tag: trivy-image-${{ matrix.name }}
+          title: Container Image Report (${{ matrix.name }})
+          issue-title: "[Security Audit] ${{ matrix.name }} image vulnerabilities"
           fail-on-findings: false
           manage-issue: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
