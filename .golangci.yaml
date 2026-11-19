@@ -17,12 +17,25 @@ linters:
     - gocritic
     - ineffassign
     - dupl
+    - gocognit
+    - nestif
   exclusions:
     rules:
       - path: _test\.go
         linters:
           - dupl # Exclude duplicate check from tests
           - goconst
+      - path: docs.go
+        linters:
+          - revive
+  
+  settings:
+    gocognit:
+      min-complexity: 15
+    revive:
+      rules: 
+        - name: file-length-limit
+          arguments: [{ max: 300, skipComments: true, skipBlankLines: true }]
 
 issues:
   max-issues-per-linter: 0
