@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { resolve } from '$app/paths';
+	import { page } from '$app/state';
 	import { authStore } from '#lib/state/auth.svelte.js';
 	import { toastStore } from '#lib/state/toast.svelte.js';
 	import Button from '#lib/components/ui/Button.svelte';
 	import Input from '#lib/components/ui/Input.svelte';
+	import { safeNextPath } from './_utils/next';
 	import TacticalBriefing from './_components/TacticalBriefing.svelte';
 	import PasswordChecker from './_components/PasswordChecker.svelte';
 	import {
@@ -55,7 +56,8 @@
 			} else {
 				await authStore.register(username, password);
 			}
-			goto(resolve('/'));
+			// eslint-disable-next-line svelte/no-navigation-without-resolve -- validated same-origin path, no base path configured
+			goto(safeNextPath(page.url.searchParams.get('next'), page.url.origin));
 		} catch (e) {
 			toastStore.handleApiMessage(e, 'Authentication failed');
 		} finally {
