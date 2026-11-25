@@ -2,6 +2,72 @@
 import type * as game from './game';
 
 //////////
+// source: friendship.go
+
+/**
+ * FriendshipStatus is the lifecycle state of a friend request.
+ */
+export type FriendshipStatus = string;
+/**
+ * Friendship statuses. Declining, cancelling and unfriending delete the row.
+ */
+export const FriendshipPending: FriendshipStatus = 'pending';
+/**
+ * Friendship statuses. Declining, cancelling and unfriending delete the row.
+ */
+export const FriendshipAccepted: FriendshipStatus = 'accepted';
+/**
+ * Friendship is one directed row per relationship: the requester asked, the addressee answers.
+ * why: unlike every other model there is no gorm.DeletedAt. A soft-deleted row would keep the
+ * pair index occupied and block re-requesting after a decline.
+ * The pair index treats A→B and B→A as the same pair. The CASE expressions carry their own
+ * parentheses because Postgres requires them around non-function index expressions, and they
+ * avoid commas because GORM splits index tag options on ",".
+ */
+export interface Friendship {
+	id: number /* int */;
+	requester_id: number /* int */;
+	addressee_id: number /* int */;
+	status: FriendshipStatus;
+	created_at: string;
+	updated_at: string;
+}
+/**
+ * FriendCodeResponse carries the owner's own friend code, formatted as XXXX-XXXX.
+ */
+export interface FriendCodeResponse {
+	code: string;
+}
+/**
+ * FriendEntry is one row of the social tab: the friendship id plus the other user.
+ */
+export interface FriendEntry {
+	id: number /* int */;
+	user: UserDTO;
+	created_at: string;
+}
+/**
+ * FriendListResponse groups a user's friendships by what they can do with each one.
+ */
+export interface FriendListResponse {
+	friends: FriendEntry[];
+	incoming: FriendEntry[];
+	outgoing: FriendEntry[];
+}
+/**
+ * AddFriendRequest asks to become friends with the owner of a friend code.
+ */
+export interface AddFriendRequest {
+	code: string;
+}
+/**
+ * FriendPreviewResponse shows who a friend code belongs to, before anyone sends a request.
+ */
+export interface FriendPreviewResponse {
+	user: UserDTO;
+}
+
+//////////
 // source: game.go
 
 /**

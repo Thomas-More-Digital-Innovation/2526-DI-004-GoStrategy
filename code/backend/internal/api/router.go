@@ -96,6 +96,8 @@ func (s *GameServer) SetupRoutes() {
 			me.GET("/games", h.HandleListMyGames)
 			me.GET("/reconnectable", h.HandleGetReconnectableGame)
 			me.POST("/password", middleware.UserRateLimitMiddleware(authLimiter), h.ChangePasswordHandler)
+			me.POST("/friend-code", h.FriendCodeHandler)
+			me.POST("/friend-code/regenerate", middleware.UserRateLimitMiddleware(actionLimiter), h.RegenerateFriendCodeHandler)
 		}
 
 		// Public info
@@ -117,6 +119,19 @@ func (s *GameServer) SetupRoutes() {
 		setups.POST("", h.CreateBoardSetupHandler)
 		setups.PUT("/:id", h.UpdateBoardSetupHandler)
 		setups.DELETE("/:id", h.DeleteBoardSetupHandler)
+	}
+
+	// Friend endpoints (all require auth). Writes and the code preview share the action limiter,
+	// which also throttles guessing friend codes.
+	friends := s.Router.Group("/friends")
+	friends.Use(auth.RequireAuth())
+	{
+		limit := middleware.UserRateLimitMiddleware(actionLimiter)
+		friends.GET("", h.ListFriendsHandler)
+		friends.GET("/preview", limit, h.PreviewFriendHandler)
+		friends.POST("/requests", limit, h.SendFriendRequestHandler)
+		friends.POST("/requests/:id/accept", limit, h.AcceptFriendRequestHandler)
+		friends.DELETE("/:id", limit, h.DeleteFriendshipHandler)
 	}
 
 	// Game endpoints

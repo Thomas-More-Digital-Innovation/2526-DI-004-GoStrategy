@@ -1,9 +1,14 @@
 import type { GameHistoryResponse, GameInfo, User, UserStats } from '#lib/types/game.js';
 import type { BoardSetup, ExportedBoardSetup } from '#lib/types/board-setup.js';
 import type {
+	AddFriendRequest,
 	ChangePasswordRequest,
 	CreateBoardSetupRequest,
 	CreateUserRequest,
+	FriendCodeResponse,
+	FriendListResponse,
+	FriendPreviewResponse,
+	Friendship,
 	GameListResponse,
 	LoginRequest,
 	ReconnectableGameResponse,
@@ -148,6 +153,29 @@ export const games = {
 // Stats
 export const stats = {
 	getMine: () => request<UserStats>('/users/me/stats')
+};
+
+// Friends
+export const friends = {
+	list: () => request<FriendListResponse>('/friends'),
+
+	getCode: () => request<FriendCodeResponse>('/users/me/friend-code', { method: 'POST' }),
+
+	regenerateCode: () =>
+		request<FriendCodeResponse>('/users/me/friend-code/regenerate', { method: 'POST' }),
+
+	preview: (code: string) =>
+		request<FriendPreviewResponse>(`/friends/preview?code=${encodeURIComponent(code)}`),
+
+	sendRequest: (code: string) =>
+		request<Friendship>('/friends/requests', {
+			method: 'POST',
+			body: JSON.stringify({ code } satisfies AddFriendRequest)
+		}),
+
+	accept: (id: number) => requestVoid(`/friends/requests/${id}/accept`, { method: 'POST' }),
+
+	remove: (id: number) => requestVoid(`/friends/${id}`, { method: 'DELETE' })
 };
 
 // Board Setups

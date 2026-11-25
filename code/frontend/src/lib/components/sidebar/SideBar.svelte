@@ -16,6 +16,7 @@
 			{ name: 'Command Center', href: resolve('/') },
 			{ name: 'Meet our AI', href: resolve('meet-our-ai') },
 			{ name: 'Profile', href: resolve('profile') },
+			{ name: 'Friends', href: resolve('friends') },
 			{ name: 'Board Setups', href: resolve('board-setups') }
 		],
 		[

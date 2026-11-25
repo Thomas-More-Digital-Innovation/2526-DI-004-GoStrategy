@@ -12,6 +12,7 @@ type User struct {
 	Username       string         `json:"username" gorm:"unique;not null;size:50;uniqueIndex:idx_users_username_lower,expression:lower(username)"`
 	PasswordHash   string         `json:"-" gorm:"not null;size:255"` // never send to client
 	ProfilePicture string         `json:"profile_picture,omitempty" gorm:"size:255"`
+	FriendCode     *string        `json:"-" gorm:"size:8;uniqueIndex:idx_users_friend_code"` // never send to client; owner-only endpoints expose it
 	CreatedAt      time.Time      `json:"created_at"`
 	UpdatedAt      time.Time      `json:"updated_at"`
 	DeletedAt      gorm.DeletedAt `json:"-" gorm:"index"`
