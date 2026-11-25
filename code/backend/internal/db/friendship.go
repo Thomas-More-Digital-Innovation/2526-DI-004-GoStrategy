@@ -34,6 +34,9 @@ func SendFriendRequest(ctx context.Context, requesterID, addresseeID int) (*mode
 	if requesterID == addresseeID {
 		return nil, ErrSelfRequest
 	}
+	if err := ensureOtherCapacity(ctx, addresseeID); err != nil {
+		return nil, err
+	}
 	f, err := sendOnce(ctx, requesterID, addresseeID)
 	if isUniqueViolation(err) {
 		// why: a concurrent send won the pair index; its row is committed now, so one retry sees it.
@@ -83,6 +86,15 @@ func AcceptFriendRequest(ctx context.Context, userID, friendshipID int) (*models
 		if err != nil {
 			return fmt.Errorf("load friendship %d: %w", friendshipID, err)
 		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	if err := ensureOtherCapacity(ctx, f.RequesterID); err != nil {
+		return nil, err
+	}
+	err = WithRLS(WithUserID(ctx, userID), func(tx *gorm.DB) error {
 		return acceptRow(tx, userID, &f)
 	})
 	if err != nil {
@@ -158,12 +170,20 @@ func ensureCanRequest(tx *gorm.DB, userID int) error {
 	return nil
 }
 
-// ensureFriendCapacity checks only the acting user's cap.
+// ensureOtherCapacity checks the other party's cap while running as that party, because RLS hides
+// their friendships from the acting user. It runs before the acting user's transaction so a request
+// never holds two connections at once.
 //
-// ponytail: RLS hides the other party's rows, so their cap is checked only when they act. A user
-// can overshoot MaxFriends by at most MaxOutgoingPending accepts; add a counting function that
-// bypasses RLS if that matters. Rows of soft-deleted friends count too, as there is no account
-// deletion flow yet.
+// shortcut: the check and the write are separate transactions, so two simultaneous requests can
+// push someone past MaxFriends by a few; move the count into the write if that ever matters.
+func ensureOtherCapacity(ctx context.Context, otherID int) error {
+	return WithRLS(WithUserID(ctx, otherID), func(tx *gorm.DB) error {
+		return ensureFriendCapacity(tx, otherID)
+	})
+}
+
+// ensureFriendCapacity checks one user's cap through that user's own RLS view. Rows of soft-deleted
+// friends count too, as there is no account deletion flow yet.
 func ensureFriendCapacity(tx *gorm.DB, userID int) error {
 	friends, err := countFriendships(tx, "status = ? AND (requester_id = ? OR addressee_id = ?)", models.FriendshipAccepted, userID, userID)
 	if err != nil {

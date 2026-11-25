@@ -101,6 +101,25 @@ func TestSendFriendRequest(t *testing.T) {
 		assert.ErrorIs(t, err, ErrFriendLimit)
 	})
 
+	t.Run("caps the addressee's friends", func(t *testing.T) {
+		a, b := newTestUser(t, "cap_addressee_a"), newTestUser(t, "cap_addressee_b")
+		seedFriendships(t, b, MaxFriends, models.FriendshipAccepted)
+		_, err := SendFriendRequest(ctx, a, b)
+		assert.ErrorIs(t, err, ErrFriendLimit)
+		assert.Empty(t, pairRows(t, a, b))
+	})
+
+	t.Run("a crossed accept respects the other side's cap", func(t *testing.T) {
+		a, b := newTestUser(t, "cap_other_a"), newTestUser(t, "cap_other_b")
+		_, err := SendFriendRequest(ctx, a, b)
+		require.NoError(t, err)
+		seedFriendships(t, a, MaxFriends, models.FriendshipAccepted)
+
+		_, err = SendFriendRequest(ctx, b, a)
+		assert.ErrorIs(t, err, ErrFriendLimit)
+		assert.Equal(t, models.FriendshipPending, pairRows(t, a, b)[0].Status)
+	})
+
 	t.Run("a crossed accept respects the acceptor's cap", func(t *testing.T) {
 		a, b := newTestUser(t, "cap_cross_a"), newTestUser(t, "cap_cross_b")
 		_, err := SendFriendRequest(ctx, a, b)
@@ -196,6 +215,14 @@ func TestAcceptFriendRequest(t *testing.T) {
 	t.Run("an unknown id is not found", func(t *testing.T) {
 		_, err := AcceptFriendRequest(ctx, newTestUser(t, "acc_none"), 999999)
 		assert.ErrorIs(t, err, ErrFriendshipNotFound)
+	})
+
+	t.Run("respects the requester's friend cap", func(t *testing.T) {
+		a, b, id := pending(t, "acc_req_cap")
+		seedFriendships(t, a, MaxFriends, models.FriendshipAccepted)
+		_, err := AcceptFriendRequest(ctx, b, id)
+		assert.ErrorIs(t, err, ErrFriendLimit)
+		assert.Equal(t, models.FriendshipPending, pairRows(t, a, b)[0].Status)
 	})
 
 	t.Run("respects the acceptor's friend cap", func(t *testing.T) {

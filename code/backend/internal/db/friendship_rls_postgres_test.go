@@ -163,3 +163,28 @@ func TestListFriendshipsPostgres(t *testing.T) {
 	assert.Equal(t, []string{"list_pg_c"}, usernames(list.Incoming))
 	assert.Empty(t, list.Friends)
 }
+
+func TestFriendCapOfOtherPartyPostgres(t *testing.T) {
+	testDB := setupPostgresDB(t)
+	oldDB := DB
+	DB = testDB
+	defer func() { DB = oldDB }()
+
+	ctx := context.Background()
+	full, errF := CreateUser(ctx, "cap_pg_full", "Pass1234!", "")
+	other, errO := CreateUser(ctx, "cap_pg_other", "Pass1234!", "")
+	require.NoError(t, errF)
+	require.NoError(t, errO)
+	defer removeFriendTestData(ctx, full.ID, other.ID)
+
+	rows := make([]models.Friendship, MaxFriends)
+	for i := range rows {
+		rows[i] = models.Friendship{RequesterID: full.ID, AddresseeID: 100000 + i, Status: models.FriendshipAccepted}
+	}
+	require.NoError(t, WithRLS(WithUserID(ctx, full.ID), func(tx *gorm.DB) error {
+		return tx.CreateInBatches(rows, 100).Error
+	}))
+
+	_, err := SendFriendRequest(ctx, other.ID, full.ID)
+	assert.ErrorIs(t, err, ErrFriendLimit, "the other party's rows are invisible to the sender, so their cap needs their own view")
+}
