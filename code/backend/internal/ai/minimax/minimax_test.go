@@ -26,7 +26,7 @@ func TestMinimaxAI_ConstructorAndParams(t *testing.T) {
 			ai_const.Marshal: 100.0,
 		},
 		Aggression: 0.5,
-		Config: map[string]interface{}{
+		Config: map[string]any{
 			"depth": float64(3),
 		},
 	}
@@ -46,7 +46,7 @@ func TestMinimaxAI_MinimaxBranches(t *testing.T) {
 			ai_const.General: 80.0,
 		},
 		Aggression: 0.0,
-		Config: map[string]interface{}{
+		Config: map[string]any{
 			"depth": float64(2),
 		},
 	}

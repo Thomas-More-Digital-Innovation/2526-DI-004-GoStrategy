@@ -164,14 +164,13 @@ func (b *Board) handleScoutMoves(pos Position, moves *[]Move) {
 		for step := 1; step < 10; step++ {
 			newPos := NewPosition(pos.X+dir.X*step, pos.Y+dir.Y*step)
 			move := NewMove(pos, newPos, nil)
-			if b.IsValidMove(&move) {
-				*moves = append(*moves, move)
-				if b.GetPieceAt(newPos) != nil {
-					// Can't move past an occupied square
-					break
-				}
-			} else {
+			if !b.IsValidMove(&move) {
 				// Stop if the move is invalid (out of bounds, lake, etc.)
+				break
+			}
+			*moves = append(*moves, move)
+			if b.GetPieceAt(newPos) != nil {
+				// Can't move past an occupied square
 				break
 			}
 		}

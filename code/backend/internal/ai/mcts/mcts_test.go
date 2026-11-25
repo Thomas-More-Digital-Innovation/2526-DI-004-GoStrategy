@@ -30,7 +30,7 @@ func TestMctsAI_Constructors(t *testing.T) {
 				ai_const.Marshal: 100.0,
 			},
 			Aggression: 0.5,
-			Config: map[string]interface{}{
+			Config: map[string]any{
 				"iterations":           float64(5),
 				"exploration_constant": 1.414,
 			},
@@ -78,7 +78,7 @@ func TestMctsAI_MakeMove(t *testing.T) {
 				ai_const.Flag:    10000.0,
 			},
 			Aggression: 0.5,
-			Config: map[string]interface{}{
+			Config: map[string]any{
 				"total_rollouts": float64(10),
 			},
 		}
@@ -104,7 +104,7 @@ func TestMctsAI_MakeMove(t *testing.T) {
 		params := &ai.Parameters{
 			Weights:    map[string]float64{ai_const.Marshal: 100.0},
 			Aggression: 0.5,
-			Config: map[string]interface{}{
+			Config: map[string]any{
 				"iterations":           float64(2),
 				"exploration_constant": 2.0,
 			},

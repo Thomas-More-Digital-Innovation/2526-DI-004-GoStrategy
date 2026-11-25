@@ -42,6 +42,11 @@ linters:
       rules: 
         - name: file-length-limit
           arguments: [{ max: 300, skipComments: true, skipBlankLines: true }]
+        - name: exported
+        - name: package-comments
+        - name: early-return
+        - name: redundant-import-alias
+        - name: use-any
 
 issues:
   max-issues-per-linter: 0
