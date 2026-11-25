@@ -21,8 +21,8 @@ lint-fix:
     pnpm lint --write
 
 # run unit tests (vitest)
-test:
-    pnpm test:unit
+test *args:
+    pnpm test:unit {{args}}
 
 # run unit tests with coverage report
 coverage:
