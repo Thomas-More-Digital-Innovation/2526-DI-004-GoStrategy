@@ -50,6 +50,7 @@ Before writing any code, stop at the first rung that holds:
   - AI assistants must **never** execute destructive migration or refactoring plans without approval.
   - Test runs: run only the tests you wrote or the ones affected by the change (single package, file or `-run` filter). Run the full suite only when explicitly asked.
 - **Commit Format:** `action(scope): description` (e.g., `feat(game): add piece movement validation`).
+- **Specs:** Design specs live in `documents/specs/NNNN-slug/`, never in `docs/` (`docs/**` is mirrored to the public wiki).
 
 ---
 
