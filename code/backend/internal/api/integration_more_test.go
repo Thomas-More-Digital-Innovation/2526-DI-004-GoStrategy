@@ -144,7 +144,7 @@ func TestIntegration_GameManagement(t *testing.T) {
 			t.Fatalf("Expected status 200, got %d", resp.StatusCode)
 		}
 
-		var respData map[string]interface{}
+		var respData map[string]any
 		if err := json.NewDecoder(resp.Body).Decode(&respData); err != nil {
 			t.Fatalf("Failed to decode response: %v", err)
 		}
@@ -244,13 +244,13 @@ func TestIntegration_GameHistory(t *testing.T) {
 			t.Fatalf("Expected status 200, got %d", resp.StatusCode)
 		}
 
-		var result map[string]interface{}
+		var result map[string]any
 		if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 			t.Fatalf("Failed to decode result: %v", err)
 		}
 		_ = resp.Body.Close()
 
-		games := result["games"].([]interface{})
+		games := result["games"].([]any)
 		if len(games) != 1 {
 			t.Errorf("Expected 1 game, got %d", len(games))
 		}
@@ -265,7 +265,7 @@ func TestIntegration_GameHistory(t *testing.T) {
 			t.Fatalf("Expected status 200, got %d", resp.StatusCode)
 		}
 
-		var result map[string]interface{}
+		var result map[string]any
 		if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 			t.Fatalf("Failed to decode result: %v", err)
 		}

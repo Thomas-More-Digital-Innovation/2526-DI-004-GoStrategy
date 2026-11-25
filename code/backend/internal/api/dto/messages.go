@@ -39,8 +39,8 @@ const (
 
 // WSMessage is the base structure for all WebSocket messages
 type WSMessage struct {
-	Type string      `json:"type"`
-	Data interface{} `json:"data,omitempty"`
+	Type string `json:"type"`
+	Data any    `json:"data,omitempty"`
 }
 
 // MoveMessage is sent by the client to request a move

@@ -3,7 +3,7 @@
 package fato
 
 import (
-	ai "digital-innovation/gostrategy/internal/ai"
+	"digital-innovation/gostrategy/internal/ai"
 	ai_const "digital-innovation/gostrategy/internal/ai/const"
 	"digital-innovation/gostrategy/internal/ai/fafo"
 	"digital-innovation/gostrategy/internal/game"

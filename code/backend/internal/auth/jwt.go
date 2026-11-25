@@ -44,7 +44,7 @@ func GenerateToken(userID int, username string) (string, error) {
 
 // VerifyToken validates the JWT and returns the user information
 func VerifyToken(tokenString string) (*models.User, error) {
-	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (any, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}

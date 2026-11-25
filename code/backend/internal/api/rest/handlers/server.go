@@ -28,16 +28,6 @@ func NewHandler(s *core.GameServer) *Handler {
 	return &Handler{s}
 }
 
-// HandleCreateGame handles game creation
-// @Summary Create a new game
-// @Description Initialize a new game session with specified type and players
-// @Tags games
-// @Accept json
-// @Produce json
-// @Param request body object{gameId=string,gameType=string,ai1=string,ai2=string} true "Game creation parameters"
-// @Success 200 {object} models.CreateGameResponse "Game created successfully"
-// @Failure 400 {object} map[string]string "Invalid request body or parameters"
-// @Router /games [post]
 // cleanupStaleSession blocks a new game when the user has an active game, or force-resigns
 // a session that is waiting for cleanup so the user can start fresh.
 // Returns true if the caller should abort (user still has a live game).
@@ -57,6 +47,16 @@ func (h *Handler) cleanupStaleSession(c *gin.Context, userID int) bool {
 	return false
 }
 
+// HandleCreateGame handles game creation
+// @Summary Create a new game
+// @Description Initialize a new game session with specified type and players
+// @Tags games
+// @Accept json
+// @Produce json
+// @Param request body object{gameId=string,gameType=string,ai1=string,ai2=string} true "Game creation parameters"
+// @Success 200 {object} models.CreateGameResponse "Game created successfully"
+// @Failure 400 {object} map[string]string "Invalid request body or parameters"
+// @Router /games [post]
 func (h *Handler) HandleCreateGame(c *gin.Context) {
 	var req struct {
 		GameID   string `json:"gameId"`
