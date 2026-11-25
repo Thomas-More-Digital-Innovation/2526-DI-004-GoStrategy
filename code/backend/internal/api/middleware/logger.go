@@ -21,7 +21,7 @@ func maskSensitiveParams(query string) string {
 		kv := strings.SplitN(p, "=", 2)
 		if len(kv) == 2 {
 			key := strings.ToLower(kv[0])
-			if strings.Contains(key, "token") || strings.Contains(key, "password") || strings.Contains(key, "secret") || strings.Contains(key, "key") {
+			if strings.Contains(key, "token") || strings.Contains(key, "password") || strings.Contains(key, "secret") || strings.Contains(key, "key") || key == "code" {
 				params[i] = kv[0] + "=[REDACTED]"
 			}
 		}
