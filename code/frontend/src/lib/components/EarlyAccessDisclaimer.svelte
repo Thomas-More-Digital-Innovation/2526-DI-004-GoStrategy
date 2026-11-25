@@ -12,8 +12,9 @@
 			Report any bugs <a
 				class="underline text-brand-primary hover:text-brand-accent"
 				href="https://github.com/Thomas-More-Digital-Innovation/2526-DI-004-GoStrategy/issues"
-				>here</a
-			>.
+			>
+				here
+			</a>.
 		</p>
 	</div>
 </div>

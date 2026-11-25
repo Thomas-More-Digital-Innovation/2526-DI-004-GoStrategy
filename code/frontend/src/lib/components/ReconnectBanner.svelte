@@ -122,8 +122,10 @@
 				<h3 class="text-white font-bold text-lg tracking-widest">Active Game In Progress</h3>
 				<p class="text-white/60 text-sm mt-0.5">
 					You have an ongoing game in progress that will be cleaned up shortly (<span
-						class="font-mono text-brand-accent">{reconnectableGame.gameId}</span
-					>).
+						class="font-mono text-brand-accent"
+					>
+						{reconnectableGame.gameId}
+					</span>).
 				</p>
 			</div>
 		</div>

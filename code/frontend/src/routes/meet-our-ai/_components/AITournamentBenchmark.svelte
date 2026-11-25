@@ -57,32 +57,32 @@
 					</tr>
 					<tr class="hover:bg-white/5 transition-colors">
 						<td class="py-3 px-4 font-sans text-white/70">Flag Captured</td>
-						<td class="py-3 px-4 text-white"
-							>{fafo.flagCaptureRate} ({fafo.flagCaptures.toLocaleString()})</td
-						>
-						<td class="py-3 px-4 text-white"
-							>{fato.flagCaptureRate} ({fato.flagCaptures.toLocaleString()})</td
-						>
+						<td class="py-3 px-4 text-white">
+							{fafo.flagCaptureRate} ({fafo.flagCaptures.toLocaleString()})
+						</td>
+						<td class="py-3 px-4 text-white">
+							{fato.flagCaptureRate} ({fato.flagCaptures.toLocaleString()})
+						</td>
 						<td class="py-3 px-4 text-white/80">+8.5%</td>
 					</tr>
 					<tr class="hover:bg-white/5 transition-colors">
 						<td class="py-3 px-4 font-sans text-white/70">No Movable Pieces (Attrition)</td>
-						<td class="py-3 px-4 text-white"
-							>{fafo.noMoveWinsRate} ({fafo.noMoveWins.toLocaleString()})</td
-						>
-						<td class="py-3 px-4 text-white"
-							>{fato.noMoveWinsRate} ({fato.noMoveWins.toLocaleString()})</td
-						>
+						<td class="py-3 px-4 text-white">
+							{fafo.noMoveWinsRate} ({fafo.noMoveWins.toLocaleString()})
+						</td>
+						<td class="py-3 px-4 text-white">
+							{fato.noMoveWinsRate} ({fato.noMoveWins.toLocaleString()})
+						</td>
 						<td class="py-3 px-4 text-white/80">+11.7%</td>
 					</tr>
 					<tr class="hover:bg-white/5 transition-colors">
 						<td class="py-3 px-4 font-sans text-white/70">Max Turn Cutoffs (Stalemate)</td>
-						<td class="py-3 px-4 text-white"
-							>{fafo.maxTurnCutoffsRate} ({fafo.maxTurnCutoffs.toLocaleString()})</td
-						>
-						<td class="py-3 px-4 text-white"
-							>{fato.maxTurnCutoffsRate} ({fato.maxTurnCutoffs.toLocaleString()})</td
-						>
+						<td class="py-3 px-4 text-white">
+							{fafo.maxTurnCutoffsRate} ({fafo.maxTurnCutoffs.toLocaleString()})
+						</td>
+						<td class="py-3 px-4 text-white">
+							{fato.maxTurnCutoffsRate} ({fato.maxTurnCutoffs.toLocaleString()})
+						</td>
 						<td class="py-3 px-4 text-white/80">-20.1%</td>
 					</tr>
 				</tbody>
@@ -93,21 +93,25 @@
 	<div
 		class="p-4 bg-black/20 border-t border-white/5 text-xs text-white/50 flex flex-col sm:flex-row justify-between gap-2"
 	>
-		<span
-			>Source: <a
+		<span>
+			Source: <a
 				class="underline"
 				href="https://github.com/Thomas-More-Digital-Innovation/2526-DI-004-GoStrategy/blob/main/documents/files/ai-data/fafo.md"
-				target="_blank">fafo.md</a
+				target="_blank"
 			>
+				fafo.md
+			</a>
 			and
 			<a
 				class="underline"
 				href="https://github.com/Thomas-More-Digital-Innovation/2526-DI-004-GoStrategy/blob/main/documents/files/ai-data/fato.md"
-				target="_blank">fato.md</a
-			></span
-		>
-		<span
-			>Heuristic, Minimax, and MCTS benchmarks will be added once 10k tournament runs finish.</span
-		>
+				target="_blank"
+			>
+				fato.md
+			</a>
+		</span>
+		<span>
+			Heuristic, Minimax, and MCTS benchmarks will be added once 10k tournament runs finish.
+		</span>
 	</div>
 </Card>

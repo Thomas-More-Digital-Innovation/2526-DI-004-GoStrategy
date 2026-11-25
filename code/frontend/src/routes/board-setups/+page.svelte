@@ -75,8 +75,10 @@
 			<Button
 				variant="primary"
 				disabled={setups.length >= MAX_BOARD_SETUPS}
-				onclick={() => goto(resolve('board-setups/new'))}>+ Create New</Button
+				onclick={() => goto(resolve('board-setups/new'))}
 			>
+				+ Create New
+			</Button>
 		</div>
 	</div>
 
@@ -100,15 +102,18 @@
 								variant="outline"
 								size="sm"
 								class="flex-1"
-								onclick={() => goto(resolve(`board-setups/${setup.id}`))}>Edit</Button
+								onclick={() => goto(resolve(`board-setups/${setup.id}`))}
 							>
+								Edit
+							</Button>
 
-							<Button variant="outline" size="sm" onclick={() => exportSetupAsJson(setup)}
-								>Export</Button
-							>
+							<Button variant="outline" size="sm" onclick={() => exportSetupAsJson(setup)}>
+								Export
+							</Button>
 
-							<Button variant="ghost" size="sm" onclick={() => deleteSetup(setup.id)}>Delete</Button
-							>
+							<Button variant="ghost" size="sm" onclick={() => deleteSetup(setup.id)}>
+								Delete
+							</Button>
 						</div>
 					{/snippet}
 				</BoardSetupCard>

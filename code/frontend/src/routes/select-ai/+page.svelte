@@ -140,14 +140,16 @@
 							{#if ai1 === ai.id}
 								<span
 									class="text-[9px] font-black bg-red-500 text-white px-2 py-1 rounded shadow-sm border border-white/10 uppercase tracking-wider"
-									>P1</span
 								>
+									P1
+								</span>
 							{/if}
 							{#if ai2 === ai.id}
 								<span
 									class="text-[9px] font-black bg-blue-500 text-white px-2 py-1 rounded shadow-sm border border-white/10 uppercase tracking-wider"
-									>P2</span
 								>
+									P2
+								</span>
 							{/if}
 						</div>
 					</div>

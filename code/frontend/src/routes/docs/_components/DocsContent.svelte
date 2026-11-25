@@ -28,8 +28,10 @@
 				href={`https://github.com/${__REPO_NAME__}/blob/main/docs/${activeSlug}.md`}
 				target="_blank"
 				rel="noopener noreferrer"
-				class="font-mono hover:underline text-xs text-white/40">docs/{activeSlug}.md</a
+				class="font-mono hover:underline text-xs text-white/40"
 			>
+				docs/{activeSlug}.md
+			</a>
 		</div>
 
 		<article class="docs-prose max-w-none text-white/80 leading-relaxed text-sm">

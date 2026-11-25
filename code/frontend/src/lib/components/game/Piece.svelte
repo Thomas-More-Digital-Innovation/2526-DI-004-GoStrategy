@@ -99,9 +99,9 @@
 				{/if}
 			</div>
 		{:else if isEnemy}
-			<span style="font-size: {20 * scale}px; font-weight: bold; color: rgba(255,255,255,0.8)"
-				>?</span
-			>
+			<span style="font-size: {20 * scale}px; font-weight: bold; color: rgba(255,255,255,0.8)">
+				?
+			</span>
 		{/if}
 	{/if}
 </div>

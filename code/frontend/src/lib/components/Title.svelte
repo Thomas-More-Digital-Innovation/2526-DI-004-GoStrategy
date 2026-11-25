@@ -17,9 +17,9 @@
 <div
 	class="text-{size} font-extrabold tracking-widest text-white flex gap-1 items-center drop-shadow-md"
 >
-	<span class="flex items-center"
-		><a href="https://go.dev/">
-			<img src={goLogo} alt="go" class="mr-1" width={sizes[size]} height={sizes[size]} /></a
-		>STRATEGY</span
-	>
+	<span class="flex items-center">
+		<a href="https://go.dev/">
+			<img src={goLogo} alt="go" class="mr-1" width={sizes[size]} height={sizes[size]} />
+		</a>STRATEGY
+	</span>
 </div>

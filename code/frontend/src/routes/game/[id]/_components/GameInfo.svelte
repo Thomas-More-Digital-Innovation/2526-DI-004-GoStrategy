@@ -81,17 +81,17 @@
 			</div>
 
 			<div class="flex justify-between items-center py-1 border-b border-white/5">
-				<span class="text-white/50"
-					>{formatPossessiveUsername(gameState.player1Username)}
-					Pieces</span
-				>
+				<span class="text-white/50">
+					{formatPossessiveUsername(gameState.player1Username)}
+					Pieces
+				</span>
 				<span class="font-semibold text-brand-secondary">{gameState.player1AlivePieces}</span>
 			</div>
 
 			<div class="flex justify-between items-center py-1 border-b border-white/5">
-				<span class="text-white/50"
-					>{formatPossessiveUsername(gameState.player2Username)} Pieces</span
-				>
+				<span class="text-white/50">
+					{formatPossessiveUsername(gameState.player2Username)} Pieces
+				</span>
 				<span class="font-semibold text-brand-primary">{gameState.player2AlivePieces}</span>
 			</div>
 

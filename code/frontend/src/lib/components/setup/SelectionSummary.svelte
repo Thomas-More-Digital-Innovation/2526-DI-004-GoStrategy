@@ -24,9 +24,9 @@
 
 	<div class="grid grid-cols-1 md:grid-cols-3 items-center gap-4 relative z-10">
 		<div class="flex flex-col items-center gap-3 text-center relative z-10">
-			<span class="text-[10px] font-bold text-red-500 uppercase tracking-[0.2em]"
-				>Player 1 (Red)</span
-			>
+			<span class="text-[10px] font-bold text-red-500 uppercase tracking-[0.2em]">
+				Player 1 (Red)
+			</span>
 			<div class="h-14 flex items-center justify-center">
 				{#if gameMode.mode === gamemodes.human_vs_ai.mode}
 					<div class="flex items-center gap-3">
@@ -57,9 +57,9 @@
 		</div>
 
 		<div class="flex flex-col items-center gap-3 text-center relative z-10">
-			<span class="text-[10px] font-bold text-blue-500 uppercase tracking-[0.2em]"
-				>Player 2 (Blue)</span
-			>
+			<span class="text-[10px] font-bold text-blue-500 uppercase tracking-[0.2em]">
+				Player 2 (Blue)
+			</span>
 			<div class="h-14 flex items-center justify-center">
 				{#if ai2}
 					<div class="flex items-center gap-3">

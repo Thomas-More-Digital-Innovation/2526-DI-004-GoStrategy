@@ -118,7 +118,8 @@
 			type="button"
 			class="hover:text-white transition-colors cursor-pointer"
 			onclick={() => (expanded = !expanded)}
-			>{expanded ? 'Hide specs' : 'Show technical specs'}</button
 		>
+			{expanded ? 'Hide specs' : 'Show technical specs'}
+		</button>
 	</div>
 </Card>

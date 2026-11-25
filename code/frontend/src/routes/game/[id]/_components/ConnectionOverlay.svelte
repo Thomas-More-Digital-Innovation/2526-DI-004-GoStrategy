@@ -35,9 +35,9 @@
 		<div class="space-y-1.5">
 			<h2 class="text-xl font-bold text-white tracking-wide uppercase">Connection Lost</h2>
 			<p class="text-white/60 text-sm">
-				Reconnecting to game session <span class="font-mono text-brand-accent font-semibold"
-					>{gameId}</span
-				>...
+				Reconnecting to game session <span class="font-mono text-brand-accent font-semibold">
+					{gameId}
+				</span>...
 			</p>
 			<p class="text-white/40 text-xs font-mono">
 				Attempt {reconnectAttempts} of {maxReconnectAttempts}

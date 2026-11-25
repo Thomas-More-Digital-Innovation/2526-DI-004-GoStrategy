@@ -32,8 +32,9 @@
 		<h1 class="text-3xl font-extrabold text-white uppercase tracking-widest">Command Center</h1>
 		<p class="text-white/50 mt-1">
 			{#if authStore.user}
-				Welcome back, <span class="text-brand-accent font-semibold">{authStore.user.username}</span
-				>.
+				Welcome back, <span class="text-brand-accent font-semibold">
+					{authStore.user.username}
+				</span>.
 			{:else}
 				<a href={resolve('login')} class="text-brand-primary hover:underline">Sign in</a>
 

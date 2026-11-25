@@ -91,9 +91,9 @@
 		<Card class="text-center py-12">
 			<p class="text-brand-secondary">{loadError}</p>
 
-			<Button variant="ghost" class="mt-4" onclick={() => goto(resolve('board-setups'))}
-				>Back to List</Button
-			>
+			<Button variant="ghost" class="mt-4" onclick={() => goto(resolve('board-setups'))}>
+				Back to List
+			</Button>
 		</Card>
 	{:else if setup}
 		<BoardSetupMetaForm bind:name bind:description bind:isDefault disabled={saving} />

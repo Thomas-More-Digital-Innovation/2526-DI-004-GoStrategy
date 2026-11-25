@@ -35,8 +35,9 @@
 			the war."
 			<span
 				class="block mt-1 font-mono text-[9px] text-brand-accent/60 uppercase tracking-widest not-italic"
-				>— Carl von Clausewitz</span
 			>
+				— Carl von Clausewitz
+			</span>
 		</div>
 	</div>
 </div>
