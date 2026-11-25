@@ -54,6 +54,18 @@ export interface FriendListResponse {
 	incoming: FriendEntry[];
 	outgoing: FriendEntry[];
 }
+/**
+ * AddFriendRequest asks to become friends with the owner of a friend code.
+ */
+export interface AddFriendRequest {
+	code: string;
+}
+/**
+ * FriendPreviewResponse shows who a friend code belongs to, before anyone sends a request.
+ */
+export interface FriendPreviewResponse {
+	user: UserDTO;
+}
 
 //////////
 // source: game.go

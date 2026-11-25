@@ -46,3 +46,13 @@ type FriendListResponse struct {
 	Incoming []FriendEntry `json:"incoming"`
 	Outgoing []FriendEntry `json:"outgoing"`
 }
+
+// AddFriendRequest asks to become friends with the owner of a friend code.
+type AddFriendRequest struct {
+	Code string `json:"code"`
+}
+
+// FriendPreviewResponse shows who a friend code belongs to, before anyone sends a request.
+type FriendPreviewResponse struct {
+	User UserDTO `json:"user"`
+}
