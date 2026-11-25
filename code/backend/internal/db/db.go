@@ -7,11 +7,12 @@ import (
 	"digital-innovation/gostrategy/internal/models"
 	"digital-innovation/gostrategy/internal/utils"
 	"fmt"
+	"log"
+	"os"
 	"time"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 )
 
 // DB is the global database connection instance
@@ -26,6 +27,7 @@ var AllModels = []any{
 	&models.Game{},
 	&models.GameMove{},
 	&models.AIParameter{},
+	&models.Friendship{},
 }
 
 type contextKey string
@@ -62,7 +64,7 @@ func WithRLS(ctx context.Context, fn func(tx *gorm.DB) error) error {
 // tryConnect opens a GORM connection, configures the pool, pings, and runs migrations.
 func tryConnect(dsn string) error {
 	var err error
-	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{Logger: logger.Default.LogMode(logger.Info)})
+	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{Logger: newSQLLogger(log.New(os.Stdout, "\r\n", log.LstdFlags))})
 	if err != nil {
 		return err
 	}
