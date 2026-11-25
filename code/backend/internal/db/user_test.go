@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestUserLogic(t *testing.T) {
@@ -78,5 +79,27 @@ func TestStatsConcurrency(t *testing.T) {
 		expectedGames := goroutines * updatesPerRoutine
 		assert.Equal(t, expectedGames, stats.TotalGames)
 		assert.Equal(t, expectedGames, stats.Wins)
+	})
+}
+
+func TestUsernameCaseInsensitiveUnique(t *testing.T) {
+	SetupDBTest(t)
+	ctx := context.Background()
+
+	t.Run("rejects name differing only in case", func(t *testing.T) {
+		_, err := CreateUser(ctx, "Sem", "Pass1234!", "")
+		require.NoError(t, err)
+
+		_, err = CreateUser(ctx, "sem", "Pass1234!", "")
+		assert.Error(t, err)
+	})
+
+	t.Run("soft-deleted name stays reserved", func(t *testing.T) {
+		user, err := CreateUser(ctx, "Gone", "Pass1234!", "")
+		require.NoError(t, err)
+		require.NoError(t, DB.Delete(user).Error)
+
+		_, err = CreateUser(ctx, "gone", "Pass1234!", "")
+		assert.Error(t, err)
 	})
 }

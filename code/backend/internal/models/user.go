@@ -9,7 +9,7 @@ import (
 // User represents a user in the system
 type User struct {
 	ID             int            `json:"id" gorm:"primaryKey"`
-	Username       string         `json:"username" gorm:"unique;not null;size:50"`
+	Username       string         `json:"username" gorm:"unique;not null;size:50;uniqueIndex:idx_users_username_lower,expression:lower(username)"`
 	PasswordHash   string         `json:"-" gorm:"not null;size:255"` // never send to client
 	ProfilePicture string         `json:"profile_picture,omitempty" gorm:"size:255"`
 	CreatedAt      time.Time      `json:"created_at"`
