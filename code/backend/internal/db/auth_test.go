@@ -25,6 +25,15 @@ func TestAuthLogic(t *testing.T) {
 		assert.Error(t, err)
 	})
 
+	t.Run("AuthenticateUser ignores username case", func(t *testing.T) {
+		_, err := CreateUser(ctx, "CaseUser", "Pass1234!", "")
+		assert.NoError(t, err)
+
+		user, err := AuthenticateUser(ctx, "caseuser", "Pass1234!")
+		assert.NoError(t, err)
+		assert.NotNil(t, user)
+	})
+
 	t.Run("RefreshToken Lifecycle", func(t *testing.T) {
 		user, _ := CreateUser(ctx, "rtuser", "Pass1234!", "")
 		token := "some-random-token"

@@ -22,7 +22,7 @@ func hashToken(token string) string {
 func AuthenticateUser(ctx context.Context, username, password string) (*models.User, error) {
 	var user models.User
 
-	err := DB.WithContext(ctx).Where("username = ?", username).First(&user).Error
+	err := DB.WithContext(ctx).Where("lower(username) = lower(?)", username).First(&user).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, fmt.Errorf("invalid username or password")
