@@ -91,7 +91,7 @@ Follows the existing convention (see migrations `004`/`005`). A new `006_friends
 
 ### REST API
 
-All under `RequireAuth`. Writes and `preview` share the existing `actionLimiter` (10/min per user). No new limiter.
+All under `RequireAuth`. Writes and `preview` share the existing `actionLimiter` (10/min per user). No new limiter. `POST /users/me/friend-code` is the exception: it only returns the caller's own code (creating it on the first call), and the social tab calls it on every load, so limiting it would spend the budget that game creation shares.
 
 | Method | Path | Body / query | Success | Errors |
 | --- | --- | --- | --- | --- |
@@ -111,7 +111,7 @@ All under `RequireAuth`. Writes and `preview` share the existing `actionLimiter`
 
 - Login and register both honour `?next=<path>` after success.
 - Only accept values that start with `/`, do not start with `//` or `/\`, and contain no scheme. Anything else falls back to `/`. This closes the open-redirect hole.
-- Unauthenticated visitors to `/friends/add` are sent to `/login?next=/friends/add?code=...`, with the inner value URL-encoded.
+- Unauthenticated visitors to an invite link end up on `/login?next=/friends?add=...`, with the inner value URL-encoded. `/friends/add?code=` redirects to `/friends?add=` first.
 
 ### Sharing
 
@@ -121,7 +121,7 @@ All under `RequireAuth`. Writes and `preview` share the existing `actionLimiter`
   - Otherwise, `navigator.clipboard.writeText(`${text} ${url}`)` plus a toast.
   - `AbortError` (the user closed the sheet) is ignored.
 - **Text:** `I'm <username> on GoStrategy, add me as a friend! Friend code: XXXX-XXXX`. Don't repeat the URL inside `text`, or some share targets show it twice.
-- **Confirmation step:** `/friends/add` shows the preview ("Add `<username>`?") and sends the request only on button press. It never sends on load, because links get prefetched and embedded.
+- **Confirmation step:** a modal on `/friends` shows the preview ("Add `<username>`?") and sends the request only on button press. It opens from the invite link: `/friends/add?code=` redirects to `/friends?add=`, so the URL stays stable. It never sends on load, because links get prefetched and embedded.
 - **Link previews:** static, generic Open Graph and Twitter meta tags in `app.html` (title, description, image from `static/`).
 
 ### Profiles and friends leaderboard

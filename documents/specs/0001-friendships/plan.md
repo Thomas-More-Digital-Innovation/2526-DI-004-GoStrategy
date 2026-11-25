@@ -53,10 +53,11 @@ The whole feature. Large, so keep one commit per layer (data → REST → UI) to
    - `_state/friends.svelte.ts`: a runes class that takes the API client as a constructor default.
    - `_components/`: the list item and `ShareCode` (code display, share button, regenerate with a confirmation).
    - `_utils/share.ts`: share-or-copy logic that takes a `navigator`-like object, plus `share.spec.ts`.
-3. New route `code/frontend/src/routes/friends/add/+page.svelte`:
-   - Reads `code`, calls `preview`, shows the confirmation and sends on click.
-   - Redirects to `/login?next=...` when logged out (needs PR 1).
-4. `code/frontend/src/lib/components/sidebar/_components/LoggedIn.svelte`: add a link to `/friends`.
+3. Confirmation modal and invite route:
+   - `friends/_components/AddFriendModal.svelte`: reads the code, calls `preview`, shows the confirmation and sends on click.
+   - `friends/add/+page.ts`: redirects `/friends/add?code=` to `/friends?add=`, which opens the modal.
+   - Logged-out visitors go to `/login?next=...` (needs PR 1).
+4. `code/frontend/src/lib/components/sidebar/SideBar.svelte`: add a `/friends` item to the nav.
 5. `code/frontend/src/app.html`: generic `og:`/`twitter:` meta tags, with an image under `static/`.
 6. Tests:
    - State spec with a fake client.
