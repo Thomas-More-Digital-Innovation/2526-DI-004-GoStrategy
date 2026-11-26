@@ -49,10 +49,22 @@ describe('GameSessionController', () => {
 			expect(session.isHumanTurn).toBe(true);
 		});
 
-		it('stores valid moves', () => {
-			socket.emit('validMoves', { validMoves: [{ x: 1, y: 1 }] });
-			expect(session.validMoves).toEqual([{ x: 1, y: 1 }]);
-			socket.emit('validMoves', {});
+		it('stores valid moves for the selected piece', () => {
+			session.store.setSelectedPosition({ x: 0, y: 6 });
+			socket.emit('validMoves', { position: { x: 0, y: 6 }, validMoves: [{ x: 0, y: 5 }] });
+			expect(session.validMoves).toEqual([{ x: 0, y: 5 }]);
+			socket.emit('validMoves', { position: { x: 0, y: 6 } });
+			expect(session.validMoves).toEqual([]);
+		});
+
+		it('ignores a late reply for a piece that is no longer selected', () => {
+			session.store.setSelectedPosition({ x: 1, y: 6 });
+			socket.emit('validMoves', { position: { x: 0, y: 6 }, validMoves: [{ x: 0, y: 5 }] });
+			expect(session.validMoves).toEqual([]);
+		});
+
+		it('ignores replies when nothing is selected', () => {
+			socket.emit('validMoves', { position: { x: 0, y: 6 }, validMoves: [{ x: 0, y: 5 }] });
 			expect(session.validMoves).toEqual([]);
 		});
 
