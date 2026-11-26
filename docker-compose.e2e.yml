@@ -6,6 +6,10 @@ services:
     image: gostrategy-e2e/backend
     build:
       context: ./code/backend
+    # why: every browser shares the proxy's IP, so the prod per-IP limit would 429 parallel workers
+    environment:
+      - RATE_LIMIT_RPS=${RATE_LIMIT_RPS}
+      - RATE_LIMIT_BURST=${RATE_LIMIT_BURST}
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/health"]
       interval: 2s

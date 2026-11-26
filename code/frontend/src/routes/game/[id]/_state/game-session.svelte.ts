@@ -108,6 +108,8 @@ export class GameSessionController {
 		});
 
 		socket.on('validMoves', (data) => {
+			const selected = this.store.selectedPosition;
+			if (selected?.x !== data.position?.x || selected?.y !== data.position?.y) return;
 			this.validMoves = data.validMoves || [];
 		});
 

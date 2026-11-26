@@ -22,6 +22,11 @@ import (
 	"digital-innovation/gostrategy/internal/telemetry"
 )
 
+const (
+	defaultGlobalRPS   = 10
+	defaultGlobalBurst = 20
+)
+
 // SetupRoutes registers all API routes and middleware
 func (s *GameServer) SetupRoutes() {
 	telemetry.Init()
@@ -56,7 +61,11 @@ func (s *GameServer) SetupRoutes() {
 	s.Router.Use(middleware.CSRFMiddleware())
 
 	// Rate limiters
-	globalLimiter := middleware.NewRateLimiter(rate.Limit(10), 20)
+	// why: e2e traffic all arrives from one proxy IP, so the suite raises these to avoid shared-bucket 429s
+	globalLimiter := middleware.NewRateLimiter(
+		rate.Limit(utils.GetEnvInt("RATE_LIMIT_RPS", defaultGlobalRPS)),
+		utils.GetEnvInt("RATE_LIMIT_BURST", defaultGlobalBurst),
+	)
 	authLimiter := middleware.NewRateLimiter(rate.Every(time.Hour/5), 5)       // 5 per hour
 	actionLimiter := middleware.NewRateLimiter(rate.Every(time.Minute/10), 10) // 10 per minute
 

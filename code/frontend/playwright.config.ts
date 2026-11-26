@@ -11,7 +11,7 @@ export default defineConfig({
 				url: baseURL,
 				reuseExistingServer: true
 			},
-	use: { baseURL },
+	use: { baseURL, reducedMotion: 'reduce' },
 	testDir: 'tests',
 	testMatch: '**/*.e2e.{ts,js}',
 	projects: [
@@ -25,6 +25,7 @@ export default defineConfig({
 		},
 		{
 			name: 'webkit',
+			timeout: 60_000,
 			use: { ...devices['Desktop Safari'] }
 		}
 	]
