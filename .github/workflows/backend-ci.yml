@@ -58,6 +58,12 @@ jobs:
             exit 1
           fi
 
+      - name: Check Swagger docs are up to date
+        working-directory: code/backend
+        run: |
+          go generate ./cmd/server
+          git diff --exit-code docs/ || { echo "Swagger docs are stale: run 'just go swagger' and commit the result"; exit 1; }
+
       - name: Cache golangci-lint binary
         id: cache-golangci-lint
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
