@@ -16,7 +16,7 @@ import (
 // @Produce json
 // @Success 200 {object} models.CountResponse
 // @Failure 500 {object} map[string]string "Internal Server Error"
-// @Router /monitoring/users/count [get]
+// @Router /users/count [get]
 func (h *Handler) UserCountHandler(c *gin.Context) {
 	count, err := db.GetTotalUserCount(c.Request.Context())
 	if err != nil {
@@ -33,7 +33,7 @@ func (h *Handler) UserCountHandler(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} models.CountResponse
 // @Failure 500 {object} map[string]string "Internal Server Error"
-// @Router /monitoring/games/count [get]
+// @Router /games/count [get]
 func (h *Handler) GamesPlayedCountHandler(c *gin.Context) {
 	count, err := db.GetTotalGamesPlayedCount(c.Request.Context())
 	if err != nil {

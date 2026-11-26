@@ -13,11 +13,12 @@ import (
 // @Description Retrieve win/loss/draw statistics for a specific user
 // @Tags stats
 // @Produce json
-// @Param id path int true "User ID"
+// @Param id query int true "User ID"
 // @Success 200 {object} models.UserStats
 // @Failure 404 {object} map[string]string "Stats not found"
-// @Router /users/{id}/stats [get]
+// @Router /users/stats [get]
 func (h *Handler) GetUserStatsHandler(c *gin.Context) {
+	// TODO: move to /users/:id/stats for user profiles; 400 on bad id instead of falling back to user 0
 	userID, _ := core.ParseID(c, "id")
 	stats, err := db.GetUserStats(c.Request.Context(), userID)
 	if err != nil {

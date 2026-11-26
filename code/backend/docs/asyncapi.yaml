@@ -27,7 +27,7 @@ servers:
 
 channels:
   game:
-    address: /ws/game/{gameID}
+    address: /game/{gameID}
     parameters:
       gameID:
         description: The unique ID of the game session.
