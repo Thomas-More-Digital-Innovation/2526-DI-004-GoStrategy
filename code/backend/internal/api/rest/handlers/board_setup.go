@@ -20,7 +20,7 @@ import (
 // @Success 200 {array} models.BoardSetup
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Failure 500 {object} map[string]string "Internal Server Error"
-// @Router /users/me/board-setups [get]
+// @Router /board-setups [get]
 func (h *Handler) GetUserBoardSetupsHandler(c *gin.Context) {
 	user := core.EnsureAuthenticated(c)
 	if user == nil {
@@ -50,7 +50,7 @@ const MaxBoardSetupsPerUser = 10
 // @Failure 400 {object} map[string]string "Invalid request body or limit reached"
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Failure 500 {object} map[string]string "Internal Server Error"
-// @Router /users/me/board-setups [post]
+// @Router /board-setups [post]
 func (h *Handler) CreateBoardSetupHandler(c *gin.Context) {
 	user := core.EnsureAuthenticated(c)
 	if user == nil {
@@ -105,7 +105,7 @@ func (h *Handler) CreateBoardSetupHandler(c *gin.Context) {
 // @Failure 400 {object} map[string]string "Invalid request body"
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Failure 500 {object} map[string]string "Internal Server Error"
-// @Router /users/me/board-setups/{id} [put]
+// @Router /board-setups/{id} [put]
 func (h *Handler) UpdateBoardSetupHandler(c *gin.Context) {
 	user := core.EnsureAuthenticated(c)
 	if user == nil {
@@ -148,7 +148,7 @@ func (h *Handler) UpdateBoardSetupHandler(c *gin.Context) {
 // @Success 204 "No Content"
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Failure 500 {object} map[string]string "Internal Server Error"
-// @Router /users/me/board-setups/{id} [delete]
+// @Router /board-setups/{id} [delete]
 func (h *Handler) DeleteBoardSetupHandler(c *gin.Context) {
 	user := core.EnsureAuthenticated(c)
 	if user == nil {
@@ -177,7 +177,7 @@ func (h *Handler) DeleteBoardSetupHandler(c *gin.Context) {
 // @Success 200 {object} models.BoardSetup
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Failure 404 {object} map[string]string "Board setup not found"
-// @Router /users/me/board-setups/{id} [get]
+// @Router /board-setups/{id} [get]
 func (h *Handler) GetBoardSetupHandler(c *gin.Context) {
 	user := core.EnsureAuthenticated(c)
 	if user == nil {

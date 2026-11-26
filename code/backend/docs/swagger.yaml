@@ -1,16 +1,81 @@
 basePath: /
 definitions:
-  game.ExportedBoardSetup:
+  digital-innovation_gostrategy_internal_game_models.HistoricalMove:
     properties:
-      description:
+      attacker:
+        $ref: '#/definitions/digital-innovation_gostrategy_internal_game_models.PieceData'
+      defender:
+        $ref: '#/definitions/digital-innovation_gostrategy_internal_game_models.PieceData'
+      fromX:
+        type: integer
+      fromY:
+        type: integer
+      moveIndex:
+        type: integer
+      playerId:
+        type: integer
+      result:
+        $ref: '#/definitions/digital-innovation_gostrategy_internal_game_models.MoveResultType'
+      toX:
+        type: integer
+      toY:
+        type: integer
+    type: object
+  digital-innovation_gostrategy_internal_game_models.MoveResultType:
+    enum:
+    - move
+    - win
+    - loss
+    - tie
+    - capture
+    type: string
+    x-enum-comments:
+      MoveResultTypeCapture: Flag captured (game over)
+      MoveResultTypeLoss: Attacker lost combat
+      MoveResultTypeMove: Normal move to empty cell
+      MoveResultTypeTie: Both pieces died
+      MoveResultTypeWin: Attacker won combat
+    x-enum-descriptions:
+    - Normal move to empty cell
+    - Attacker won combat
+    - Attacker lost combat
+    - Both pieces died
+    - Flag captured (game over)
+    x-enum-varnames:
+    - MoveResultTypeMove
+    - MoveResultTypeWin
+    - MoveResultTypeLoss
+    - MoveResultTypeTie
+    - MoveResultTypeCapture
+  digital-innovation_gostrategy_internal_game_models.PieceData:
+    properties:
+      ownerId:
+        type: integer
+      rank:
         type: string
-      name:
+      type:
         type: string
-      rows:
+    type: object
+  digital-innovation_gostrategy_internal_models.GameHistory:
+    properties:
+      gameId:
+        type: string
+      initialState:
         items:
-          type: string
+          items:
+            $ref: '#/definitions/digital-innovation_gostrategy_internal_game_models.PieceData'
+          type: array
         type: array
-      setup_data:
+      moves:
+        items:
+          $ref: '#/definitions/digital-innovation_gostrategy_internal_game_models.HistoricalMove'
+        type: array
+      winnerId:
+        type: integer
+    type: object
+  models.AddFriendRequest:
+    properties:
+      code:
         type: string
     type: object
   models.BoardSetup:
@@ -42,6 +107,20 @@ definitions:
       old_password:
         type: string
     type: object
+  models.CountResponse:
+    properties:
+      count:
+        type: integer
+    type: object
+  models.CreateGameResponse:
+    properties:
+      gameId:
+        type: string
+      gameType:
+        type: string
+      wsUrl:
+        type: string
+    type: object
   models.CreateUserRequest:
     properties:
       password:
@@ -49,6 +128,68 @@ definitions:
       profile_picture:
         type: string
       username:
+        type: string
+    type: object
+  models.ExportedBoardSetup:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      rows:
+        items:
+          type: string
+        type: array
+      setup_data:
+        type: string
+    type: object
+  models.FriendCodeResponse:
+    properties:
+      code:
+        type: string
+    type: object
+  models.FriendEntry:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      user:
+        $ref: '#/definitions/models.UserDTO'
+    type: object
+  models.FriendListResponse:
+    properties:
+      friends:
+        items:
+          $ref: '#/definitions/models.FriendEntry'
+        type: array
+      incoming:
+        items:
+          $ref: '#/definitions/models.FriendEntry'
+        type: array
+      outgoing:
+        items:
+          $ref: '#/definitions/models.FriendEntry'
+        type: array
+    type: object
+  models.FriendPreviewResponse:
+    properties:
+      user:
+        $ref: '#/definitions/models.UserDTO'
+    type: object
+  models.Friendship:
+    properties:
+      addressee_id:
+        type: integer
+      created_at:
+        type: string
+      id:
+        type: integer
+      requester_id:
+        type: integer
+      status:
+        type: string
+      updated_at:
         type: string
     type: object
   models.Game:
@@ -59,6 +200,8 @@ definitions:
         type: string
       game_type:
         type: string
+      has_replay:
+        type: boolean
       id:
         type: string
       initial_state:
@@ -72,6 +215,15 @@ definitions:
       player2_user_id:
         type: integer
       winner_id:
+        type: integer
+    type: object
+  models.GameListResponse:
+    properties:
+      games:
+        items:
+          $ref: '#/definitions/models.Game'
+        type: array
+      total:
         type: integer
     type: object
   models.GameMove:
@@ -120,6 +272,13 @@ definitions:
       round:
         type: integer
     type: object
+  models.HealthResponse:
+    properties:
+      db:
+        type: string
+      status:
+        type: string
+    type: object
   models.LoginRequest:
     properties:
       password:
@@ -127,7 +286,23 @@ definitions:
       username:
         type: string
     type: object
-  models.User:
+  models.MessageResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  models.ReconnectableGameResponse:
+    properties:
+      gameId:
+        type: string
+      gameType:
+        type: string
+      hasGame:
+        type: boolean
+      seatIndex:
+        type: integer
+    type: object
+  models.UserDTO:
     properties:
       created_at:
         type: string
@@ -163,7 +338,6 @@ definitions:
       wins:
         type: integer
     type: object
-host: localhost:8080
 info:
   contact:
     email: info@dotsem.be
@@ -177,465 +351,7 @@ info:
   title: GoStrategy API
   version: 0.1.1
 paths:
-  /board-setups/{id}/export:
-    get:
-      description: Export a board setup configuration in JSON format for external
-        AI training/testing
-      parameters:
-      - description: Board Setup ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/game.ExportedBoardSetup'
-        "401":
-          description: Unauthorized
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "404":
-          description: Board setup not found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Export board setup
-      tags:
-      - board-setups
-  /board-setups/export:
-    get:
-      description: Export all saved board setups as a ZIP archive containing individual
-        JSON files
-      produces:
-      - application/zip
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: file
-        "401":
-          description: Unauthorized
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Export all board setups
-      tags:
-      - board-setups
-  /csrf:
-    get:
-      description: Retrieve a CSRF token for subsequent state-changing requests
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Get CSRF token
-      tags:
-      - auth
-  /debug/stats:
-    get:
-      description: Retrieve runtime memory, goroutine, and session statistics (Internal
-        use)
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            additionalProperties: true
-            type: object
-      summary: Get debug statistics
-      tags:
-      - debug
-  /game/{gameID}:
-    get:
-      description: Establish a WebSocket connection to an active game session
-      parameters:
-      - description: Game ID
-        in: path
-        name: gameID
-        required: true
-        type: string
-      - description: Player index (0 or 1)
-        in: query
-        name: player
-        type: string
-      responses:
-        "101":
-          description: Switching Protocols
-          schema:
-            type: string
-        "400":
-          description: Game ID required or invalid player index
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "403":
-          description: Unauthorized
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "404":
-          description: Game not found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Connect to game via WebSocket
-      tags:
-      - games
-  /games:
-    get:
-      description: Retrieve a list of all currently active game sessions
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/models.GameSummaryDTO'
-            type: array
-      summary: List active games
-      tags:
-      - games
-    post:
-      consumes:
-      - application/json
-      description: Initialize a new game session with specified type and players
-      parameters:
-      - description: Game creation parameters
-        in: body
-        name: request
-        required: true
-        schema:
-          properties:
-            ai1:
-              type: string
-            ai2:
-              type: string
-            gameId:
-              type: string
-            gameType:
-              type: string
-          type: object
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Game created successfully
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "400":
-          description: Invalid request body or parameters
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Create a new game
-      tags:
-      - games
-  /games/{id}:
-    delete:
-      description: Terminate the active game session immediately and prevent further
-        reconnection
-      parameters:
-      - description: Game ID
-        in: path
-        name: id
-        required: true
-        type: string
-      responses:
-        "200":
-          description: Success message
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "401":
-          description: Unauthorized
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "404":
-          description: Active game session not found or user is not a participant
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Delete active game session
-      tags:
-      - games
-  /games/{id}/history:
-    get:
-      description: Retrieve the move history and final state of a specific game
-      parameters:
-      - description: Game ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Game'
-        "400":
-          description: Game ID required
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "404":
-          description: Game history not found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Get game history
-      tags:
-      - games
-  /health:
-    get:
-      description: Check if the API server is up and running
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Health check
-      tags:
-      - health
-  /monitoring/games/count:
-    get:
-      description: Retrieve the total number of games played in the system
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            additionalProperties:
-              format: int64
-              type: integer
-            type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Get total games played count
-      tags:
-      - monitoring
-  /monitoring/users/count:
-    get:
-      description: Retrieve the total number of registered users
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            additionalProperties:
-              format: int64
-              type: integer
-            type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Get total user count
-      tags:
-      - monitoring
-  /users/{id}:
-    get:
-      description: Retrieve information about a user by their ID
-      parameters:
-      - description: User ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.User'
-        "400":
-          description: Invalid or missing user ID
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "404":
-          description: User not found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Get user by ID
-      tags:
-      - users
-  /users/{id}/games:
-    get:
-      description: Retrieve a list of games played by a specific user (paged)
-      parameters:
-      - description: User ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            additionalProperties: true
-            type: object
-        "500":
-          description: Failed to retrieve games
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: List user games
-      tags:
-      - games
-  /users/{id}/stats:
-    get:
-      description: Retrieve win/loss/draw statistics for a specific user
-      parameters:
-      - description: User ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.UserStats'
-        "404":
-          description: Stats not found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Get user statistics
-      tags:
-      - stats
-  /users/login:
-    post:
-      consumes:
-      - application/json
-      description: Authenticate a user and return user details with session cookies
-      parameters:
-      - description: Login credentials
-        in: body
-        name: credentials
-        required: true
-        schema:
-          $ref: '#/definitions/models.LoginRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.User'
-        "400":
-          description: Invalid request body
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "401":
-          description: Invalid username or password
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: User login
-      tags:
-      - auth
-  /users/logout:
-    post:
-      description: Clear user session and delete refresh token
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Logged out successfully
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: User logout
-      tags:
-      - auth
-  /users/me:
-    get:
-      description: Retrieve information about the currently logged-in user
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.User'
-        "401":
-          description: Unauthorized
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Get current user
-      tags:
-      - users
-  /users/me/board-setups:
+  /board-setups:
     get:
       description: Retrieve all saved board setups for the authenticated user
       produces:
@@ -681,7 +397,7 @@ paths:
           schema:
             $ref: '#/definitions/models.BoardSetup'
         "400":
-          description: Invalid request body
+          description: Invalid request body or limit reached
           schema:
             additionalProperties:
               type: string
@@ -701,7 +417,7 @@ paths:
       summary: Create board setup
       tags:
       - board-setups
-  /users/me/board-setups/{id}:
+  /board-setups/{id}:
     delete:
       description: Delete a specific board setup configuration by ID
       parameters:
@@ -802,17 +518,715 @@ paths:
       summary: Update board setup
       tags:
       - board-setups
-  /users/me/games:
+  /board-setups/{id}/export:
     get:
-      description: Retrieve a list of games played by the currently logged-in user
+      description: Export a board setup configuration in JSON format for external
+        AI training/testing
+      parameters:
+      - description: Board Setup ID
+        in: path
+        name: id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            additionalProperties: true
+            $ref: '#/definitions/models.ExportedBoardSetup'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
             type: object
+        "404":
+          description: Board setup not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Export board setup
+      tags:
+      - board-setups
+  /board-setups/export:
+    get:
+      description: Export all saved board setups as a ZIP archive containing individual
+        JSON files
+      produces:
+      - application/zip
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Export all board setups
+      tags:
+      - board-setups
+  /csrf-token:
+    get:
+      description: Retrieve a CSRF token for subsequent state-changing requests
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.MessageResponse'
+      summary: Get CSRF token
+      tags:
+      - auth
+  /friends:
+    get:
+      description: Friends, incoming requests and outgoing requests of the logged-in
+        user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.FriendListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to list friends
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List friends
+      tags:
+      - friends
+  /friends/{id}:
+    delete:
+      description: Either side can decline, cancel or unfriend. The row is deleted.
+      parameters:
+      - description: Friendship ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: Removed
+        "400":
+          description: Invalid ID
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Friend request not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "429":
+          description: Too many requests
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Remove a friendship or request
+      tags:
+      - friends
+  /friends/preview:
+    get:
+      description: Resolve a friend code to its owner so the invite page can ask for
+        confirmation
+      parameters:
+      - description: Friend code, any spelling
+        in: query
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.FriendPreviewResponse'
+        "400":
+          description: Invalid friend code
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: No player has this friend code
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "429":
+          description: Too many requests
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Preview a friend code
+      tags:
+      - friends
+  /friends/requests:
+    post:
+      consumes:
+      - application/json
+      description: Ask the owner of a friend code to be friends. If they already asked
+        you, the request is accepted instead.
+      parameters:
+      - description: Friend code
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.AddFriendRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Accepted an existing request from them
+          schema:
+            $ref: '#/definitions/models.Friendship'
+        "201":
+          description: Request sent
+          schema:
+            $ref: '#/definitions/models.Friendship'
+        "400":
+          description: Invalid body or friend code, or your own code
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: No player has this friend code
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Already friends, already requested, or friend limit reached
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "429":
+          description: Too many pending requests or too many calls
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Send a friend request
+      tags:
+      - friends
+  /friends/requests/{id}/accept:
+    post:
+      description: Only the addressee can accept a pending request
+      parameters:
+      - description: Friendship ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Friendship'
+        "400":
+          description: Invalid ID
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Friend request not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Friend limit reached
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "429":
+          description: Too many requests
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Accept a friend request
+      tags:
+      - friends
+  /game/{gameID}:
+    get:
+      description: Establish a WebSocket connection to an active game session
+      parameters:
+      - description: Game ID
+        in: path
+        name: gameID
+        required: true
+        type: string
+      - description: Player index (0 or 1)
+        in: query
+        name: player
+        type: string
+      responses:
+        "101":
+          description: Switching Protocols
+          schema:
+            type: string
+        "400":
+          description: Game ID required or invalid player index
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Game not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Connect to game via WebSocket
+      tags:
+      - games
+  /games:
+    get:
+      description: Retrieve a list of all currently active game sessions
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.GameSummaryDTO'
+            type: array
+      summary: List active games
+      tags:
+      - games
+    post:
+      consumes:
+      - application/json
+      description: Initialize a new game session with specified type and players
+      parameters:
+      - description: Game creation parameters
+        in: body
+        name: request
+        required: true
+        schema:
+          properties:
+            ai1:
+              type: string
+            ai2:
+              type: string
+            gameId:
+              type: string
+            gameType:
+              type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Game created successfully
+          schema:
+            $ref: '#/definitions/models.CreateGameResponse'
+        "400":
+          description: Invalid request body or parameters
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new game
+      tags:
+      - games
+  /games/{id}:
+    delete:
+      description: Terminate the active game session immediately and prevent further
+        reconnection
+      parameters:
+      - description: Game ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Success message
+          schema:
+            $ref: '#/definitions/models.MessageResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Active game session not found or user is not a participant
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete active game session
+      tags:
+      - games
+  /games/{id}/history:
+    get:
+      description: Retrieve the move history and final state of a specific game
+      parameters:
+      - description: Game ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/digital-innovation_gostrategy_internal_models.GameHistory'
+        "400":
+          description: Game ID required
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Game history not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get game history
+      tags:
+      - games
+  /games/count:
+    get:
+      description: Retrieve the total number of games played in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CountResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get total games played count
+      tags:
+      - monitoring
+  /health:
+    get:
+      description: Check if the API server is up and running
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.HealthResponse'
+      summary: Health check
+      tags:
+      - health
+  /users/{id}:
+    get:
+      description: Retrieve information about a user by their ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserDTO'
+        "400":
+          description: Invalid or missing user ID
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: User not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get user by ID
+      tags:
+      - users
+  /users/{id}/games:
+    get:
+      description: Retrieve a list of games played by a specific user (paged)
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Number of games to return (default 10, max 50)
+        in: query
+        name: limit
+        type: integer
+      - description: Offset for pagination (default 0)
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.GameListResponse'
+        "500":
+          description: Failed to retrieve games
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List user games
+      tags:
+      - games
+  /users/count:
+    get:
+      description: Retrieve the total number of registered users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CountResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get total user count
+      tags:
+      - monitoring
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate a user and return user details with session cookies
+      parameters:
+      - description: Login credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserDTO'
+        "400":
+          description: Invalid request body
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Invalid username or password
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: User login
+      tags:
+      - auth
+  /users/logout:
+    post:
+      description: Clear user session and delete refresh token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Logged out successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: User logout
+      tags:
+      - auth
+  /users/me:
+    get:
+      description: Retrieve information about the currently logged-in user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserDTO'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get current user
+      tags:
+      - users
+  /users/me/friend-code:
+    post:
+      description: Return the friend code of the logged-in user. The first call creates
+        it.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.FriendCodeResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "429":
+          description: Too many requests
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to get friend code
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get my friend code
+      tags:
+      - friends
+  /users/me/friend-code/regenerate:
+    post:
+      description: Replace the friend code of the logged-in user. Old codes and invite
+        links stop working.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.FriendCodeResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "429":
+          description: Too many requests
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to regenerate friend code
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Regenerate my friend code
+      tags:
+      - friends
+  /users/me/games:
+    get:
+      description: Retrieve a list of games played by the currently logged-in user
+      parameters:
+      - description: Number of games to return (default 10, max 50)
+        in: query
+        name: limit
+        type: integer
+      - description: Offset for pagination (default 0)
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.GameListResponse'
         "401":
           description: Unauthorized
           schema:
@@ -879,8 +1293,7 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/models.ReconnectableGameResponse'
         "401":
           description: Unauthorized
           schema:
@@ -954,7 +1367,7 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/models.User'
+            $ref: '#/definitions/models.UserDTO'
         "400":
           description: Invalid request body or validation error
           schema:
@@ -976,4 +1389,29 @@ paths:
       summary: Register a new user
       tags:
       - auth
+  /users/stats:
+    get:
+      description: Retrieve win/loss/draw statistics for a specific user
+      parameters:
+      - description: User ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserStats'
+        "404":
+          description: Stats not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get user statistics
+      tags:
+      - stats
 swagger: "2.0"

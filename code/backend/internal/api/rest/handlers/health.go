@@ -38,7 +38,7 @@ func (h *Handler) HealthHandler(c *gin.Context) {
 // @Tags auth
 // @Produce json
 // @Success 200 {object} models.MessageResponse
-// @Router /csrf [get]
+// @Router /csrf-token [get]
 func (h *Handler) GetCSRFToken(c *gin.Context) {
 	// The CSRF token is already set in a cookie by the middleware
 	core.SendJSON(c, models.MessageResponse{Message: "CSRF cookie set"}, http.StatusOK)

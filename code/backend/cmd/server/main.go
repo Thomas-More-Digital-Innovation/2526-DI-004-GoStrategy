@@ -12,6 +12,9 @@ import (
 	"time"
 )
 
+// why: swag maps import paths only when every search dir is a Go package; the module root isn't, which breaks type aliases
+//go:generate go tool swag init -d .,../../internal/api/rest/handlers,../../internal/models,../../internal/game/models -g main.go -o ../../docs
+
 // @title GoStrategy API
 // @version 0.1.1
 // @description This is the API server for the GoStrategy game.
@@ -24,7 +27,6 @@ import (
 // @license.name MIT
 // @license.url https://opensource.org/license/mit/
 
-// @host localhost:8080
 // @BasePath /
 
 func main() {
