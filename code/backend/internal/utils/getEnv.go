@@ -4,12 +4,21 @@ package utils
 import (
 	"errors"
 	"os"
+	"strconv"
 )
 
 // GetEnv returns the value of the environment variable key, or fallback if it's not set
 func GetEnv(key, fallback string) string {
 	if value := os.Getenv(key); value != "" {
 		return value
+	}
+	return fallback
+}
+
+// GetEnvInt returns the environment variable key as a positive int, or fallback if it's unset, malformed or not positive
+func GetEnvInt(key string, fallback int) int {
+	if n, err := strconv.Atoi(os.Getenv(key)); err == nil && n > 0 {
+		return n
 	}
 	return fallback
 }

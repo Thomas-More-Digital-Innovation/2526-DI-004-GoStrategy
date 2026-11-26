@@ -75,3 +75,25 @@ func TestGetEnvOrErrorInProduction(t *testing.T) {
 		assert.Error(t, err)
 	}
 }
+
+func TestGetEnvInt(t *testing.T) {
+	const fallback = 7
+	tests := []struct {
+		name  string
+		value string
+		want  int
+	}{
+		{"unset", "", fallback},
+		{"valid", "42", 42},
+		{"malformed", "lots", fallback},
+		{"zero", "0", fallback},
+		{"negative", "-5", fallback},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Setenv(testKeyStr, tt.value)
+			assert.Equal(t, tt.want, GetEnvInt(testKeyStr, fallback))
+		})
+	}
+}
