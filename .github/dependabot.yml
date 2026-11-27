@@ -62,8 +62,10 @@ updates:
           - "prettier*"
           - "typescript*"
           - "@playwright/*"
-          - "vite*"
+          - "vite"
           - "*tailwind*"
+          - "vitest*"
+          - "@vitest/*"
 
   # Backend (Go modules)
   - package-ecosystem: "gomod"
