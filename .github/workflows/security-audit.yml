@@ -23,7 +23,7 @@ permissions:
 jobs:
   trivy:
     permissions: { contents: read, pull-requests: write, issues: write }
-    uses: dotactions/security/.github/workflows/trivy-audit.yml@4d0356342b83c1c83c8e6ac5496589ba8fa665c2 # v0.1.0
+    uses: dotactions/security/.github/workflows/trivy-audit.yml@02c4f51cc52359c5eedce9e310760ec150748f12 # v0.3.0
     with:
       severity: "CRITICAL,HIGH"
       fail-on-findings: false
@@ -38,7 +38,7 @@ jobs:
         uses: golang/govulncheck-action@032d45514ae346b1db93c04b0c90b841c370344f # v1.1.0
         with: { work-dir: code/backend, output-format: sarif, output-file: govulncheck.sarif }
 
-      - uses: dotactions/sarif-reporter@917c66712f17657e67d429895eade83a9543034d # v0.1.0
+      - uses: dotactions/sarif-reporter@5796dde6b1e4f1a36ef3bdfde3002a8623715d29 # v0.2.0
         if: always() && hashFiles('govulncheck.sarif') != ''
         with:
           sarif-file: govulncheck.sarif
@@ -87,7 +87,7 @@ jobs:
           severity: "CRITICAL,HIGH"
           limit-severities-for-sarif: true
 
-      - uses: dotactions/sarif-reporter@917c66712f17657e67d429895eade83a9543034d # v0.1.0
+      - uses: dotactions/sarif-reporter@5796dde6b1e4f1a36ef3bdfde3002a8623715d29 # v0.2.0
         if: always() && hashFiles('trivy-image.sarif') != ''
         with:
           sarif-file: trivy-image.sarif
